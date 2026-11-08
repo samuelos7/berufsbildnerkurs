@@ -8,12 +8,16 @@
    cols   { t:"cols",  h, cols:[{h, items:[...]}] }    Karten nebeneinander
    stats  { t:"stats", h, items:[{v, l}] }             grosse Zahlen
    pyramid{ t:"pyramid", h, items:[{h, d}] }           oben → unten
-   note   { t:"note",  text }                          Merksatz            */
+   note   { t:"note",  text }                          Merksatz
+
+   Inhalte bleiben generisch (gelten für alle Berufe). Das Beispiel «Informatiker/in EFZ»
+   steht separat: Rolle "informatik", Listen "informatik" pro Rolle und das Modul "beruf". */
 window.GAME_DATA = {
   title: "Berufsbildner",
   subtitle: "Das Spiel der Lehrzeit",
-  tagline: "Ein Kurs, fünf Level, neun Rollen – wer macht was in der beruflichen Grundbildung?",
+  tagline: "Ein Kurs, fünf Level, zehn Rollen – wer macht was in der beruflichen Grundbildung?",
   meta: "Berufsbildnerkurs · WBZ Kanton Luzern · Take-away",
+  example: { name: "Informatiker/in EFZ", short: "Beispielberuf" },
 
   /* =====================================================================
      LEVELS = KURSTAGE
@@ -781,13 +785,123 @@ window.GAME_DATA = {
   ],
 
   /* =====================================================================
+     BEISPIELBERUF – Informatiker/in EFZ (BiVo SR 412.101.220.10 · Bildungsplan 88611)
+     Wird wie ein Level dargestellt; der Charakter "informatik" steht dabei auf der Bühne.
+     ===================================================================== */
+  beruf: {
+    nr: "💻",
+    char: "informatik",
+    title: "Beispielberuf Informatiker/in EFZ",
+    subtitle: "Alles Generische gilt für jeden Beruf – hier am Beispiel meines Berufs: BiVo, Bildungsplan, Kompetenzen und QV",
+    missions: [
+      {
+        ch: "Überblick",
+        title: "Der Beruf auf einen Blick",
+        blocks: [
+          { t: "stats", items: [{ v: "8", l: "Semester" }, { v: "2", l: "Fachrichtungen" }, { v: "8", l: "Handlungskompetenzbereiche" }, { v: "24", l: "Module Berufsfachschule" }, { v: "35", l: "üK-Tage in 7 Kursen" }] },
+          { t: "cols", h: "Zwei Fachrichtungen", cols: [
+            { h: "🖧 Plattformentwicklung", items: ["Netze, Dienste und Serversysteme aufbauen, betreiben und überwachen", "Zusätzlich HKB d, e, f"] },
+            { h: "💻 Applikationsentwicklung", items: ["Applikationen und Schnittstellen realisieren, ausliefern und betreiben", "Zusätzlich HKB g, h"] },
+          ] },
+          { t: "note", text: "Nebst Fachkompetenzen vermittelt die Ausbildung Methoden-, Sozial- und Selbstkompetenzen (BiVo Art. 3)." },
+        ],
+        source: "BiVo Informatiker/in EFZ Art. 3 · Bildungsplan 88611",
+      },
+      {
+        ch: "Kompetenzen",
+        title: "Für alle: HKB a–c",
+        blocks: [
+          { t: "cols", cols: [
+            { h: "a · ICT-Projekte begleiten", items: ["a1 Bedürfnisse von Stakeholdern abklären", "a2 Vorgehensmodell bestimmen", "a3 ICT-Lösungen recherchieren", "a4 Projekte planen", "a5 Varianten visualisieren & präsentieren", "a6 Fortschritt überprüfen", "a7 Lösungen übergeben & abschliessen"] },
+            { h: "b · Unterstützen & Beraten", items: ["b1 Eigenen ICT-Arbeitsplatz einrichten", "b2 Komplexe Supportanfragen bearbeiten", "b3 Kunden zu Datenschutz & -sicherheit beraten", "b4 Geschäftsprozesse analysieren & dokumentieren"] },
+            { h: "c · Digitale Daten", items: ["c1 Datenmodelle entwickeln", "c2 Datenmodelle umsetzen", "c3 Datensicherheit & Datenschutz umsetzen", "c4 Daten aufbereiten"] },
+          ] },
+        ],
+        source: "Bildungsplan Informatiker/in EFZ, Übersicht der Handlungskompetenzen",
+      },
+      {
+        ch: "Kompetenzen",
+        title: "Plattformentwicklung: HKB d–f",
+        blocks: [
+          { t: "cols", cols: [
+            { h: "d · ICT-Lösungen betreiben", items: ["d1 ICT-Prozesse automatisieren", "d2 Auslieferungsprozess definieren", "d3 Ausführungsplattform vorbereiten", "d4 ICT-Lösungen in Betrieb nehmen"] },
+            { h: "e · Netze", items: ["e1 Netze planen & dokumentieren", "e2 Netzkomponenten in Betrieb nehmen", "e3 Netze warten", "e4 Sicherheit implementieren", "e5 Leistung optimieren", "e6 Netze überwachen"] },
+            { h: "f · Server & Dienste", items: ["f1 Planen & dokumentieren", "f2/f3 Systeme & Dienste in Betrieb nehmen", "f4 Warten & verwalten", "f5 Überwachen", "f6 Sicherheit", "f7 Verfügbarkeit", "f8 Backup & Archivierung"] },
+          ] },
+        ],
+        source: "Bildungsplan Informatiker/in EFZ, Übersicht der Handlungskompetenzen",
+      },
+      {
+        ch: "Kompetenzen",
+        title: "Applikationsentwicklung: HKB g–h",
+        blocks: [
+          { t: "cols", cols: [
+            { h: "g · Applikationen entwickeln", items: ["g1 Anforderungen & Schnittstellen analysieren", "g2 Gestaltungsentwürfe für Benutzerschnittstellen prüfen", "g3 Sicherheit beurteilen", "g4 Lösung konzeptionell ausarbeiten", "g5 Implementieren", "g6 Qualität & Sicherheit überprüfen"] },
+            { h: "h · Ausliefern & Betreiben", items: ["h1 Plattform bestimmen", "h2 Auslieferungsprozess definieren", "h3 Auslieferung durchführen", "h4 Applikationen überwachen & Probleme beheben"] },
+          ] },
+          { t: "list", h: "Kompetenzmodell", items: [
+            "Handlungskompetenzbereich → Handlungskompetenz → Leistungsziele je Lernort",
+            "Taxonomie K1 Wissen · K2 Verstehen · K3 Anwenden · K4 Analyse · K5 Synthese · K6 Beurteilen",
+          ] },
+        ],
+        source: "Bildungsplan Informatiker/in EFZ",
+      },
+      {
+        ch: "Rahmen (BiVo)",
+        title: "Was die BiVo im Betrieb verlangt",
+        blocks: [
+          { t: "table", h: "Anforderungen an Berufsbildner/innen (Art. 10)", head: ["Qualifikation", "Praxis im Lehrgebiet"], rows: [
+            ["Informatiker/in EFZ", "mind. 2 Jahre"],
+            ["EFZ eines verwandten Berufs mit Informatikkenntnissen", "mind. 5 Jahre"],
+            ["Einschlägiger Abschluss der höheren Berufsbildung", "–"],
+            ["Einschlägiger Hochschulabschluss", "mind. 2 Jahre"],
+          ] },
+          { t: "list", h: "Höchstzahl Lernende (Art. 11)", items: [
+            "1 Lernende/r: 1 Berufsbildner/in zu 100 % oder 2 zu je mind. 60 %",
+            "Jede weitere: zusätzlich 1 Fachkraft zu 100 % oder 2 zu je mind. 60 %",
+            "Zweite Person darf beginnen, wenn die erste ins letzte Lehrjahr eintritt",
+          ] },
+          { t: "note", text: "Arbeitssicherheit (Art. 5): zu Beginn und während der ganzen Ausbildung, an allen Lernorten. Keine gefährlichen Arbeiten – also keine Ausnahme vom Arbeitsgesetz nötig." },
+        ],
+        source: "BiVo Informatiker/in EFZ Art. 5, 10, 11 · Antworten Tag 2",
+      },
+      {
+        ch: "Rahmen (BiVo)",
+        title: "Lerndokumentation & Bildungsbericht",
+        blocks: [
+          { t: "cols", cols: [
+            { h: "📒 Lerndokumentation (Art. 12)", items: ["Lernende führen sie laufend", "Alle wesentlichen Arbeiten festhalten", "BB kontrolliert & unterzeichnet mind. 1x pro Semester", "An der IPA als Hilfsmittel erlaubt"] },
+            { h: "📝 Bildungsbericht (Art. 13)", items: ["Am Ende jedes Semesters", "Gestützt auf Betrieb, BFS und üK", "Massnahmen mit Fristen schriftlich vereinbaren", "Bei Gefährdung: Vertragsparteien & Kanton schriftlich informieren"] },
+          ] },
+        ],
+        source: "BiVo Informatiker/in EFZ Art. 12, 13, 18",
+      },
+      {
+        ch: "Qualifikationsverfahren",
+        title: "Das QV Informatiker/in EFZ",
+        blocks: [
+          { t: "table", h: "Gesamtnote (Art. 19)", head: ["Bestandteil", "Gewicht"], rows: [
+            ["Praktische Arbeit (IPA, 70–90 h)", "40 %"],
+            ["Erfahrungsnote «Informatikkompetenzen» (80 % BFS-Module, 20 % üK)", "30 %"],
+            ["Allgemeinbildung", "20 %"],
+            ["Erfahrungsnote «erweiterte Grundkompetenzen» (Ø 8 Semesterzeugnisse)", "10 %"],
+          ] },
+          { t: "stats", h: "IPA-Bewertung (Art. 18)", items: [{ v: "50 %", l: "Ausführung & Resultat" }, { v: "20 %", l: "Dokumentation" }, { v: "30 %", l: "Präsentation & Fachgespräch (max. 1 h)" }] },
+          { t: "note", text: "Bestanden, wenn alle drei erfüllt sind: IPA ≥ 4 · Erfahrungsnote «Informatikkompetenzen» ≥ 4 · Gesamtnote ≥ 4." },
+        ],
+        source: "BiVo Informatiker/in EFZ Art. 18, 19",
+      },
+    ],
+  },
+
+  /* =====================================================================
      CHARAKTERE = AKTEURE  (look = Bauplan für die 3D-Figur, env = Umgebung)
      ===================================================================== */
   characters: [
     {
       id: "lernende", name: "Lernende/r", short: "Die Hauptfigur",
       color: "#5fd4ff", env: "lernorte",
-      look: { skin: "#f1c27d", shirt: "#2f8fd8", pants: "#2b3550", hair: "#4a2e1a", hairStyle: "cap", cap: "#ff8a3d", extra: ["backpack"], scale: 0.92 },
+      look: { skin: "#f1c27d", shirt: "#2f8fd8", pants: "#2b3550", hair: "#4a2e1a", hairStyle: "cap", cap: "#c2410c", extra: ["backpack"], scale: 0.92 },
       tagline: "Lernt an drei Lernorten – und wächst dabei in neue Rollen hinein.",
       role: "Absolviert die berufliche Grundbildung (EFZ oder EBA) an drei Lernorten und ist – mit der gesetzlichen Vertretung – Vertragspartei des Lehrvertrags.",
       aufgaben: [
@@ -820,8 +934,58 @@ window.GAME_DATA = {
         { to: "uek", text: "Übt grundlegende Fertigkeiten, Transfer Theorie ↔ Praxis." },
         { to: "eltern", text: "Löst sich ab – die Eltern bleiben aber gesetzliche Vertretung." },
         { to: "dbw", text: "Beaufsichtigt das Lehrverhältnis und hilft bei Problemen." },
+        { to: "informatik", text: "Ein konkretes Beispiel: so sieht eine Lehre als Informatiker/in EFZ aus." },
+      ],
+      informatik: [
+        "Ein Beispiel ist die Lehre als Informatiker/in EFZ – siehe Rolle «Informatik-Lernende/r»",
+        "Lerndokumentation laufend führen und alle wesentlichen Arbeiten festhalten (BiVo Art. 12)",
+        "Arbeitssicherheit, Gesundheits- und Umweltschutz von Beginn an – an allen drei Lernorten (Art. 5)",
       ],
       sources: "PP Tag 1 & 2 · Ablaufplan · Planung",
+    },
+    {
+      id: "informatik", name: "Informatik-Lernende/r", short: "Beispielberuf · Informatiker/in EFZ",
+      color: "#3fe0c5", env: "serverraum",
+      look: { skin: "#e8b98a", shirt: "#334a7a", pants: "#23293a", hair: "#2a1d14", hairStyle: "curly", extra: ["hoodie", "headset", "laptop"], pose: "laptop", scale: 0.94 },
+      tagline: "Lernt in 8 Semestern, ICT-Lösungen zu planen, zu bauen und zu betreiben – im Betrieb, in der Schule und im üK.",
+      role: "Absolviert die berufliche Grundbildung Informatiker/in EFZ nach der BiVo des SBFI (SR 412.101.220.10) – in der Fachrichtung Plattformentwicklung oder Applikationsentwicklung.",
+      aufgaben: [
+        "Wählt eine Fachrichtung: Plattformentwicklung (Netze, Server, Dienste) oder Applikationsentwicklung (Software)",
+        "Erwirbt Kompetenzen in 8 Handlungskompetenzbereichen (a–h) – a bis c für alle",
+        "Begleitet ICT-Projekte, unterstützt und berät im ICT-Umfeld, pflegt digitale Daten",
+        "Entwickelt neben Fachkompetenzen auch Methoden-, Sozial- und Selbstkompetenzen (Art. 3)",
+        "Besucht 24 Module an der Berufsfachschule und 7 üK-Kurse",
+        "Lernt Mathematik (120 Lektionen) und Englisch (200 Lektionen) als erweiterte Grundkompetenzen",
+      ],
+      rechte: [
+        "Wird von qualifizierten Berufsbildner/innen ausgebildet (z. B. Informatiker/in EFZ + mind. 2 Jahre Praxis, Art. 10)",
+        "Arbeitssicherheit wird zu Beginn und während der ganzen Ausbildung erklärt – an allen Lernorten (Art. 5)",
+        "Keine gefährlichen Arbeiten – darum braucht der Beruf keine Ausnahme vom Arbeitsgesetz",
+        "35 üK-Tage (7 Kurse à 5 Tage) zählen als Arbeitszeit – im letzten Semester gibt es keine üK",
+        "Bildungsbericht jedes Semester, besprochen mit der lernenden Person (Art. 13)",
+        "Wird schriftlich informiert, wenn der Ausbildungserfolg gefährdet ist – samt Massnahmen und Fristen",
+        "Darf die Lerndokumentation an der IPA als Hilfsmittel verwenden (Art. 18)",
+      ],
+      pflichten: [
+        "Führt die Lerndokumentation laufend und hält alle wesentlichen Arbeiten fest (Art. 12)",
+        "Erarbeitet die IPA: 70–90 Stunden, bewertet nach Ausführung 50 %, Doku 20 %, Präsentation & Fachgespräch 30 %",
+        "Besteht das QV mit IPA ≥ 4, Erfahrungsnote «Informatikkompetenzen» ≥ 4 und Gesamtnote ≥ 4 (Art. 19)",
+      ],
+      informatik: [
+        "Fachrichtung Plattformentwicklung: Netze, Dienste und Serversysteme aufbauen, betreiben und überwachen (HKB d, e, f)",
+        "Fachrichtung Applikationsentwicklung: Applikationen entwickeln, ausliefern und betreiben (HKB g, h)",
+        "Projektmodule 431 und 306: Aufträge bzw. Kleinprojekt im eigenen Berufsumfeld",
+        "Gesamtnote: IPA 40 % · Informatikkompetenzen 30 % · Allgemeinbildung 20 % · erweiterte Grundkompetenzen 10 %",
+      ],
+      beziehungen: [
+        { to: "lernende", text: "Ist eine lernende Person – alle allgemeinen Rechte und Pflichten gelten auch hier." },
+        { to: "bb", text: "Kontrolliert die Lerndokumentation mind. 1x pro Semester und erstellt den Bildungsbericht." },
+        { to: "bfs", text: "24 Module und erweiterte Grundkompetenzen – 80 % der Erfahrungsnote Informatik." },
+        { to: "uek", text: "7 Kurse à 5 Tage – 20 % der Erfahrungsnote Informatik." },
+        { to: "oda", text: "ICT-Berufsbildung Schweiz organisiert die Module (ICT-Modulbaukasten)." },
+        { to: "sbfi", text: "Die BiVo vom 19. November 2020 gibt den Rahmen vor." },
+      ],
+      sources: "BiVo Informatiker/in EFZ (SR 412.101.220.10) · Bildungsplan Nr. 88611 · Antworten BiVo Tag 2",
     },
     {
       id: "betrieb", name: "Lehrbetrieb", short: "Der Arbeitgeber",
@@ -859,6 +1023,12 @@ window.GAME_DATA = {
         { to: "oda", text: "Nutzt Ausbildungsprogramm und branchenspezifische Unterlagen." },
         { to: "eltern", text: "Die gesetzliche Vertretung unterschreibt den Lehrvertrag mit." },
       ],
+      informatik: [
+        "1 Lernende/r braucht 1 Berufsbildner/in zu 100 % oder 2 zu je mind. 60 % (Art. 11)",
+        "Jede weitere lernende Person: zusätzlich 1 Fachkraft zu 100 % oder 2 zu je mind. 60 %",
+        "Wer nur 1 Lernende/n ausbilden darf, kann die zweite Person starten lassen, sobald die erste im letzten Lehrjahr ist",
+        "Keine Ausnahme vom Verbot gefährlicher Arbeiten nötig – Informatiker/innen führen keine aus",
+      ],
       sources: "Ablaufplan · PP Tag 1 & 2 · BiVo Informatiker/in",
     },
     {
@@ -888,7 +1058,7 @@ window.GAME_DATA = {
         "Über Arbeitssicherheit informieren und begleitende Massnahmen umsetzen",
         "Probezeitgespräch ca. 2 Wochen vor Ende der Probezeit",
         "Probleme früh erkennen, einordnen und verhältnismässig intervenieren",
-        "Anforderungen der BiVo erfüllen (z. B. Informatik: EFZ + 2 Jahre Praxis)",
+        "Anforderungen der BiVo erfüllen: passender Abschluss + berufliche Praxis im Lehrgebiet",
       ],
       beziehungen: [
         { to: "lernende", text: "Begleitet, fördert und beurteilt – denkt aus Sicht der Lernenden." },
@@ -897,6 +1067,15 @@ window.GAME_DATA = {
         { to: "dbw", text: "Holt früh Hilfe – vor allem vor einer Lehrvertragsauflösung." },
         { to: "bfs", text: "Lernortkooperation – das Zeugnis fliesst in den Bildungsbericht ein." },
         { to: "uek", text: "Lernortkooperation – üK-Leistungen zählen ebenfalls." },
+        { to: "informatik", text: "Beispiel aus meinem Beruf: Ausbildung von Informatiker/innen EFZ." },
+      ],
+      informatik: [
+        "Voraussetzung (Art. 10): Informatiker/in EFZ + mind. 2 Jahre Praxis · verwandtes EFZ mit Informatikkenntnissen + mind. 5 Jahre · einschlägige höhere Berufsbildung · einschlägiger Hochschulabschluss + mind. 2 Jahre",
+        "Lerndokumentation mind. 1x pro Semester kontrollieren, unterzeichnen und besprechen (Art. 12)",
+        "Bildungsbericht am Ende jedes Semesters – gestützt auf Betrieb, Berufsfachschule und üK (Art. 13)",
+        "Massnahmen mit Fristen schriftlich vereinbaren und im nächsten Bericht überprüfen",
+        "Arbeitssicherheit erklären: zu Beginn und während der ganzen Ausbildung, inkl. Gefahrensymbole und Piktogramme (Art. 5)",
+        "Die IPA (70–90 h) im letzten Semester begleiten",
       ],
       sources: "PP Tag 1 & 2 · Planung · BiVo Informatiker/in",
     },
@@ -926,6 +1105,9 @@ window.GAME_DATA = {
         { to: "bb", text: "Partner bei Problemen: gemeinsames Gespräch, Aktennotiz unterschreiben." },
         { to: "betrieb", text: "Vertragspartei im Lehrvertrag." },
         { to: "dbw", text: "Bei schweren Verstössen sitzen DBW und Eltern mit am Tisch." },
+      ],
+      informatik: [
+        "Werden als Vertragspartei schriftlich informiert, wenn der Ausbildungserfolg gefährdet ist (BiVo Art. 13)",
       ],
       sources: "PP Tag 1 & 2 · BiVo Informatiker/in",
     },
@@ -962,6 +1144,10 @@ window.GAME_DATA = {
         { to: "uek", text: "Leistungsverträge mit den üK-Zentren (50 in Luzern)." },
         { to: "sbfi", text: "Setzt die Vorgaben des Bundes im Kanton um." },
       ],
+      informatik: [
+        "Kann Betrieben mit mehrjährigem, überdurchschnittlichem Ausbildungserfolg mehr Lernende bewilligen (Art. 11)",
+        "Wird schriftlich informiert, wenn der Ausbildungserfolg gefährdet ist (Art. 13)",
+      ],
       sources: "PP Tag 2 · Ablaufplan · BiVo Informatiker/in",
     },
     {
@@ -978,7 +1164,13 @@ window.GAME_DATA = {
       ],
       pflichten: [
         "Unterricht nach Lehrplan und Rahmenlehrplan",
-        "Zeugnisse bzw. Modulnoten – z. B. 80 % der Erfahrungsnote Informatik",
+        "Zeugnisse bzw. Modulnoten – sie fliessen in Erfahrungsnoten und Bildungsbericht ein",
+      ],
+      informatik: [
+        "24 Module nach dem ICT-Modulbaukasten von ICT-Berufsbildung Schweiz",
+        "Erweiterte Grundkompetenzen: Mathematik 120 + Englisch 200 = 320 Lektionen",
+        "Modulnoten = 80 % der Erfahrungsnote «Informatikkompetenzen»",
+        "Erfahrungsnote «erweiterte Grundkompetenzen» = Durchschnitt der 8 Semesterzeugnisnoten",
       ],
       beziehungen: [
         { to: "lernende", text: "Unterrichtet und unterstützt – auch mit dem Help Point." },
@@ -998,11 +1190,16 @@ window.GAME_DATA = {
         "Grundlegende Fertigkeiten vermitteln",
         "Transfer zwischen Theorie und Praxis",
         "Detailplanung der Kurse durch die Kursleitenden",
-        "Beispiel Informatik: 35 Tage in 7 Kursen (je ein Modul)",
       ],
       pflichten: [
         "Kurse nach dem Ausbildungsprogramm für die üK durchführen",
-        "Leistungen bewerten – z. B. 20 % der Erfahrungsnote Informatik",
+        "Leistungen bewerten – je nach Beruf zählen sie für die Erfahrungsnote",
+      ],
+      informatik: [
+        "35 Tage zu je 8 Stunden – aufgeteilt auf 7 Kurse à 5 Tage (Art. 8)",
+        "Jeder Kurs entspricht einem Modul · 4 Pflicht- und 3 Wahlkurse",
+        "Im letzten Semester finden keine üK statt",
+        "üK-Noten = 20 % der Erfahrungsnote «Informatikkompetenzen»",
       ],
       beziehungen: [
         { to: "oda", text: "Die OdA ist für die Durchführung verantwortlich." },
@@ -1032,6 +1229,11 @@ window.GAME_DATA = {
         { to: "betrieb", text: "Liefert Ausbildungsprogramm und Unterlagen." },
         { to: "bfs", text: "Erarbeitet den Lehrplan gemeinsam." },
       ],
+      informatik: [
+        "Für die Informatik: ICT-Berufsbildung Schweiz",
+        "Organisiert den Unterricht in Berufsfachschule und üK über den ICT-Modulbaukasten",
+        "Hat den Bildungsplan Informatiker/in EFZ (Nr. 88611) erarbeitet",
+      ],
       sources: "PP Tag 1 & 2 · Planung · Ablaufplan",
     },
     {
@@ -1050,6 +1252,11 @@ window.GAME_DATA = {
       beziehungen: [
         { to: "oda", text: "Arbeitet mit den OdA zusammen – BiVo-Überprüfung alle 5 Jahre." },
         { to: "dbw", text: "Die Kantone setzen die Vorgaben um und üben die Aufsicht aus." },
+      ],
+      informatik: [
+        "Verordnung des SBFI vom 19. November 2020 über die berufliche Grundbildung Informatiker/in EFZ",
+        "SR 412.101.220.10 – Stand 1. Januar 2026",
+        "Bildungsplan Informatiker/in EFZ, Nr. 88611 (SBFI 2020)",
       ],
       sources: "PP Tag 1 & 2 · Planung",
     },
@@ -1178,6 +1385,55 @@ window.GAME_DATA = {
     ["VPA", "Vorgegebene praktische Arbeit – Teil des Qualifikationsverfahrens."],
   ],
 
+  /* Ausführliche Erklärungen fürs Lexikon (Klick auf einen Begriff).
+     Dazu zeigt die App automatisch: Stellen im Kurs, betroffene Rollen, verwandte Begriffe. */
+  lexikonMehr: {
+    "ABU": "Der allgemeinbildende Unterricht gehört zu jeder beruflichen Grundbildung und findet an der Berufsfachschule statt. Er stärkt Sprache, Kommunikation und Gesellschaft. Im QV ist die Allgemeinbildung ein eigener Qualifikationsbereich – bei Informatiker/innen EFZ zählt sie 20 %.",
+    "ArG": "Das Arbeitsgesetz schützt Arbeitnehmende – Jugendliche ganz besonders. Für Lernende wichtig sind Arbeits- und Ruhezeiten und der Gesundheitsschutz. Die BiVo hält fest, ob ein Beruf eine Ausnahme braucht (bei Informatiker/innen: keine).",
+    "ArGV 5": "Die Jugendarbeitsschutzverordnung verbietet Jugendlichen gefährliche Arbeiten. Art. 4 erlaubt Ausnahmen ab 15 Jahren – aber nur, wenn die BiVo des Berufs das vorsieht und die begleitenden Massnahmen (Ausbildung, Anleitung, Überwachung) eingehalten werden.",
+    "BB": "Berufsbildner/innen bilden im Lehrbetrieb aus: Bildungsverlauf planen, Ziele festlegen, instruieren, begleiten und beurteilen. Sie sind Coach, Fachperson und Vorbild. Voraussetzung: der Kurs für Berufsbildner/innen (40 h) und die fachlichen Anforderungen der BiVo.",
+    "BBG": "Das Berufsbildungsgesetz ist das Dach der ganzen Berufsbildung – gestützt auf Art. 63 der Bundesverfassung. Es regelt die Grundbildung, die höhere Berufsbildung und die Aufgaben von Bund, Kantonen und OdA. Art. 20: Lehrbetriebe setzen sich für den Lernerfolg ein und überprüfen ihn.",
+    "BBV": "Die Berufsbildungsverordnung führt das BBG im Detail aus und steht in der Gesetzespyramide direkt darunter – über den Bildungsverordnungen der einzelnen Berufe.",
+    "BehiG": "Das Behindertengleichstellungsgesetz soll Benachteiligungen verhindern. In der Berufsbildung zeigt es sich vor allem im Nachteilsausgleich – auch im Qualifikationsverfahren.",
+    "BFS": "Die Berufsfachschule ist der 2. Lernort: Berufskenntnisse, Allgemeinbildung (ABU) und Sport, meist ein Tag pro Woche. Sie bietet Stütz- und Freikurse und den Help Point. Ihr Zeugnis fliesst in den Bildungsbericht ein.",
+    "Bildungsbericht": "Am Ende jedes Semesters halten Berufsbildner/in und Lernende fest, wo die Ausbildung steht. Er stützt sich auf die Leistungen in Betrieb, Berufsfachschule und üK. Massnahmen werden mit Fristen vereinbart und im nächsten Bericht überprüft. Alle unterschreiben.",
+    "Bildungsbewilligung": "Ohne Bildungsbewilligung darf ein Betrieb keine Lernenden ausbilden. Sie wird beim Berufsbildungsamt des Lehrortskantons beantragt – in Luzern bei der DBW, die sie auch wieder entziehen kann.",
+    "BiPla / Bipla": "Der Bildungsplan konkretisiert die BiVo: Handlungskompetenzbereiche → Handlungskompetenzen → Leistungsziele je Lernort, mit Taxonomiestufen K1 bis K6. Die OdA erarbeitet ihn, das SBFI genehmigt ihn. Er ist die verbindliche Grundlage für die Planung im Betrieb.",
+    "BiVo": "Die Bildungsverordnung ist das «Gesetz» eines einzelnen Berufs: Dauer, Lernorte, Arbeitssicherheit, Anforderungen an Berufsbildner/innen, Höchstzahl Lernende, Lerndokumentation, Bildungsbericht und QV. Das SBFI erlässt sie; alle 5 Jahre wird sie überprüft.",
+    "BIZ": "Das Berufsinformationszentrum berät zu Berufswahl und Laufbahn – laut Kurs u. a. mit Kurzberatungen zu Grundkompetenzen.",
+    "BM 1 / BM 2": "Die Berufsmaturität ergänzt das EFZ mit erweiterter Allgemeinbildung und öffnet den Weg an die Fachhochschule. Die BM 1 läuft während der Lehre – die Lernenden melden sich selbst an, mit Einverständnis des Betriebs. Die BM 2 folgt nach dem Abschluss.",
+    "BP": "Die eidgenössische Berufsprüfung gehört zur höheren Berufsbildung. Wer besteht, erhält einen eidgenössischen Fachausweis.",
+    "BV": "Die Bundesverfassung steht zuoberst in der Gesetzespyramide. Art. 63 erlaubt dem Bund, Vorschriften über die Berufsbildung zu erlassen – darauf stützt sich das BBG.",
+    "DBW": "Die Dienststelle Berufs- und Weiterbildung setzt die Grundbildung im Kanton Luzern um: Lehraufsicht, Lehrverträge genehmigen, Bildungsbewilligungen, rechtliche Beratung, Gespräche mit allen Vertragsparteien, Lostly und Help Point. Früh beiziehen – «Sie stehen nicht alleine da!»",
+    "DSG": "Das Datenschutzgesetz regelt den Umgang mit Personendaten – auch mit Bewerbungsunterlagen und Bildungsberichten von Lernenden.",
+    "EBA": "Die zweijährige Grundbildung schliesst mit dem eidgenössischen Berufsattest ab. EBA-Lernende können fachkundige individuelle Begleitung (FiB) sowie schulische und individuelle Begleitung (SB, IB) erhalten.",
+    "EFZ": "Die drei- bis vierjährige Grundbildung schliesst mit dem eidgenössischen Fähigkeitszeugnis ab. Zusammen mit der Berufsmaturität öffnet sie den Weg an die Fachhochschule. Beispiel: Informatiker/in EFZ – 8 Semester.",
+    "FH": "Fachhochschulen gehören zur Tertiärstufe und bieten praxisnahe Studiengänge. Aus der Berufsbildung führt der Weg typischerweise über EFZ und Berufsmaturität.",
+    "FiB": "Die fachkundige individuelle Begleitung unterstützt EBA-Lernende, die den Ausbildungserfolg sonst gefährden würden – nicht nur schulisch, sondern im ganzen Lehrverhältnis.",
+    "GAV": "Ein Gesamtarbeitsvertrag zwischen Arbeitgeber- und Arbeitnehmerverbänden regelt z. B. Lohn, Ferien und Arbeitszeit einer Branche. Lehrbetriebe müssen ihn beachten.",
+    "Handlungskompetenz": "Handlungskompetent ist, wer berufliche Situationen selbstständig bewältigt. Der Bildungsplan beschreibt dafür vier Dimensionen: Fach-, Methoden-, Sozial- und Selbstkompetenz.",
+    "HF": "Höhere Fachschulen gehören zur höheren Berufsbildung und vertiefen Fach- und Führungswissen. Abschluss: Diplom HF.",
+    "HFP": "Die eidgenössische höhere Fachprüfung ist die anspruchsvollste Prüfung der höheren Berufsbildung. Abschluss: eidgenössisches Diplom.",
+    "IB": "Die individuelle Begleitung unterstützt EBA-Lernende mit erhöhtem Bedarf – über die schulische Begleitung hinaus.",
+    "IPA": "Bei der individuellen praktischen Arbeit erledigt die lernende Person einen echten Auftrag im eigenen Betrieb; Prüfungsexpert/innen bewerten sie. Bei Informatiker/innen EFZ: 70–90 Stunden, 40 % der Gesamtnote – Ausführung 50 %, Dokumentation 20 %, Präsentation & Fachgespräch 30 %.",
+    "Lehraufsicht": "Der Kanton beaufsichtigt jedes Lehrverhältnis – von der Unterzeichnung des Lehrvertrags bis zum QV. In Luzern ist das die DBW: Sie berät, vermittelt bei Problemen und greift ein, wenn der Ausbildungserfolg gefährdet ist.",
+    "Lerndokumentation": "Die Lernenden halten darin laufend fest, was sie gelernt und gearbeitet haben – Lernberichte mind. 1x pro Monat. Berufsbildner/innen prüfen sie regelmässig und geben Feedback. Bei Informatiker/innen darf sie an der IPA als Hilfsmittel verwendet werden.",
+    "LOK": "Lernortkooperation heisst: Betrieb, Berufsfachschule und üK arbeiten zusammen, damit Theorie und Praxis zueinander passen. Zeugnisse und üK-Leistungen fliessen in den Bildungsbericht ein.",
+    "Lostly": "Ein Unterstützungsangebot der DBW, an das sich Lernende im Kanton Luzern wenden können – eine Anlaufstelle, wenn es in der Lehre schwierig wird.",
+    "Nachteilsausgleich": "Lernende mit einer Beeinträchtigung (z. B. Legasthenie) erhalten angepasste Bedingungen, damit sie zeigen können, was sie wirklich können. Für das QV muss er rechtzeitig beantragt werden – spätestens im September vor dem QV.",
+    "OdA": "Organisationen der Arbeitswelt sind die Berufs- und Branchenverbände. Sie erarbeiten BiVo, Bildungsplan und Ausbildungsprogramm, führen die überbetrieblichen Kurse durch und unterstützen die Betriebe. In der Informatik: ICT-Berufsbildung Schweiz.",
+    "OR": "Das Obligationenrecht regelt den Lehrvertrag als besonderen Einzelarbeitsvertrag: befristet, zwingend schriftlich und von der kantonalen Behörde genehmigt.",
+    "PEX": "Prüfungsexpert/innen nehmen im Qualifikationsverfahren die Prüfungen ab und bewerten sie – z. B. die IPA mit Präsentation und Fachgespräch.",
+    "QualiCarte": "Mit der QualiCarte prüft der Lehrbetrieb einmal pro Jahr selbst die Qualität seiner Ausbildung. Die lernende Person füllt am Ende des 1. Lehrjahres einen eigenen Fragebogen aus.",
+    "QV": "Das Qualifikationsverfahren schliesst die Grundbildung ab – mit einer praktischen Arbeit (IPA oder VPA), Erfahrungsnoten und Allgemeinbildung. Nicht bestanden? Berufsbildungsamt kontaktieren und die ungenügenden Positionen wiederholen.",
+    "SB / SB Plus": "Die schulische Begleitung unterstützt EBA-Lernende an der Berufsfachschule – SB im Unterricht, SB Plus zusätzlich ausserhalb.",
+    "SBFI": "Das Staatssekretariat für Bildung, Forschung und Innovation macht die Vorgaben des Bundes: Es erlässt die BiVo, genehmigt die Bildungspläne und steuert die Berufsbildung strategisch – gemeinsam mit Kantonen und OdA.",
+    "SDBB": "Das Schweizerische Dienstleistungszentrum Berufsbildung stellt Formulare und Hilfsmittel bereit, z. B. den Bildungsbericht.",
+    "üK": "Die überbetrieblichen Kurse sind der 3. Lernort: grundlegende Fertigkeiten und Transfer zwischen Theorie und Praxis. Die OdA führt sie durch, üK-Tage sind Arbeitszeit. Informatik: 35 Tage in 7 Kursen.",
+    "UVG": "Das Unfallversicherungsgesetz – Lernende sind über den Lehrbetrieb gegen Unfälle versichert. Die Versicherungen gehören in den Lehrvertrag.",
+    "VPA": "Bei der vorgegebenen praktischen Arbeit lösen alle Kandidierenden dieselben Aufgaben. Je nach Beruf ist sie die Alternative zur IPA.",
+  },
+
   /* =====================================================================
      ARENA – BOSSKAMPF
      ===================================================================== */
@@ -1205,6 +1461,10 @@ window.GAME_DATA = {
     { q: "Welcher Führungsstil passt laut Generationenvergleich zur Generation Z?", a: ["Kontrollieren", "Anweisen", "Befähigen", "Koordinieren"], correct: 2, why: "Generation Z: befähigen – Alpha: inspirieren." },
     { q: "Wer genehmigt in Luzern den Lehrvertrag?", a: ["Die Berufsfachschule", "Die OdA", "Die DBW", "Das SBFI"], correct: 2, why: "Die Dienststelle Berufs- und Weiterbildung – die Lehraufsicht des Kantons." },
     { q: "Wann ist das QV Informatiker/in EFZ bestanden?", a: ["Gesamtnote ≥ 4 reicht", "IPA ≥ 4, Erfahrungsnote Informatik ≥ 4 und Gesamtnote ≥ 4", "Allgemeinbildung ≥ 4", "IPA ≥ 5"], correct: 1, why: "BiVo Informatiker/in Art. 19 – drei Bedingungen." },
+    { q: "💻 Wie viele üK-Tage haben Informatik-Lernende?", a: ["10 Tage", "20 Tage", "35 Tage in 7 Kursen", "50 Tage"], correct: 2, why: "BiVo Art. 8 – 7 Kurse à 5 Tage, im letzten Semester keine üK." },
+    { q: "💻 Wie oft kontrolliert die Berufsbildnerin die Lerndokumentation einer Informatik-Lernenden mindestens?", a: ["Jede Woche", "1x pro Semester", "1x pro Lehrjahr", "Nur vor der IPA"], correct: 1, why: "BiVo Art. 12 – kontrollieren, unterzeichnen und besprechen." },
+    { q: "💻 Warum enthält die BiVo Informatiker/in keine Abweichung vom Arbeitsgesetz?", a: ["Weil sie vergessen wurde", "Weil Informatiker/innen keine gefährlichen Arbeiten ausführen", "Weil Lernende über 18 sind", "Weil der Kanton das regelt"], correct: 1, why: "Es braucht keine Ausnahme vom Verbot gefährlicher Arbeiten." },
+    { q: "💻 Wie lange dauert die IPA bei Informatiker/innen EFZ?", a: ["8–16 Stunden", "24–40 Stunden", "70–90 Stunden", "200 Stunden"], correct: 2, why: "BiVo Art. 18 – Ausführung 50 %, Doku 20 %, Präsentation & Fachgespräch 30 %." },
   ],
 
   /* =====================================================================
@@ -1222,6 +1482,7 @@ window.GAME_DATA = {
     { s: "Ein Lernender hält sich wiederholt nicht an die vereinbarten Handy-Regeln, trotz Feedbackgespräch.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss mit schriftlich definierten Massnahmen." },
     { s: "Eine Lernende wirkt seit Wochen bedrückt und erwähnt psychische Krisen.", level: 3, why: "Weiterverweisen: Fachstelle Psychologische Beratung, Help Point oder DBW." },
     { s: "Ein Lernender antwortet bei einer Instruktion einmal patzig.", level: 0, why: "Leichter Verstoss: das Gespräch suchen und Feedback geben." },
+    { s: "💻 Ein Informatik-Lernender führt seine Lerndokumentation trotz Feedbackgespräch seit Monaten nicht nach.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss: formelles Gespräch und schriftliche Massnahmen mit Fristen." },
   ],
   duellLevels: [
     { icon: "🟢", lbl: "Leichter Verstoss" },
@@ -1233,6 +1494,8 @@ window.GAME_DATA = {
   credits: [
     "Take-away im Berufsbildnerkurs – WBZ Kanton Luzern.",
     "Inhalte: Kursunterlagen Tag 1 und Tag 2 – PP-Präsentationen, Ablaufplan der Lehrzeit, Planung und Umsetzung der betrieblichen Bildung, Glossar, BiVo und Bildungsplan Informatiker/in EFZ, Mini-Fallbeispiele.",
+    "Beispielberuf: Informatiker/in EFZ – die allgemeinen Inhalte gelten für alle Berufe.",
+    "Kulisse: Luzern am Vierwaldstättersee mit Kapellbrücke, Wasserturm, Museggmauer und Pilatus.",
     "3D-Grafik mit Three.js (WebGL) · HTML, CSS und JavaScript · läuft ohne Internet.",
   ],
 };

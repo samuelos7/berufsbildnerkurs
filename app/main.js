@@ -68,7 +68,7 @@
           if (p.startsWith("--")) el.style.setProperty(p, val);
           else el.style[p] = val;
         }
-      } else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+      } else if (k.startsWith("on")) { el[k] = v; (el._ev || (el._ev = [])).push(k); }
       else if (v !== false && v != null) el.setAttribute(k, v);
     }
     for (const kid of kids.flat(Infinity)) {
@@ -77,6 +77,23 @@
     }
     return el;
   };
+  /* DOM abgleichen statt neu aufbauen: bestehende Elemente bleiben stehen, nur Änderungen
+     werden übernommen → kein Flackern, CSS-Übergänge laufen weich, Scroll-Position bleibt.
+     Elemente mit anderem data-k werden ersetzt (damit ihr Inhalt sanft eingeblendet wird). */
+  function patch(a, b) {
+    if (a.nodeType !== b.nodeType || a.nodeName !== b.nodeName || (a.nodeType === 1 && a.getAttribute("data-k") !== b.getAttribute("data-k"))) { a.replaceWith(b); return; }
+    if (a.nodeType === 3) { if (a.data !== b.data) a.data = b.data; return; }
+    if (a.nodeType !== 1) return;
+    for (const at of [...a.attributes]) if (!b.hasAttribute(at.name)) a.removeAttribute(at.name);
+    for (const at of [...b.attributes]) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+    for (const k of new Set([...(a._ev || []), ...(b._ev || [])])) a[k] = b[k] || null;
+    a._ev = b._ev;
+    if (a.tagName === "INPUT") return;
+    const ak = [...a.childNodes], bk = [...b.childNodes];
+    bk.forEach((n, i) => { if (i < ak.length) patch(ak[i], n); else a.appendChild(n); });
+    for (let i = bk.length; i < ak.length; i++) ak[i].remove();
+  }
+  const luLogo = (cls = "") => h("div", { class: "lu-logo " + cls, title: "Kanton Luzern" }, h("i"), h("span", {}, "Kanton", h("b", {}, "Luzern")));
   const wrap = (i, n) => ((i % n) + n) % n;
   const shuffle = (a) => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
   function toast(msg) {
@@ -115,29 +132,33 @@
   function render() {
     current = stack[stack.length - 1];
     document.body.dataset.zone = current.zone || "menu";
-    if (current !== lastScreen) {
+    const fresh = current !== lastScreen;
+    if (fresh) {
       lastScreen = current;
       current.world && current.world();
     }
-    app.innerHTML = "";
+    let hud = null;
     if (current.id !== "title") {
       const zoneName = { wissen: "📘 Wissen", arena: "⚔️ Arena", menu: "🏠 Hub" }[current.zone || "menu"];
-      app.append(h("div", { class: "hud" },
-        h("div", { class: "crumbs" }, h("span", { class: "zone-badge" }, zoneName), ...crumbs()),
+      hud = h("div", { class: "hud" },
+        h("div", { class: "crumbs" }, luLogo(), h("span", { class: "zone-badge" }, zoneName), h("span", { class: "trail" }, ...crumbs())),
         h("div", { class: "keys" },
           h("span", {}, h("kbd", {}, "←↑↓→"), "Navigieren"),
           h("span", {}, h("kbd", {}, "Enter"), "Wählen"),
-          stack.length > 1 ? h("span", {}, h("kbd", {}, "Esc"), "Zurück") : null,
+          h("span", { class: stack.length > 1 ? "" : "off" }, h("kbd", {}, "Esc"), "Zurück"),
           h("span", {}, h("kbd", {}, "M"), muted ? "Ton an" : "Ton aus"),
         ),
-      ));
+      );
     }
-    app.append(current.view());
-    current.after && current.after();
+    const next = [hud, current.view()].filter(Boolean);
+    const old = [...app.children];
+    if (old.length !== next.length) app.replaceChildren(...next);
+    else next.forEach((n, i) => (fresh && i === next.length - 1 ? old[i].replaceWith(n) : patch(old[i], n)));
+    current.after && current.after(fresh);
   }
   function crumbs() {
     const parts = stack.filter((s) => s.id !== "title" && s.id !== "menu").map((s) => s.title);
-    return parts.flatMap((p, i) => (i === parts.length - 1 ? ["  ›  ", h("b", {}, p)] : ["  ›  ", p]));
+    return parts.flatMap((p, i) => (i === parts.length - 1 ? [h("i", {}, "›"), h("b", {}, p)] : [h("i", {}, "›"), h("span", {}, p)]));
   }
   function listNav(e, state, n, onEnter, axis = "y") {
     const prev = axis === "y" ? "ArrowUp" : "ArrowLeft";
@@ -178,7 +199,7 @@
   }
 
   /* ================= SCREENS ================= */
-  const heroes = [charById.lernende, charById.bb];
+  const heroes = [charById.lernende, charById.bb, charById.informatik];
 
   /* --- Titelbild --- */
   const TitleScreen = () => ({
@@ -186,10 +207,15 @@
     world: () => W.mode("menu", { side: null, heroes }),
     view: () =>
       h("div", { class: "screen title-screen" },
-        h("h1", { class: "logo" }, D.title, h("small", {}, D.subtitle)),
-        h("div", { class: "tagline" }, D.tagline),
-        h("div", { class: "press-start", onclick: start }, "Enter drücken"),
-        h("div", { class: "title-meta" }, D.meta),
+        luLogo("lu-logo-lg"),
+        h("div", { class: "title-top" },
+          h("h1", { class: "logo" }, D.title, h("small", {}, D.subtitle)),
+          h("div", { class: "tagline" }, D.tagline),
+        ),
+        h("div", { class: "title-bottom" },
+          h("div", { class: "press-start", onclick: start }, "Enter drücken"),
+          h("div", { class: "title-meta" }, D.meta),
+        ),
       ),
     key: (e) => { if (e.key === "Enter" || e.key === " ") start(); },
   });
@@ -201,7 +227,8 @@
       id: "wissen", name: "Wissen", sub: "Lernen & Nachschlagen", ico: "📘",
       items: [
         { ico: "🗂️", lbl: "Kurstage", sub: "5 Level mit allen Inhalten", open: () => LevelSelect() },
-        { ico: "👥", lbl: "Rollen", sub: "9 Charaktere · Rechte & Pflichten", open: () => CharSelect() },
+        { ico: "👥", lbl: "Rollen", sub: `${D.characters.length} Charaktere · Rechte & Pflichten`, open: () => CharSelect() },
+        { ico: "💻", lbl: "Beispielberuf", sub: `${D.example.name} · BiVo, Kompetenzen, QV`, open: () => LevelDetail(D.beruf) },
         { ico: "🗺️", lbl: "Lehrzeit-Reise", sub: "Vom Lehrvertrag bis zum Abschluss", open: () => Journey() },
         { ico: "📖", lbl: "Lexikon", sub: `${D.lexikon.length} Begriffe von ABU bis VPA`, open: () => Lexikon() },
       ],
@@ -228,20 +255,20 @@
           h("div", { class: "portals" },
             PORTALS.map((p, c) =>
               h("div", { class: `portal portal-${p.id}` + (c === s.col ? " active" : "") },
-                h("div", { class: "portal-head" }, h("span", { class: "portal-ico" }, p.ico), h("div", {}, h("h2", {}, p.name), h("div", { class: "portal-sub" }, p.sub))),
+                h("div", { class: "portal-head" }, h("span", { class: "portal-ico" }, p.ico), h("div", {}, h("h2", {}, p.name), h("div", { class: "portal-sub" }, p.sub)), h("span", { class: "portal-count" }, p.items.length)),
                 h("div", { class: "portal-items" },
                   p.items.map((m, i) =>
                     h("div", {
                       class: "menu-item" + (c === s.col && i === s.i ? " active" : ""),
                       onmouseenter: () => { if (s.col !== c || s.i !== i) { const sw = s.col !== c; s.col = c; s.i = i; if (sw) W.menuSide(p.id); render(); } },
                       onclick: () => { s.col = c; s.i = i; open(); },
-                    }, h("div", { class: "ico" }, m.ico), h("div", {}, h("div", { class: "lbl" }, m.lbl), h("div", { class: "sub" }, m.sub))),
+                    }, h("div", { class: "mi-badge" }, m.ico), h("div", { class: "mi-text" }, h("div", { class: "lbl" }, m.lbl), h("div", { class: "sub" }, m.sub)), h("div", { class: "mi-go" }, "›")),
                   ),
                 ),
               ),
             ),
           ),
-          h("div", { class: "menu-foot", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits"),
+          h("div", { class: "menu-foot" }, h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Seite wechseln"), h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Auswahl"), h("span", { class: "link", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits")),
         ),
       key: (e) => {
         const n = PORTALS[s.col].items.length;
@@ -306,10 +333,12 @@
         key: () => false,
       };
     }
-    let bodyEl = null;
+    const hero = lv.char ? charById[lv.char] : null;
+    const bodyEl = () => document.querySelector(".mission-body");
+    let shownI = -1;
     return {
-      id: "level", title: `Level ${lv.nr}`, zone: "wissen",
-      world: () => W.mode("wissen"),
+      id: "level", title: hero ? "Beispielberuf" : `Level ${lv.nr}`, zone: "wissen",
+      world: () => (hero ? W.mode("character", { char: hero, stageX: -3.35 }) : W.mode("wissen")),
       view: () => {
         const m = lv.missions[s.i];
         let lastCh = null;
@@ -319,24 +348,29 @@
           list.push(h("div", { class: "mission" + (i === s.i ? " active" : ""), onclick: () => { s.i = i; sfx.move(); render(); } },
             h("div", { class: "mnum" }, i + 1), h("div", {}, mm.title)));
         });
-        bodyEl = h("div", { class: "mission-body panel" },
-          h("div", { class: "goal" }, `Mission ${s.i + 1} von ${lv.missions.length}` + (m.ch ? ` · ${m.ch}` : "")),
-          h("h3", {}, m.title),
-          (m.blocks || [{ t: "list", items: m.points || [] }]).map(block),
-          m.source ? h("div", { class: "source" }, "Quelle: " + m.source) : null,
+        const body = h("div", { class: "mission-body panel" },
+          h("div", { class: "swap", "data-k": "m" + s.i },
+            h("div", { class: "goal" }, `Mission ${s.i + 1} von ${lv.missions.length}` + (m.ch ? ` · ${m.ch}` : "")),
+            h("h3", {}, m.title),
+            (m.blocks || [{ t: "list", items: m.points || [] }]).map(block),
+            m.source ? h("div", { class: "source" }, "Quelle: " + m.source) : null,
+          ),
         );
-        return h("div", { class: "screen screen-top" },
-          h("div", { class: "level-head" }, h("h2", { class: "screen-title" }, `Level ${lv.nr} · ${lv.title}`), h("div", { class: "screen-sub" }, lv.subtitle)),
-          h("div", { class: "level-detail" }, h("div", { class: "mission-list panel" }, list), bodyEl),
+        return h("div", { class: "screen screen-top" + (hero ? " beruf-screen" : "") },
+          h("div", { class: "level-head" }, h("h2", { class: "screen-title" }, hero ? lv.title : `Level ${lv.nr} · ${lv.title}`), h("div", { class: "screen-sub" }, lv.subtitle)),
+          h("div", { class: "level-detail" + (hero ? " with-stage" : "") },
+            hero ? h("div", { class: "stage-col" }, h("div", { class: "nameplate", style: { "--c": hero.color } }, h("h2", {}, hero.name), h("div", { class: "cshort" }, hero.short))) : null,
+            h("div", { class: "mission-list panel" }, list), body),
         );
       },
       after: () => {
         const a = document.querySelector(".mission.active");
         a && a.scrollIntoView({ block: "nearest" });
+        if (shownI !== s.i) { shownI = s.i; const b = bodyEl(); if (b) b.scrollTop = 0; }
       },
       key: (e) => {
-        if (e.key === "PageDown" || e.key === "ArrowRight") { bodyEl && bodyEl.scrollBy({ top: 260, behavior: "smooth" }); return true; }
-        if (e.key === "PageUp" || e.key === "ArrowLeft") { bodyEl && bodyEl.scrollBy({ top: -260, behavior: "smooth" }); return true; }
+        if (e.key === "PageDown" || e.key === "ArrowRight") { const b = bodyEl(); b && b.scrollBy({ top: 260, behavior: "smooth" }); return true; }
+        if (e.key === "PageUp" || e.key === "ArrowLeft") { const b = bodyEl(); b && b.scrollBy({ top: -260, behavior: "smooth" }); return true; }
         return listNav(e, s, lv.missions.length, null);
       },
     };
@@ -379,53 +413,142 @@
   };
 
   /* --- Charakterbogen --- */
-  const TABS = [
-    { id: "aufgaben", lbl: "🎯 Aufgaben", bullet: '"◆"' },
-    { id: "rechte", lbl: "🛡️ Rechte", bullet: '"✔"' },
-    { id: "pflichten", lbl: "📜 Pflichten", bullet: '"!"' },
-    { id: "beziehungen", lbl: "🔗 Beziehungen" },
+  const ROLE_ICON = { lernende: "🎒", informatik: "💻", betrieb: "🏭", bb: "🧑‍🏫", eltern: "👪", dbw: "🏛️", bfs: "🏫", uek: "🛠️", oda: "🤝", sbfi: "⚖️" };
+  const ROLE_ABBR = { lernende: "Lernende", informatik: "Informatik", betrieb: "Betrieb", bb: "BB", eltern: "Eltern", dbw: "DBW", bfs: "BFS", uek: "üK", oda: "OdA", sbfi: "SBFI" };
+  /* Wo steht die Rolle im System? (von oben nach unten) */
+  const SYSTEM = [
+    { lbl: "Bund", sub: "Gesetze, BiVo", ids: ["sbfi"] },
+    { lbl: "Kanton", sub: "Lehraufsicht", ids: ["dbw"] },
+    { lbl: "Branche", sub: "Inhalte, üK", ids: ["oda"] },
+    { lbl: "Lernorte", sub: "Betrieb · Schule · üK", ids: ["betrieb", "bfs", "uek"] },
+    { lbl: "Menschen", sub: "in der Lehre", ids: ["bb", "lernende", "informatik", "eltern"] },
   ];
+  /* Piktogramme für Listeneinträge – nach Stichwort gewählt */
+  const ICONS = [
+    [/Bildungsbericht/i, "📝"], [/Lerndoku|Lernbericht/i, "📒"], [/Lehrvertrag|Vertragspartei|Vertrag/i, "📄"],
+    [/IPA|QV\b|Qualifikationsverfahren|Prüfung|Erfahrungsnote|Gesamtnote/i, "🎓"], [/Sicherheit|gefährlich|Schutz|Belästigung|Verstöss/i, "⛑️"],
+    [/Entschädigung|Lohn|Versicherung/i, "💰"], [/Ferien|Urlaub|Absenz/i, "🏖️"], [/Beratung|Unterstütz|Help Point|Lostly|Fachstelle|Hilfe|Begleitung/i, "🤝"],
+    [/Bewilligung|genehmig|bewillig/i, "✅"], [/Gesetz|BBG|BBV|\bOR\b|ArG|Verordnung|BiVo|Art\.|Erlass/, "⚖️"], [/Schule|Unterricht|Modul|Lektion|Lehrplan|Theorie/i, "🏫"],
+    [/üK|überbetrieb|Kurse?\b/i, "🛠️"], [/Eltern|Vertretung|Ablösung/i, "👪"], [/Portal|Daten|digital|ICT|Netz|Server|Applikation|Software|Informatik/i, "💻"],
+    [/Feedback|Gespräch|kommuniz|informiert/i, "💬"], [/plan|Semester|Termin|Lehrstart/i, "🗓️"], [/Qualität|QualiCarte/i, "⭐"], [/Projekt/i, "📊"],
+    [/Kompetenz|lernt|Fertigkeit|Grundkompetenz/i, "🧠"], [/Ziel|Lernerfolg/i, "🎯"], [/Rolle|Vorbild|Coach|Bezugsperson/i, "🧭"], [/Lehrstelle|auswählen|Schnupper/i, "🔎"],
+  ];
+  const iconFor = (txt, fb) => (ICONS.find(([re]) => re.test(txt)) || [0, fb])[1];
+  const TABS = [
+    { id: "overview", lbl: "✨ Überblick", ico: "✨" },
+    { id: "aufgaben", lbl: "🎯 Aufgaben", ico: "🎯" },
+    { id: "rechte", lbl: "🛡️ Rechte", ico: "🛡️" },
+    { id: "pflichten", lbl: "📜 Pflichten", ico: "📜" },
+    { id: "informatik", lbl: "💻 Informatik", ico: "💻", example: true },
+    { id: "beziehungen", lbl: "🔗 Beziehungen", ico: "🔗" },
+  ];
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const sv = (tag, attrs = {}, ...kids) => {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k.startsWith("on")) { el[k] = v; (el._ev || (el._ev = [])).push(k); } else if (v != null) el.setAttribute(k, v);
+    }
+    kids.flat(Infinity).forEach((k) => k != null && el.append(k.nodeType ? k : document.createTextNode(String(k))));
+    return el;
+  };
+  /* Beziehungsnetz als Grafik: Rolle in der Mitte, Partner rundherum (anklickbar) */
+  function relNet(c, big = false) {
+    const W0 = big ? 520 : 340, H0 = big ? 290 : 236, cx = W0 / 2, cy = H0 / 2 - 6;
+    const rels = (c.beziehungen || []).filter((r) => charById[r.to]);
+    const n = rels.length, rx = W0 / 2 - 46, ry = H0 / 2 - 42;
+    const pts = rels.map((r, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; return { r, o: charById[r.to], x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry }; });
+    return sv("svg", { class: "net", viewBox: `0 0 ${W0} ${H0}`, role: "img", "aria-label": "Beziehungsnetz" },
+      pts.map((p, i) => sv("line", { class: "net-line", x1: cx, y1: cy, x2: p.x, y2: p.y, stroke: p.o.color, style: `animation-delay:${i * 0.08}s` })),
+      sv("circle", { cx, cy, r: big ? 40 : 32, class: "net-core", fill: c.color }),
+      sv("text", { x: cx, y: cy + 1, class: "net-emoji big" }, ROLE_ICON[c.id] || "●"),
+      pts.map((p, i) => sv("g", { class: "net-node", style: `animation-delay:${0.15 + i * 0.08}s`, onclick: () => { sfx.ok(); go(CharSheet(p.o.id), true); } },
+        sv("title", {}, `${p.o.name}: ${p.r.text}`),
+        sv("circle", { cx: p.x, cy: p.y, r: 21, fill: "rgba(8,14,30,.85)", stroke: p.o.color, "stroke-width": 2.5 }),
+        sv("text", { x: p.x, y: p.y + 1, class: "net-emoji" }, ROLE_ICON[p.o.id] || "●"),
+        sv("text", { x: p.x, y: p.y + 35, class: "net-lbl", fill: p.o.color }, ROLE_ABBR[p.o.id] || p.o.name))));
+  }
+  /* Ebene im System als gestufte Pyramide */
+  const systemStack = (c) => h("div", { class: "sys" }, SYSTEM.map((row, i) => {
+    const here = row.ids.includes(c.id);
+    return h("div", { class: "sys-row" + (here ? " here" : ""), style: { "--w": 46 + i * 13.5 + "%" } },
+      h("div", { class: "sys-lbl" }, h("b", {}, row.lbl), h("span", {}, row.sub)),
+      h("div", { class: "sys-chips" }, row.ids.map((id) => h("i", { class: id === c.id ? "me" : "", title: charById[id].name, onclick: () => { if (id !== c.id) { sfx.ok(); go(CharSheet(id), true); } } }, ROLE_ICON[id]))));
+  }));
+  const icards = (list, fb) => h("div", { class: "icards" }, list.map((p, i) =>
+    h("div", { class: "icard", style: { "--i": String(i) } }, h("div", { class: "ic" }, iconFor(p, fb)), h("div", { class: "it" }, p), h("div", { class: "in" }, String(i + 1).padStart(2, "0")))));
   const CharSheet = (id) => {
-    const s = { tab: 0 };
+    const s = { tab: 0, shown: -1 };
     const c = charById[id];
-    const tabs = TABS.filter((t) => (c[t.id] || []).length);
+    const tabs = TABS.filter((t) => t.id === "overview" || (c[t.id] || []).length);
+    const toTab = (tid) => { const i = tabs.findIndex((t) => t.id === tid); if (i >= 0) { s.tab = i; sfx.move(); render(); } };
+    const overview = () => {
+      const stats = ["aufgaben", "rechte", "pflichten", "beziehungen"].filter((k) => (c[k] || []).length);
+      const hiR = (c.rechte || []).slice(0, 2), hiP = (c.pflichten || []).slice(0, 2);
+      return h("div", { class: "ov" },
+        h("div", { class: "ov-stats" }, stats.map((k) => {
+          const t = TABS.find((x) => x.id === k);
+          return h("div", { class: "ov-stat", onclick: () => toTab(k) }, h("span", { class: "ov-ico" }, t.ico), h("b", {}, c[k].length), h("span", {}, t.lbl.split(" ").slice(1).join(" ")));
+        })),
+        h("div", { class: "ov-grid" },
+          h("div", { class: "ov-card" }, h("h5", {}, "🔗 Beziehungsnetz", h("small", {}, "Rolle anklicken")), relNet(c)),
+          h("div", { class: "ov-card" }, h("h5", {}, "🏛️ Ebene im System"), systemStack(c))),
+        hiR.length || hiP.length
+          ? h("div", { class: "ov-grid" },
+            hiR.length ? h("div", { class: "ov-card" }, h("h5", {}, "🛡️ Wichtigste Rechte"), icards(hiR, "🛡️")) : null,
+            hiP.length ? h("div", { class: "ov-card" }, h("h5", {}, "📜 Wichtigste Pflichten"), icards(hiP, "📜")) : null)
+          : h("div", { class: "ov-card" }, h("h5", {}, "🎯 Kernaufgaben"), icards((c.aufgaben || []).slice(0, 4), "🎯")),
+        c.informatik && c.id !== "informatik"
+          ? h("div", { class: "ov-teaser", onclick: () => toTab("informatik") }, h("span", { class: "ov-ico" }, "💻"), h("div", {}, h("b", {}, "Beispiel " + D.example.name), h("span", {}, c.informatik[0])), h("span", { class: "go" }, "›"))
+          : null,
+      );
+    };
     return {
       id: "sheet", title: c.name, zone: "wissen",
       world: () => W.mode("character", { char: c }),
       view: () => {
         const t = tabs[s.tab];
-        const content = t.id === "beziehungen"
-          ? h("div", { class: "rels" }, c.beziehungen.map((r) => {
+        let content;
+        if (t.id === "overview") content = overview();
+        else if (t.id === "beziehungen") {
+          content = h("div", { class: "rel-wrap" }, h("div", { class: "ov-card net-big" }, relNet(c, true)), h("div", { class: "rels" }, c.beziehungen.map((r) => {
             const o = charById[r.to];
             return h("div", { class: "rel", style: { "--c": o ? o.color : "#888" }, onclick: () => { if (o) { sfx.ok(); go(CharSheet(o.id), true); } } },
-              h("div", { class: "mini" }), h("div", {}, h("b", {}, o ? o.name : r.to), h("span", {}, r.text)), h("span", { class: "go" }, "›"));
-          }))
-          : h("ul", { class: "blist", style: { "--bullet": t.bullet } }, c[t.id].map((p) => h("li", {}, p)));
+              h("div", { class: "mini" }, ROLE_ICON[r.to] || ""), h("div", {}, h("b", {}, o ? o.name : r.to), h("span", {}, r.text)), h("span", { class: "go" }, "›"));
+          })));
+        } else {
+          content = h("div", {},
+            t.example && c.id !== "informatik" ? h("div", { class: "example-hint" }, "💡 Allgemein gelten Aufgaben / Rechte / Pflichten – hier konkret für ", h("b", {}, D.example.name), ":") : null,
+            icards(c[t.id], t.ico));
+        }
         return h("div", { class: "screen sheet-screen" },
           h("div", { class: "sheet", style: { "--c": c.color } },
             h("div", { class: "sheet-stage" },
-              h("div", { class: "nameplate" }, h("h2", {}, c.name), h("div", { class: "cshort" }, c.short)),
+              h("div", { class: "nameplate" }, h("span", { class: "np-ico" }, ROLE_ICON[c.id] || ""), h("div", {}, h("h2", {}, c.name), h("div", { class: "cshort" }, c.short))),
             ),
             h("div", { class: "sheet-main panel" },
               h("div", { class: "role" }, c.role),
-              h("div", { class: "tabs" }, tabs.map((tt, i) => h("div", { class: "tab" + (i === s.tab ? " active" : ""), onclick: () => { s.tab = i; sfx.move(); render(); } }, tt.lbl, h("small", {}, (c[tt.id] || []).length)))),
-              h("div", { class: "tab-body" }, content),
+              h("div", { class: "tabs" }, tabs.map((tt, i) => h("div", { class: "tab" + (i === s.tab ? " active" : "") + (tt.example ? " tab-example" : ""), onclick: () => { s.tab = i; sfx.move(); render(); } }, tt.lbl, tt.id !== "overview" ? h("small", {}, (c[tt.id] || []).length) : null))),
+              h("div", { class: "tab-body" }, h("div", { class: "swap", "data-k": c.id + t.id }, content)),
               c.sources ? h("div", { class: "source" }, "Quellen: " + c.sources) : null,
             ),
           ),
         );
       },
+      after: () => { if (s.shown !== s.tab) { s.shown = s.tab; const b = document.querySelector(".tab-body"); if (b) b.scrollTop = 0; } },
       key: (e) => {
+        const b = document.querySelector(".tab-body");
         if (e.key === "ArrowLeft") { s.tab = wrap(s.tab - 1, tabs.length); sfx.move(); render(); return true; }
         if (e.key === "ArrowRight" || e.key === "Tab") { e.preventDefault(); s.tab = wrap(s.tab + 1, tabs.length); sfx.move(); render(); return true; }
+        if (e.key === "ArrowDown" || e.key === "PageDown") { b && b.scrollBy({ top: 220, behavior: "smooth" }); return true; }
+        if (e.key === "ArrowUp" || e.key === "PageUp") { b && b.scrollBy({ top: -220, behavior: "smooth" }); return true; }
         return false;
       },
     };
   };
 
   /* --- Lehrzeit-Reise --- */
-  const Journey = () => {
-    const s = { i: 0, seen: new Set([0]) };
+  const Journey = (start = 0) => {
+    const s = { i: start, seen: new Set([start]) };
     const J = D.journey;
     return {
       id: "journey", title: "Lehrzeit-Reise", zone: "wissen",
@@ -439,12 +562,12 @@
             h("div", { class: "path" }, J.map((j, i) =>
               h("div", { class: "stop" + (i === s.i ? " active" : "") + (s.seen.has(i) ? " visited" : ""), onclick: () => { s.i = i; s.seen.add(i); sfx.move(); render(); } },
                 h("div", { class: "node" }, j.icon), h("div", { class: "stop-lbl" }, j.title)))),
-            h("div", { class: "mission-body panel" },
+            h("div", { class: "mission-body panel" }, h("div", { class: "swap", "data-k": "j" + s.i },
               h("div", { class: "goal" }, `Etappe ${s.i + 1} von ${J.length}` + (st.when ? ` · ${st.when}` : "")),
               h("h3", {}, st.title),
               h("ol", { class: "steps" }, st.items.map((p, n) => h("li", {}, h("span", { class: "sn" }, n + 1), h("span", {}, p)))),
               h("div", { class: "source" }, "Quelle: " + st.source),
-            ),
+            )),
           ),
         );
       },
@@ -457,33 +580,114 @@
   };
 
   /* --- Lexikon --- */
-  const Lexikon = () => {
-    const s = { q: "" };
-    let input = null;
-    let grid = null;
-    const fill = () => {
-      const q = s.q.trim().toLowerCase();
-      grid.innerHTML = "";
-      const hits = D.lexikon.filter(([k, v]) => !q || k.toLowerCase().includes(q) || v.toLowerCase().includes(q));
-      hits.forEach(([k, v]) => grid.append(h("div", { class: "lex" }, h("b", {}, k), h("span", {}, v))));
-      if (!hits.length) grid.append(h("div", { class: "lex empty" }, "Kein Begriff gefunden."));
+  const LEX_ALIAS = {
+    "BB": ["Berufsbildner/in", "Berufsbildner/innen", "Berufsbildnerin"], "BFS": ["Berufsfachschule"], "BiPla / Bipla": ["Bildungsplan"], "BiVo": ["Bildungsverordnung"],
+    "BM 1 / BM 2": ["BM", "Berufsmaturität"], "DBW": ["Dienststelle Berufs- und Weiterbildung"], "EFZ": ["Fähigkeitszeugnis"], "EBA": ["Berufsattest"],
+    "Handlungskompetenz": ["Handlungskompetenzen"], "LOK": ["Lernortkooperation"], "OdA": ["Organisation der Arbeitswelt", "Organisationen der Arbeitswelt"],
+    "QV": ["Qualifikationsverfahren"], "SB / SB Plus": ["SB"], "üK": ["überbetriebliche Kurse", "überbetrieblichen Kurse"], "IPA": ["individuelle praktische Arbeit"],
+    "Lerndokumentation": ["Lerndoku"], "Bildungsbewilligung": ["Bildungsbewilligungen"], "SBFI": ["Staatssekretariat"],
+  };
+  const reEsc = (x) => x.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+  const termRe = (k) => new RegExp(`(^|[^\\p{L}\\p{N}])(${[...k.split(" / "), ...(LEX_ALIAS[k] || [])].map(reEsc).join("|")})(?=$|[^\\p{L}\\p{N}])`, "u");
+  let lexIndex = null;
+  function buildLexIndex() {
+    // alle Textstellen im Kurs sammeln (Missionen, Beispielberuf, Lehrzeit-Reise)
+    const texts = [];
+    const add = (text, link) => text && texts.push({ text: String(text).trim(), link });
+    const walk = (lv, mi, m) => {
+      const link = { lv, mi, label: (lv.char ? "Beispielberuf" : `Level ${lv.nr}`) + " · " + m.title };
+      (m.blocks || []).forEach((b) => {
+        (b.items || []).forEach((it) => add(typeof it === "string" ? it : `${it.h || it.v || ""} ${it.d || it.l || ""}`, link));
+        (b.rows || []).forEach((r) => add(r.filter(Boolean).join(" – "), link));
+        (b.cols || []).forEach((c) => c.items.forEach((it) => add(`${c.h}: ${it}`, link)));
+        if (b.text) add(b.text, link);
+      });
+    };
+    D.levels.filter((l) => !l.placeholder).concat([D.beruf]).forEach((lv) => lv.missions.forEach((m, mi) => walk(lv, mi, m)));
+    D.journey.forEach((j, ji) => j.items.forEach((it) => add(it, { journey: ji, label: "Lehrzeit-Reise · " + j.title })));
+    lexIndex = {};
+    D.lexikon.forEach(([k, v]) => {
+      const re = termRe(k);
+      const hits = [], seen = new Set();
+      texts.forEach((t) => { if (re.test(t.text) && !seen.has(t.text)) { seen.add(t.text); hits.push(t); } });
+      const roles = D.characters.map((c) => {
+        const all = [c.role, ...(c.aufgaben || []), ...(c.rechte || []), ...(c.pflichten || []), ...(c.informatik || [])];
+        return { c, n: all.filter((x) => re.test(x)).length };
+      }).filter((r) => r.n).sort((a, b) => b.n - a.n).slice(0, 6);
+      const more = (D.lexikonMehr || {})[k] || "";
+      const related = D.lexikon.filter(([k2]) => k2 !== k && termRe(k2).test(v + " " + more)).map(([k2]) => k2).slice(0, 8);
+      lexIndex[k] = { re, hits, roles, related, more };
+    });
+  }
+  const markTerm = (text, re) => {
+    const g = new RegExp(re.source, "gu"), out = [];
+    let last = 0, m;
+    while ((m = g.exec(text))) { const st = m.index + m[1].length; out.push(text.slice(last, st), h("mark", {}, m[2])); last = st + m[2].length; g.lastIndex = last; }
+    out.push(text.slice(last));
+    return out;
+  };
+  const Lexikon = (pre = null) => {
+    if (!lexIndex) buildLexIndex();
+    const s = { q: "", cur: 0, sel: pre && lexIndex[pre] ? pre : null };
+    const hitsOf = () => { const q = s.q.trim().toLowerCase(); return D.lexikon.filter(([k, v]) => !q || k.toLowerCase().includes(q) || v.toLowerCase().includes(q)); };
+    const openTerm = (k) => { s.sel = k; sfx.ok(); render(); };
+    const close = () => { s.sel = null; sfx.back(); render(); };
+    const detail = (k) => {
+      const [, v] = D.lexikon.find(([kk]) => kk === k);
+      const ix = lexIndex[k];
+      return h("div", { class: "lex-modal", onclick: close },
+        h("div", { class: "lex-card panel swap", "data-k": "d" + k, onclick: (e) => e.stopPropagation() },
+          h("button", { class: "lex-x", onclick: close, title: "Schliessen (Esc)" }, "✕"),
+          h("div", { class: "lex-head" }, h("div", { class: "lex-term" }, k), h("div", { class: "lex-def" }, v)),
+          h("div", { class: "lex-scroll" },
+            ix.more ? h("div", { class: "lex-more" }, h("h5", {}, "📖 Was steckt dahinter?"), h("p", {}, markTerm(ix.more, ix.re))) : null,
+            ix.roles.length ? h("div", { class: "lex-sec" }, h("h5", {}, "👥 Wer hat damit zu tun?"), h("div", { class: "lex-roles" }, ix.roles.map((r) =>
+              h("div", { class: "lex-role", style: { "--c": r.c.color }, onclick: () => { sfx.ok(); go(CharSheet(r.c.id)); } }, h("span", {}, ROLE_ICON[r.c.id] || ""), h("b", {}, r.c.name), h("small", {}, r.n + "×"))))) : null,
+            ix.hits.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🎓 So kam es im Kurs vor", h("small", {}, `${ix.hits.length} Stellen`)), h("div", { class: "lex-hits" }, ix.hits.slice(0, 5).map((t) =>
+              h("div", { class: "lex-hit", onclick: () => { sfx.ok(); if (t.link.journey != null) go(Journey(t.link.journey)); else go(LevelDetail(t.link.lv, t.link.mi)); } },
+                h("p", {}, markTerm(t.text, ix.re)), h("small", {}, "↗ " + t.link.label))))) : null,
+            ix.related.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🔗 Verwandte Begriffe"), h("div", { class: "lex-rel" }, ix.related.map((k2) => h("span", { onclick: () => openTerm(k2) }, k2)))) : null,
+          ),
+        ));
     };
     return {
       id: "lexikon", title: "Lexikon", zone: "wissen",
       world: () => W.mode("wissen"),
       view: () => {
-        input = h("input", { class: "search", placeholder: "🔎 Begriff suchen … z. B. BiVo, Lehraufsicht, QV", value: s.q });
-        input.addEventListener("input", () => { s.q = input.value; fill(); });
-        grid = h("div", { class: "lex-grid" });
+        const hits = hitsOf();
+        s.cur = Math.min(s.cur, Math.max(0, hits.length - 1));
+        const inp = h("input", {
+          class: "search", placeholder: "🔎 Begriff suchen … z. B. BiVo, Lehraufsicht, QV", value: s.q,
+          oninput: (e) => { s.q = e.target.value; s.cur = 0; render(); },
+          onkeydown: (e) => {
+            const n = hitsOf().length;
+            if (!n || s.sel) return;
+            if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); s.cur = wrap(s.cur + (e.key === "ArrowDown" ? 3 : 1), n); sfx.move(); render(); }
+            else if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); s.cur = wrap(s.cur - (e.key === "ArrowUp" ? 3 : 1), n); sfx.move(); render(); }
+            else if (e.key === "Enter") openTerm(hitsOf()[s.cur][0]);
+          },
+        });
         return h("div", { class: "screen screen-top" },
           h("h2", { class: "screen-title" }, "Lexikon"),
-          h("div", { class: "screen-sub" }, "Alle Abkürzungen und Begriffe aus dem Kurs – einfach lostippen."),
-          input,
-          h("div", { class: "panel lex-panel" }, grid),
+          h("div", { class: "screen-sub" }, "Alle Abkürzungen und Begriffe aus dem Kurs – tippen zum Suchen, anklicken (oder Enter) für die ganze Erklärung."),
+          inp,
+          h("div", { class: "panel lex-panel" }, h("div", { class: "lex-grid" },
+            hits.length
+              ? hits.map(([k, v], i) => h("div", { class: "lex" + (i === s.cur ? " active" : ""), onclick: () => { s.cur = i; openTerm(k); } },
+                h("div", { class: "lex-top" }, h("b", {}, k), lexIndex[k].hits.length ? h("small", {}, lexIndex[k].hits.length + "× im Kurs") : null),
+                h("span", {}, v), h("i", { class: "lex-go" }, "Mehr erfahren ›")))
+              : h("div", { class: "lex empty" }, "Kein Begriff gefunden."))),
+          s.sel ? detail(s.sel) : null,
         );
       },
-      after: () => { fill(); input.focus(); },
-      key: () => false,
+      after: () => {
+        const inp = document.querySelector(".search");
+        if (inp && !s.sel) inp.focus();
+        const a = document.querySelector(".lex.active");
+        if (a && !s.sel) a.scrollIntoView({ block: "nearest" });
+      },
+      esc: () => { if (s.sel) { close(); return true; } return false; },
+      key: (e) => { if (s.sel && (e.key === "Enter" || e.key === " ")) { close(); return true; } return false; },
     };
   };
 
@@ -569,7 +773,7 @@
             h("div", { class: "hearts" }, "❤️".repeat(Math.max(0, s.lives)) + "🖤".repeat(3 - Math.max(0, s.lives))),
           ),
           h("div", { class: "boss-panel" },
-            h("div", { class: "question" }, h("span", { class: "qn" }, `Frage ${s.q + 1}`), qq.q),
+            h("div", { class: "question swap", "data-k": "q" + s.q }, h("span", { class: "qn" }, `Frage ${s.q + 1}`), qq.q),
             h("div", { class: "answers" }, qq.a.map((a, i) => {
               let cls = "answer";
               if (s.answered !== null) {
@@ -631,7 +835,7 @@
         return h("div", { class: "screen duell-screen" },
           h("div", { class: "arena-card" },
             h("div", { class: "arena-kicker" }, `Fall ${s.i + 1} von ${cases.length} · Punkte ${s.score}`),
-            h("div", { class: "case" }, "«", c.s, "»"),
+            h("div", { class: "case swap", "data-k": "c" + s.i }, "«", c.s, "»"),
             h("div", { class: "duell-opts" }, L.map((l, k) => {
               let cls = "dopt";
               if (s.answered !== null) { if (k === c.level) cls += " right"; else if (k === s.answered) cls += " wrong"; } else if (k === s.sel) cls += " active";
@@ -696,7 +900,7 @@
         return h("div", { class: "screen duell-screen" },
           h("div", { class: "arena-card" },
             h("div", { class: "arena-kicker" }, `Runde ${s.r + 1} von ${ROUNDS} · Punkte ${s.score}`),
-            h("h3", { class: "riddle-q" }, "Wer bin ich?"),
+            h("h3", { class: "riddle-q swap", "data-k": "r" + s.r }, "Wer bin ich?"),
             h("ul", { class: "clues" }, R.clues.slice(0, s.shown).map((c, i) => h("li", {}, h("span", { class: "sn" }, i + 1), c))),
             s.answered === null && s.shown < R.clues.length ? h("button", { class: "btn btn-ghost", onclick: hint }, "Weiterer Hinweis ", h("kbd", {}, "H")) : null,
             h("div", { class: "duell-opts" }, R.opts.map((o, k) => {
@@ -738,7 +942,7 @@
   /* ---------- Tastatur ---------- */
   window.addEventListener("keydown", (e) => {
     const typing = e.target && e.target.tagName === "INPUT";
-    if (e.key === "Escape") { e.preventDefault(); back(); return; }
+    if (e.key === "Escape") { e.preventDefault(); if (current.esc && current.esc()) return; back(); return; }
     if (typing) return;
     if (e.key === "Backspace") { e.preventDefault(); back(); return; }
     if ((e.key === "m" || e.key === "M") && current.id !== "raetsel") { muted = !muted; toast(muted ? "🔇 Ton aus" : "🔊 Ton an"); render(); return; }
@@ -757,8 +961,9 @@
     if (what === "level") { go(LevelSelect()); go(LevelDetail(D.levels[(+arg || 1) - 1], (+sub || 1) - 1)); }
     if (what === "chars") go(CharSelect());
     if (what === "sheet" && charById[arg]) { go(CharSelect()); go(CharSheet(arg)); }
+    if (what === "beruf") go(LevelDetail(D.beruf, (+arg || 1) - 1));
     if (what === "journey") go(Journey());
-    if (what === "lexikon") go(Lexikon());
+    if (what === "lexikon") go(Lexikon(arg ? decodeURIComponent(jump.slice(8)) : null));
     if (what === "boss") {
       go(Boss());
       if (fight) current.key({ key: "Enter" });

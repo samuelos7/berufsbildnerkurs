@@ -1,22 +1,4 @@
 {
-  "material/graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_914e2f18.md": {
-    "mtime": 1794049273.8717847,
-    "seen": 1794049806.2279317,
-    "ast_hash": "fb29beb5211733da816f622cef6f099f",
-    "semantic_hash": "fb29beb5211733da816f622cef6f099f"
-  },
-  "material/graphify-out/converted/WBZLU BEKU_Tabelle meine Rolle als BB_406c9bb8.md": {
-    "mtime": 1794049273.9169064,
-    "seen": 1794049806.2279406,
-    "ast_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5",
-    "semantic_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5"
-  },
-  "material/graphify-out/converted/WBZLU BEKU_Vorlage Reflexionen_8e5f7b21.md": {
-    "mtime": 1794049273.9718924,
-    "seen": 1794049806.2279446,
-    "ast_hash": "58fcf8d329030341e1b9e133590c6816",
-    "semantic_hash": "58fcf8d329030341e1b9e133590c6816"
-  },
   "material/Tag 1/Ablaufplan der Lehrzeit-Druckversion ohne Verlinkungen.pdf": {
     "mtime": 1793880358.1606226,
     "seen": 1794049806.2279472,
@@ -70,5 +52,47 @@
     "seen": 1794049806.2279634,
     "ast_hash": "654fae8a87df95c7eb972a759e6bd0fc",
     "semantic_hash": "654fae8a87df95c7eb972a759e6bd0fc"
+  },
+  "app/data.js": {
+    "mtime": 1794136618.7232776,
+    "seen": 1794136832.6583693,
+    "ast_hash": "34763df44f04350612d58c21b27cf546",
+    "semantic_hash": "34763df44f04350612d58c21b27cf546"
+  },
+  "app/main.js": {
+    "mtime": 1794136219.0400517,
+    "seen": 1794136832.6583831,
+    "ast_hash": "e52df5973ef89b2ba7da1e8d915dd5e7",
+    "semantic_hash": "e52df5973ef89b2ba7da1e8d915dd5e7"
+  },
+  "app/scene3d.js": {
+    "mtime": 1794136629.150717,
+    "seen": 1794136832.6583896,
+    "ast_hash": "dc9419810e6ef11028fe74b0de590042",
+    "semantic_hash": "dc9419810e6ef11028fe74b0de590042"
+  },
+  "app/index.html": {
+    "mtime": 1794136326.8628283,
+    "seen": 1794136832.6583939,
+    "ast_hash": "dbc0b5e4d041a41b1a9c37f7b153544c",
+    "semantic_hash": "dbc0b5e4d041a41b1a9c37f7b153544c"
+  },
+  "graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md": {
+    "mtime": 1794134969.7974885,
+    "seen": 1794135063.5243394,
+    "ast_hash": "fb29beb5211733da816f622cef6f099f",
+    "semantic_hash": "fb29beb5211733da816f622cef6f099f"
+  },
+  "graphify-out/converted/WBZLU BEKU_Tabelle meine Rolle als BB_9f57e179.md": {
+    "mtime": 1794134970.6497595,
+    "seen": 1794135063.524342,
+    "ast_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5",
+    "semantic_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5"
+  },
+  "graphify-out/converted/WBZLU BEKU_Vorlage Reflexionen_0d58df28.md": {
+    "mtime": 1794134970.7747476,
+    "seen": 1794135063.524344,
+    "ast_hash": "58fcf8d329030341e1b9e133590c6816",
+    "semantic_hash": "58fcf8d329030341e1b9e133590c6816"
   }
 }
