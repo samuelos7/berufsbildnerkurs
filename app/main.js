@@ -3,7 +3,7 @@
 (() => {
   "use strict";
   const D = window.GAME_DATA;
-  const W = window.World || { mode() {}, rotateTo() {}, menuSide() {}, cheer() {}, dragonBreath() {}, dragonHit() {}, dragonDie() {}, dragonRoar() {} };
+  const W = window.World || { mode() {}, rotateTo() {}, menuSide() {}, cheer() {}, bossAttack() {}, bossHit() {}, bossDie() {}, bossRoar() {} };
   const app = document.getElementById("app");
   const flash = document.getElementById("flash");
   const charById = Object.fromEntries(D.characters.map((c) => [c.id, c]));
@@ -53,7 +53,8 @@
     right: () => { tone(784, 0.08); setTimeout(() => tone(1046, 0.12), 80); },
     wrong: () => tone(140, 0.25, "sawtooth", 0.05),
     zap: () => tone(1200, 0.35, "sawtooth", 0.035, -900),
-    roar: () => { tone(110, 0.9, "sawtooth", 0.06, -60); noise(0.9, 0.05); },
+    // Drucker-Gebrüll: ratternde Rechteck-Pieptöne + Papiereinzug-Rauschen
+    roar: () => { [0, 80, 160, 240, 380].forEach((d, i) => setTimeout(() => tone(i % 2 ? 190 : 120, 0.1, "square", 0.045, i % 2 ? -50 : 70), d)); noise(0.7, 0.04); },
     fire: () => noise(1.1, 0.12),
     win: () => [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, 0.18, "square", 0.05), i * 120)),
   };
@@ -204,12 +205,12 @@
   /* --- Titelbild --- */
   const TitleScreen = () => ({
     id: "title", title: "Start", zone: "menu",
-    world: () => W.mode("menu", { side: null, heroes }),
+    world: () => W.mode("menu", { side: null, heroes, title: true }),
     view: () =>
       h("div", { class: "screen title-screen" },
         luLogo("lu-logo-lg"),
         h("div", { class: "title-top" },
-          h("h1", { class: "logo" }, D.title, h("small", {}, D.subtitle)),
+          h("div", { class: "logo-wrap" }, h("h1", { class: "logo" }, D.title), h("div", { class: "logo-sub" }, D.subtitle)),
           h("div", { class: "tagline" }, D.tagline),
         ),
         h("div", { class: "title-bottom" },
@@ -228,7 +229,7 @@
       items: [
         { ico: "🗂️", lbl: "Kurstage", sub: "5 Level mit allen Inhalten", open: () => LevelSelect() },
         { ico: "👥", lbl: "Rollen", sub: `${D.characters.length} Charaktere · Rechte & Pflichten`, open: () => CharSelect() },
-        { ico: "💻", lbl: "Beispielberuf", sub: `${D.example.name} · BiVo, Kompetenzen, QV`, open: () => LevelDetail(D.beruf) },
+        { ico: "💻", lbl: "Beispielberuf", menuLbl: "Beispiel­beruf", sub: `${D.example.name} · BiVo, Kompetenzen, QV`, open: () => LevelDetail(D.beruf) },
         { ico: "🗺️", lbl: "Lehrzeit-Reise", sub: "Vom Lehrvertrag bis zum Abschluss", open: () => Journey() },
         { ico: "📖", lbl: "Lexikon", sub: `${D.lexikon.length} Begriffe von ABU bis VPA`, open: () => Lexikon() },
       ],
@@ -236,50 +237,92 @@
     {
       id: "arena", name: "Arena", sub: "Spielen & Prüfen", ico: "⚔️",
       items: [
-        { ico: "🐉", lbl: "Bosskampf", sub: "Besiege den QV-Drachen", open: () => Boss() },
+        { ico: "🖨️", lbl: "Bosskampf", sub: "Patche den PrintNightmare-Drucker", open: () => Boss() },
         { ico: "⚖️", lbl: "Interventions-Duell", sub: "Leicht, mittel, schwer – oder weiterverweisen?", open: () => Duell() },
         { ico: "🎭", lbl: "Wer bin ich?", sub: "Errate die Rolle", open: () => Raetsel() },
       ],
     },
   ];
-  let menuMem = { col: 0, i: 0 };
+  /* Alle Menüpunkte in einer Reihe (← → läuft durch alle Knöpfe, ↑ ↓ springt zwischen Wissen und Arena) */
+  const MENU = PORTALS.flatMap((p) => p.items.map((m) => ({ ...m, side: p.id })));
+  /* Luzerner Wappen: gespalten von Blau und Weiss (Blau heraldisch rechts = vom Betrachter links) */
+  const SHIELD = "M3 3H45V25C45 39 24 50 24 50C24 50 3 39 3 25Z";
+  const luWappen = (cls = "") => sv("svg", { class: "lu-wappen " + cls, viewBox: "0 0 48 53", "aria-label": "Wappen Kanton Luzern" },
+    sv("clipPath", { id: "lu-wappen-clip" }, sv("path", { d: SHIELD })),
+    sv("g", { "clip-path": "url(#lu-wappen-clip)" },
+      sv("rect", { x: 0, y: 0, width: 24, height: 53, fill: "#1f6fc5" }),
+      sv("rect", { x: 24, y: 0, width: 24, height: 53, fill: "#ffffff" })),
+    sv("path", { d: SHIELD, fill: "none", stroke: "#0b2340", "stroke-width": 2.4, "stroke-linejoin": "round" }));
+  const arenaShield = () => sv("svg", { class: "lu-wappen", viewBox: "0 0 48 53", "aria-hidden": "true" },
+    sv("path", { d: SHIELD, fill: "#c2381a", stroke: "#3a0a02", "stroke-width": 2.4, "stroke-linejoin": "round" }),
+    // zwei gekreuzte Schwerter (kein Kreuz – sonst sieht es aus wie das Schweizer Wappen)
+    sv("path", { d: "M13 11L35 37M35 11L13 37", stroke: "#ffe2a0", "stroke-width": 4, "stroke-linecap": "round" }),
+    sv("path", { d: "M10 32L18 40M38 32L30 40", stroke: "#6b2a0e", "stroke-width": 4, "stroke-linecap": "round" }));
+  let menuMem = { i: 0 };
   const MainMenu = () => {
     const s = menuMem;
-    const open = () => { sfx.ok(); go(PORTALS[s.col].items[s.i].open()); };
+    const sideOf = (i) => MENU[i].side;
+    const select = (i, silent) => {
+      if (i === s.i) return;
+      const sw = sideOf(i) !== sideOf(s.i);
+      s.i = i;
+      if (sw) W.menuSide(sideOf(i));
+      if (!silent) sfx.move();
+      render();
+    };
+    const open = () => { sfx.ok(); go(MENU[s.i].open()); };
+    const btn = (m, i) =>
+      h("div", {
+        class: `lu-btn lu-btn-${m.side}` + (i === s.i ? " active" : ""),
+        style: { "--d": i * 0.05 + "s" },
+        onmouseenter: () => select(i, true),
+        onclick: () => { s.i = i; open(); },
+      },
+        h("div", { class: "lu-flag" }, h("i")),
+        h("div", { class: "lu-roof" }, h("div", { class: "lu-tafel" }, h("span", { class: "lu-ico" }, m.ico))),
+        h("div", { class: "lu-body" },
+          h("div", { class: "lu-lbl" }, m.menuLbl || m.lbl),
+          h("div", { class: "lu-sub" }, m.sub)),
+      );
+    let k = 0;
     return {
       id: "menu", title: "Hauptmenü", zone: "menu",
-      world: () => { W.mode("menu", { side: PORTALS[s.col].id, heroes }); },
-      view: () =>
-        h("div", { class: "screen menu-screen" },
-          h("h1", { class: "logo logo-sm" }, D.title, h("small", {}, D.subtitle)),
-          h("div", { class: "portals" },
-            PORTALS.map((p, c) =>
-              h("div", { class: `portal portal-${p.id}` + (c === s.col ? " active" : "") },
-                h("div", { class: "portal-head" }, h("span", { class: "portal-ico" }, p.ico), h("div", {}, h("h2", {}, p.name), h("div", { class: "portal-sub" }, p.sub)), h("span", { class: "portal-count" }, p.items.length)),
-                h("div", { class: "portal-items" },
-                  p.items.map((m, i) =>
-                    h("div", {
-                      class: "menu-item" + (c === s.col && i === s.i ? " active" : ""),
-                      onmouseenter: () => { if (s.col !== c || s.i !== i) { const sw = s.col !== c; s.col = c; s.i = i; if (sw) W.menuSide(p.id); render(); } },
-                      onclick: () => { s.col = c; s.i = i; open(); },
-                    }, h("div", { class: "mi-badge" }, m.ico), h("div", { class: "mi-text" }, h("div", { class: "lbl" }, m.lbl), h("div", { class: "sub" }, m.sub)), h("div", { class: "mi-go" }, "›")),
-                  ),
-                ),
+      world: () => { W.mode("menu", { side: sideOf(s.i), heroes }); },
+      view: () => {
+        k = 0;
+        return h("div", { class: "screen menu-screen" },
+          h("div", { class: "logo-wrap logo-wrap-sm" }, h("h1", { class: "logo logo-sm" }, D.title), h("div", { class: "logo-sub" }, D.subtitle)),
+          h("div", { class: "menu-stage" }),
+          // Wissen (Kapellbrücke) | Wasserturm als Trenner | Arena (Feuer-Bastion)
+          h("div", { class: "lu-menu" },
+            PORTALS.map((p, n) => [
+              n ? h("div", { class: "lu-tower", "aria-hidden": "true" }, h("i", { class: "lu-tw-flag" }), h("b", { class: "lu-tw-roof" }), h("span", { class: "lu-tw-body" })) : null,
+              h("div", { class: `lu-group lu-group-${p.id}` + (sideOf(s.i) === p.id ? " on" : "") },
+                h("div", { class: "lu-group-head" }, p.id === "wissen" ? luWappen() : arenaShield(), h("b", {}, p.name), h("span", {}, p.sub)),
+                h("div", { class: "lu-row" }, p.items.map(() => { const i = k++; return btn(MENU[i], i); })),
+                h("div", { class: `lu-deck lu-deck-${p.id}` }),
               ),
-            ),
+            ]),
           ),
-          h("div", { class: "menu-foot" }, h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Seite wechseln"), h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Auswahl"), h("span", { class: "link", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits")),
-        ),
+          h("div", { class: "menu-foot" },
+            h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Auswahl"),
+            h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Wissen / Arena"),
+            h("span", {}, h("kbd", {}, "1–8"), " Direktwahl"),
+            h("span", { class: "link", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits")),
+        );
+      },
       key: (e) => {
-        const n = PORTALS[s.col].items.length;
-        if (e.key === "ArrowUp") { s.i = wrap(s.i - 1, n); sfx.move(); render(); return true; }
-        if (e.key === "ArrowDown") { s.i = wrap(s.i + 1, n); sfx.move(); render(); return true; }
-        if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-          s.col = 1 - s.col;
-          s.i = Math.min(s.i, PORTALS[s.col].items.length - 1);
-          W.menuSide(PORTALS[s.col].id);
-          sfx.move(); render(); return true;
+        const n = MENU.length;
+        if (e.key === "ArrowLeft") { select(wrap(s.i - 1, n)); return true; }
+        if (e.key === "ArrowRight") { select(wrap(s.i + 1, n)); return true; }
+        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+          // in die andere Gruppe springen, möglichst an die gleiche Position
+          const side = sideOf(s.i), first = MENU.findIndex((m) => m.side === side);
+          const other = MENU.map((m, i) => i).filter((i) => MENU[i].side !== side);
+          select(other[Math.min(s.i - first, other.length - 1)]);
+          return true;
         }
+        if (/^[1-9]$/.test(e.key) && +e.key <= n) { s.i = +e.key - 1; W.menuSide(sideOf(s.i)); render(); open(); return true; }
         if (e.key === "Enter" || e.key === " ") { open(); return true; }
         if (e.key === "c" || e.key === "C") { sfx.ok(); go(Credits()); return true; }
         return false;
@@ -287,35 +330,52 @@
     };
   };
 
-  /* --- Level-Auswahl --- */
+  /* --- Level-Auswahl: die Kurstage als Giebel der Kapellbrücke (wie das Hauptmenü) --- */
+  const rgbOf = (hex, k = 0) => { const n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255].map((c) => Math.round(c + (255 - c) * k)).join(", "); };
   const LevelSelect = () => {
     const s = { i: 0 };
     const open = (i) => { sfx.ok(); go(LevelDetail(D.levels[i])); };
+    const total = D.levels.reduce((a, lv) => a + lv.missions.length, 0);
     return {
       id: "levels", title: "Kurstage", zone: "wissen",
       world: () => W.mode("wissen"),
       view: () =>
-        h("div", { class: "screen" },
+        h("div", { class: "screen levels-screen" },
           h("h2", { class: "screen-title" }, "Kurstag wählen"),
           h("div", { class: "screen-sub" }, "Jeder Kurstag ist ein Level – jede Mission ein Thema aus dem Kurs."),
-          h("div", { class: "levels" },
-            D.levels.map((lv, i) =>
-              h("div", {
-                class: "level-card" + (i === s.i ? " active" : "") + (lv.placeholder ? " placeholder" : ""),
-                style: { "--c1": lv.c1, "--c2": lv.c2 },
-                onmouseenter: () => { if (s.i !== i) { s.i = i; render(); } },
-                onclick: () => open(i),
-              },
-                h("div", {}, h("div", { class: "lv" }, "Level"), h("div", { class: "num" }, lv.nr)),
-                h("div", {},
-                  h("div", { class: "name" }, lv.title),
-                  h("div", { class: "state" }, lv.placeholder ? "🚧 In Arbeit …" : `${lv.missions.length} Missionen`),
+          h("div", { class: "menu-stage" }),
+          h("div", { class: "lv-bridge" },
+            h("div", { class: "lu-group-head" }, luWappen(), h("b", {}, "Kurstage"), h("span", {}, `${D.levels.length} Level · ${total} Missionen`)),
+            h("div", { class: "lu-row lv-row" },
+              D.levels.map((lv, i) =>
+                h("div", {
+                  class: "lu-btn lv-btn" + (i === s.i ? " active" : "") + (lv.placeholder ? " placeholder" : ""),
+                  style: { "--a": rgbOf(lv.c1), "--a2": rgbOf(lv.c1, 0.55), "--d": i * 0.06 + "s" },
+                  onmouseenter: () => { if (s.i !== i) { s.i = i; render(); } },
+                  onclick: () => open(i),
+                },
+                  h("div", { class: "lu-flag" }, h("i")),
+                  h("div", { class: "lu-roof" }, h("div", { class: "lu-tafel" }, h("span", { class: "lv-num" }, lv.nr))),
+                  h("div", { class: "lu-body" },
+                    h("div", { class: "lv-kicker" }, `Level ${lv.nr}`),
+                    h("div", { class: "lu-lbl" }, lv.title),
+                    lv.subtitle ? h("div", { class: "lu-sub" }, lv.subtitle) : null,
+                    h("div", { class: "lv-state" }, lv.placeholder ? "🚧 In Arbeit …" : `${lv.missions.length} Missionen`),
+                  ),
                 ),
               ),
             ),
+            h("div", { class: "lu-deck" }),
           ),
+          h("div", { class: "menu-foot" },
+            h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Auswahl"),
+            h("span", {}, h("kbd", {}, "1–" + D.levels.length), " Direktwahl"),
+            h("span", {}, h("kbd", {}, "Enter"), " Öffnen")),
         ),
-      key: (e) => listNav(e, s, D.levels.length, open, "x"),
+      key: (e) => {
+        if (/^[1-9]$/.test(e.key) && +e.key <= D.levels.length) { s.i = +e.key - 1; render(); open(s.i); return true; }
+        return listNav(e, s, D.levels.length, open, "x");
+      },
     };
   };
 
@@ -691,7 +751,7 @@
     };
   };
 
-  /* --- ARENA: Bosskampf gegen den QV-Drachen --- */
+  /* --- ARENA: Bosskampf gegen den PrintNightmare-Drucker --- */
   const Boss = () => {
     const HP = 8;
     const pool = shuffle(D.quiz).map((q) => {
@@ -712,11 +772,11 @@
         zapFlash();
         W.onImpact = () => {
           s.hp--; s.hits++; sfx.right();
-          if (s.hp <= 0) { W.dragonDie(); sfx.roar(); W.onDefeated = () => setTimeout(() => finish(true), 900); }
+          if (s.hp <= 0) { W.bossDie(); sfx.roar(); W.onDefeated = () => setTimeout(() => finish(true), 900); }
           s.busy = false;
           render();
         };
-        W.dragonHit();
+        W.bossHit();
         if (!W.ok) W.onImpact();
       } else {
         sfx.wrong();
@@ -728,7 +788,7 @@
           if (s.lives <= 0) setTimeout(() => finish(false), 1200);
         };
         setTimeout(() => sfx.roar(), 200);
-        W.dragonBreath();
+        W.bossAttack();
         if (!W.ok) W.onScorch();
       }
       render();
@@ -751,15 +811,15 @@
           return h("div", { class: "screen" }, h("div", { class: "arena-card intro" },
             h("div", { class: "arena-kicker" }, "Endgegner"),
             h("h2", { class: "arena-title" }, D.boss.name),
-            h("p", {}, `Beantworte Fragen aus dem Kurs. Jede richtige Antwort schleudert einen Wissensblitz – ${HP} Treffer besiegen den Drachen. Jede falsche Antwort kostet dich ein Leben im Feuerstoss.`),
+            h("p", {}, `Ein vom PrintNightmare-Virus befallener Drucker flattert über der Arena. Jede richtige Antwort schleudert einen Wissensblitz – nach ${HP} Treffern ist er gepatcht. Jede falsche Antwort kostet dich ein Leben in seiner brennenden Papierstau-Salve.`),
             h("button", { class: "btn btn-fire", onclick: () => { s.phase = "fight"; sfx.ok(); render(); } }, "Kampf beginnen ", h("kbd", {}, "Enter")),
           ));
         }
         if (s.phase === "won" || s.phase === "lost") {
           const won = s.phase === "won";
           return h("div", { class: "screen" }, h("div", { class: "arena-card intro" },
-            h("div", { class: "result-big" }, won ? "🏆" : "🔥"),
-            h("h2", { class: "arena-title" }, won ? "Drache besiegt!" : "Verbrannt!"),
+            h("div", { class: "result-big" }, won ? "🏆" : "📄"),
+            h("h2", { class: "arena-title" }, won ? "Drucker gepatcht!" : "Papierstau!"),
             h("p", {}, `${s.hits} Treffer · ${3 - s.lives} Fehler · ${s.q + 1} Fragen`),
             h("p", {}, won ? "Du bist bereit für das Qualifikationsverfahren – und für die Rolle als Berufsbildner/in." : "Zurück ins Wissen-Portal, auftanken – und nochmals angreifen!"),
             h("button", { class: "btn btn-fire", onclick: () => go(Boss(), true) }, "Nochmals ", h("kbd", {}, "Enter")),
@@ -768,7 +828,7 @@
         const qq = q();
         return h("div", { class: "screen boss-screen" },
           h("div", { class: "boss-hud" },
-            h("div", { class: "bar-lbl" }, h("span", {}, "🐉 " + D.boss.name), h("span", {}, `${s.hp} / ${HP} HP`)),
+            h("div", { class: "bar-lbl" }, h("span", {}, "🖨️ " + D.boss.name), h("span", {}, `${s.hp} / ${HP} HP`)),
             h("div", { class: "bar" }, h("i", { style: { width: (s.hp / HP) * 100 + "%" } })),
             h("div", { class: "hearts" }, "❤️".repeat(Math.max(0, s.lives)) + "🖤".repeat(3 - Math.max(0, s.lives))),
           ),
@@ -784,7 +844,7 @@
                 h("kbd", { class: "key" }, String.fromCharCode(65 + i)), h("span", {}, a));
             })),
             h("div", { class: "explain" }, s.answered !== null
-              ? [(s.answered === qq.correct ? "⚡ Treffer! " : "🔥 Daneben! ") + (qq.why || ""), s.busy ? "" : ["  ", h("kbd", {}, "Enter"), " Weiter"]]
+              ? [(s.answered === qq.correct ? "⚡ Treffer! " : "📄 Daneben! ") + (qq.why || ""), s.busy ? "" : ["  ", h("kbd", {}, "Enter"), " Weiter"]]
               : "Wähle mit A–D oder den Pfeiltasten."),
           ),
         );
@@ -931,7 +991,7 @@
   /* --- Credits --- */
   const Credits = () => ({
     id: "credits", title: "Credits", zone: "menu",
-    world: () => W.mode("menu", { side: null, heroes }),
+    world: () => W.mode("menu", { side: null, heroes, title: true }),
     view: () => h("div", { class: "screen" }, h("div", { class: "placeholder-box panel" },
       h("div", { class: "big" }, "🎓"),
       h("h2", { class: "screen-title" }, "Credits"),

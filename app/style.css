@@ -133,7 +133,11 @@ h1, h2, h3, h4, h5 { font-family: var(--font-display); margin: 0; letter-spacing
 }
 body[data-zone="wissen"] .screen-title { text-transform: none; letter-spacing: .01em; }
 body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter: drop-shadow(0 0 18px rgba(255, 90, 31, .55)) drop-shadow(0 4px 0 #3a0700); }
-.screen-sub { color: var(--text); opacity: .82; margin-bottom: 22px; text-align: center; max-width: 860px; text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
+.screen-sub {
+  color: var(--text); margin-bottom: 22px; text-align: center; max-width: 900px; padding: 5px 16px; border-radius: 999px;
+  background: rgba(6, 10, 26, .42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .7);
+}
 .btn {
   margin-top: 14px; padding: 12px 24px; border-radius: 999px; cursor: pointer;
   font-family: var(--font-display); font-size: 16px; letter-spacing: .04em;
@@ -157,11 +161,15 @@ body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter
   filter: drop-shadow(0 6px 0 #6a3d00) drop-shadow(0 18px 30px rgba(0, 0, 0, .5));
   transform: perspective(600px) rotateX(12deg);
 }
-.logo small {
-  display: block; font-size: .3em; letter-spacing: .32em; margin-top: 12px;
-  background: linear-gradient(180deg, #e9f9ff, #7fdcff); -webkit-background-clip: text; background-clip: text;
+/* Untertitel als eigenes Element: verschachtelter Text-Verlauf + Schatten des Logos hat ihn vorher doppelt/verschmiert gezeichnet */
+.logo-wrap { display: flex; flex-direction: column; align-items: center; }
+.logo-sub {
+  margin-top: 14px; padding-left: .34em; /* gleicht letter-spacing am Ende aus */
+  font-family: var(--font-display); font-size: clamp(14px, 2vw, 30px); letter-spacing: .34em; text-transform: uppercase;
+  color: #e3f5ff; text-shadow: 0 2px 0 rgba(4, 10, 30, .8), 0 0 22px rgba(95, 190, 255, .6);
 }
-.logo-sm { font-size: clamp(30px, 3.6vw, 52px); margin: 0 0 4px; }
+.logo-sm { font-size: clamp(30px, 3.6vw, 52px); margin: 0; }
+.logo-wrap-sm .logo-sub { margin-top: 2px; font-size: clamp(11px, .95vw, 15px); }
 .tagline {
   color: #fff; font-size: 19px; max-width: 680px; padding: 10px 22px; border-radius: 999px;
   background: rgba(8, 10, 28, .45); border: 1px solid rgba(255, 255, 255, .12);
@@ -176,102 +184,193 @@ body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter
 @keyframes pulse { 50% { opacity: .55; box-shadow: 0 0 0 6px rgba(255, 204, 77, .08); } }
 .title-meta { color: rgba(255, 255, 255, .85); font-size: 13px; letter-spacing: .12em; text-shadow: 0 2px 6px #000; }
 
-/* ============ Hauptmenü: zwei Portale ============ */
-.menu-screen { justify-content: flex-start; padding-top: 0; }
-.portals {
-  flex: 1; width: 100%; max-width: 1500px;
-  display: grid; grid-template-columns: minmax(300px, 390px) 1fr minmax(300px, 390px);
-  align-items: center; gap: 20px; min-height: 0;
+/* ============ Hauptmenü: einzelne Knöpfe im Kapellbrücken-Stil ============
+   Jeder Knopf = ein Giebel der Kapellbrücke mit dreieckiger Bildtafel (wie die
+   bemalten Tafeln im Dachstuhl), darunter die Luzerner Farben Blau | Weiss.
+   Unter der Reihe läuft der Brückensteg mit den roten Geranien-Kistchen. */
+.menu-screen { justify-content: flex-start; padding-top: 0; padding-bottom: 12px; }
+.menu-stage { flex: 1; min-height: 90px; }
+.lu-menu { width: 100%; max-width: 1600px; display: flex; gap: 0; align-items: flex-end; justify-content: center; }
+/* Zwei klar getrennte Bereiche: Wissen = blaue Kapellbrücke, Arena = glühende Feuer-Bastion.
+   Dazwischen steht der Wasserturm. */
+.lu-group {
+  position: relative; display: flex; flex-direction: column; gap: 44px; min-width: 0;
+  padding: 14px 16px 0; border-radius: 24px 24px 0 0; border: 1px solid transparent; border-bottom: 0;
+  transition: filter .4s, background .4s;
+  filter: saturate(.7) brightness(.82);
 }
-.portal {
-  border-radius: 26px; overflow: hidden; border: 1px solid;
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  transition: transform .45s var(--ease), box-shadow .45s var(--ease), filter .45s;
-  filter: saturate(.75) brightness(.82);
+.lu-group.on { filter: none; }
+.lu-group-wissen {
+  flex: 5 1 0;
+  background: linear-gradient(180deg, rgba(31, 111, 197, 0) 0%, rgba(31, 111, 197, .16) 35%, rgba(18, 60, 120, .5) 100%);
+  border-color: rgba(130, 195, 255, .32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
 }
-.portal-wissen { grid-column: 1; background: rgba(4, 24, 42, .78); border-color: rgba(95, 212, 255, .35); transform: perspective(900px) rotateY(10deg); }
-.portal-arena { grid-column: 3; background: rgba(34, 7, 5, .8); border-color: rgba(255, 122, 61, .4); transform: perspective(900px) rotateY(-10deg); }
-.portal.active { filter: none; transform: perspective(900px) rotateY(0) scale(1.03); }
-.portal-wissen.active { box-shadow: 0 0 0 2px #5fd4ff, 0 25px 70px rgba(95, 212, 255, .35); }
-.portal-arena.active { box-shadow: 0 0 0 2px #ff7a3d, 0 25px 70px rgba(255, 90, 31, .45); }
-.portal-head { display: flex; gap: 14px; align-items: center; padding: 18px 20px; position: relative; }
-.portal-ico { font-size: 30px; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 16px; background: rgba(255, 255, 255, .12); box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 6px 16px rgba(0, 0, 0, .3); }
-.portal-head h2 { font-size: 28px; text-transform: uppercase; }
-.portal-count { margin-left: auto; min-width: 30px; height: 30px; padding: 0 8px; display: grid; place-items: center; border-radius: 999px; background: rgba(0, 0, 0, .25); font-weight: 700; font-size: 13px; opacity: .8; }
-.portal-items { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-/* Menü-Knöpfe als Kacheln */
-.menu-item {
-  --pc: 95, 212, 255;
-  position: relative; display: grid; grid-template-columns: 46px 1fr 22px; align-items: center; gap: 14px;
-  padding: 10px 14px 10px 10px; border-radius: 16px; cursor: pointer; overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-  border: 1px solid rgba(255, 255, 255, .08);
-  transition: transform .3s var(--ease), background .3s, border-color .3s, box-shadow .3s;
+.lu-group-arena {
+  flex: 3 1 0;
+  background: linear-gradient(180deg, rgba(150, 30, 8, 0) 0%, rgba(150, 30, 8, .2) 35%, rgba(90, 14, 4, .62) 100%);
+  border-color: rgba(255, 120, 60, .42);
+  box-shadow: inset 0 1px 0 rgba(255, 190, 120, .14);
 }
-.portal-arena .menu-item { --pc: 255, 122, 61; }
-.menu-item::before {
-  content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px; border-radius: 0 3px 3px 0;
-  background: rgb(var(--pc)); transform: scaleY(0); transition: transform .3s var(--ease);
+/* Glut, die in der Arena vom Boden aufsteigt */
+.lu-group-arena::before {
+  content: ""; position: absolute; inset: 40% 0 0; border-radius: inherit; pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 100%, rgba(255, 120, 30, .55), transparent 30%),
+    radial-gradient(circle at 62% 100%, rgba(255, 70, 20, .5), transparent 34%),
+    radial-gradient(circle at 92% 100%, rgba(255, 160, 50, .45), transparent 28%);
+  animation: lu-glow 2.6s ease-in-out infinite alternate;
 }
-.menu-item::after {
+@keyframes lu-glow { from { opacity: .55; } to { opacity: 1; } }
+/* Wasserturm zwischen den Bereichen: achteckiger Steinturm, Spitzdach, Luzerner Fahne */
+.lu-tower { flex: none; width: 58px; height: 236px; margin: 0 16px; position: relative; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .55)); }
+.lu-tw-flag { position: relative; width: 2px; height: 34px; background: linear-gradient(#ffffff, #9aa3b5); flex: none; }
+.lu-tw-flag::before { content: ""; position: absolute; top: -5px; left: -3px; width: 8px; height: 8px; border-radius: 50%; background: #ffd23f; }
+.lu-tw-flag::after {
+  content: ""; position: absolute; left: 2px; top: 1px; width: 20px; height: 20px;
+  background: linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%); transform-origin: left center; animation: lu-wave 1.5s ease-in-out infinite;
+}
+.lu-tw-roof { width: 74px; height: 62px; flex: none; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .22) 0 2px, transparent 2px 9px), linear-gradient(90deg, #6c2f1f, #b0583a 45%, #7c3a24); }
+.lu-tw-body {
+  width: 100%; flex: 1; border-radius: 2px 2px 0 0;
+  background:
+    radial-gradient(ellipse 4px 7px at 50% 26%, #ffd77a 0 100%, transparent 100%),
+    radial-gradient(ellipse 4px 7px at 50% 56%, #2a2620 0 100%, transparent 100%),
+    linear-gradient(90deg, #6f624f, #b3a283 22%, #d2c3a3 45%, #b3a283 70%, #6f624f);
+  box-shadow: inset 0 6px 0 rgba(0, 0, 0, .18);
+}
+.lu-group-head {
+  display: flex; align-items: center; gap: 10px; padding: 0 4px; white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .85); opacity: .72; transition: opacity .35s;
+}
+.lu-group.on .lu-group-head { opacity: 1; }
+.lu-group-head::after { content: ""; flex: 1; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(255, 255, 255, .55), transparent); }
+.lu-group-arena .lu-group-head::after { background: linear-gradient(90deg, rgba(255, 160, 90, .7), transparent); }
+.lu-wappen { width: 28px; height: auto; flex: none; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .55)); }
+.lu-group-head b { font-family: var(--font-display); font-size: 21px; letter-spacing: .14em; text-transform: uppercase; color: #e4f3ff; }
+.lu-group-arena .lu-group-head b { color: #ffd9ae; font-style: italic; }
+.lu-group-head span { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .78); }
+.lu-row { display: flex; gap: 12px; }
+
+.lu-btn {
+  --a: 31, 111, 197;      /* Luzerner Blau */
+  --a2: 150, 205, 255;
+  position: relative; flex: 1 1 0; min-width: 0; cursor: pointer;
+  display: flex; flex-direction: column;
+  filter: drop-shadow(0 14px 16px rgba(0, 0, 0, .45));
+  transition: transform .35s var(--ease), filter .35s;
+  animation: lu-rise .6s var(--ease) backwards; animation-delay: var(--d, 0s);
+}
+.lu-btn-arena { --a: 214, 72, 30; --a2: 255, 196, 120; }
+@keyframes lu-rise { from { opacity: 0; transform: translateY(34px); } }
+/* Dach mit Schindeln */
+.lu-roof {
+  position: relative; height: 64px; margin: 0 -7px -1px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, .2) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, #b0583a, #6c2f1f);
+}
+/* Bemalte Bildtafel im Giebel */
+.lu-tafel {
+  position: absolute; left: 50%; bottom: 0; width: 68%; height: 84%; transform: translateX(-50%);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%); background: #2e1a0d;
+}
+.lu-tafel::before {
+  content: ""; position: absolute; inset: 6px 8px 0; clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: radial-gradient(circle at 50% 80%, #f3dfae, #d2a35e 58%, #8e5f2e);
+  transition: background .35s;
+}
+.lu-btn-arena .lu-tafel::before { background: radial-gradient(circle at 50% 80%, #ffd9a0, #d9733a 58%, #7a2a12); }
+.lu-ico { position: absolute; left: 50%; bottom: 2px; z-index: 1; font-size: 25px; line-height: 1; transform: translateX(-50%); filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); }
+/* Körper des Knopfs */
+.lu-body {
+  position: relative; flex: 1; min-height: 98px; padding: 10px 12px 15px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(16, 26, 58, .93), rgba(7, 11, 28, .94));
+  border: 1px solid rgba(var(--a2), .22); border-top: 4px solid #3a2213; border-radius: 0 0 14px 14px;
+  transition: background .35s, border-color .35s;
+}
+.lu-body::after { /* Luzerner Farben – gespalten Blau | Weiss */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
+  background: linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%);
+}
+.lu-body::before { /* Glanz beim Auswählen */
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .14) 50%, transparent 65%);
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .16) 50%, transparent 65%);
   transform: translateX(-120%); transition: transform .8s var(--ease);
 }
-.mi-badge {
-  width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 23px;
-  background: linear-gradient(145deg, rgba(var(--pc), .35), rgba(var(--pc), .08));
-  border: 1px solid rgba(var(--pc), .35); box-shadow: 0 1px 0 rgba(255, 255, 255, .2) inset;
-  transition: transform .3s var(--ease), box-shadow .3s, background .3s;
+.lu-lbl { font-family: var(--font-display); font-size: clamp(14px, 1.1vw, 17px); line-height: 1.15; color: #fff; transition: color .3s; hyphens: manual; }
+.lu-sub { margin-top: 5px; font-size: 12px; line-height: 1.32; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* Fähnchen auf dem Giebel (Luzern wie das Wappen: Blau | Weiss senkrecht) */
+.lu-flag { position: absolute; left: calc(50% - 1px); top: -27px; z-index: 2; width: 2px; height: 30px; background: linear-gradient(#ffffff, #9aa3b5); transform-origin: bottom; transform: scaleY(0); transition: transform .35s var(--ease); }
+.lu-flag::before { content: ""; position: absolute; top: -5px; left: -3px; width: 8px; height: 8px; border-radius: 50%; background: #ffd23f; }
+.lu-flag i { position: absolute; left: 2px; top: 1px; width: 19px; height: 19px; background: linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%); transform-origin: left center; animation: lu-wave 1.3s ease-in-out infinite; box-shadow: 0 2px 4px rgba(0, 0, 0, .3); }
+@keyframes lu-wave { 0%, 100% { transform: skewY(0deg) scaleX(1); } 50% { transform: skewY(-9deg) scaleX(.84); } }
+/* Zustände */
+.lu-btn:hover { transform: translateY(-4px); }
+.lu-btn.active { transform: translateY(-12px); filter: drop-shadow(0 0 14px rgba(var(--a), .8)) drop-shadow(0 18px 22px rgba(0, 0, 0, .5)); }
+.lu-btn.active .lu-body { border-color: rgba(var(--a2), .9); background: linear-gradient(180deg, rgba(var(--a), .62), rgba(10, 16, 40, .95) 78%); }
+.lu-btn.active .lu-body::before { transform: translateX(120%); }
+.lu-btn.active .lu-lbl { color: rgb(var(--a2)); }
+.lu-btn.active .lu-sub { color: #fff; }
+.lu-btn.active .lu-flag { transform: scaleY(1); }
+.lu-btn.active .lu-tafel::before { background: radial-gradient(circle at 50% 80%, #fffbe6, #ffd77a 55%, #cf8d2c); }
+.lu-btn-arena.active .lu-tafel::before { background: radial-gradient(circle at 50% 80%, #fff3c4, #ffaa45 55%, #d2461a); }
+.lu-btn.active .lu-ico { animation: lu-bob 1.2s ease-in-out infinite; }
+@keyframes lu-bob { 50% { transform: translateX(-50%) translateY(-3px) scale(1.14); } }
+/* Brückensteg mit Geranien */
+.lu-deck {
+  width: 100%; max-width: 1600px; height: 17px; margin-top: -1px; border-radius: 3px;
+  background:
+    radial-gradient(circle at 6px 4px, #ff3b4f 0 3px, transparent 3.6px) 0 0 / 22px 8px repeat-x,
+    radial-gradient(circle at 15px 5px, #ff8fb1 0 2.4px, transparent 3px) 0 0 / 22px 8px repeat-x,
+    radial-gradient(circle at 11px 6px, #3f7a32 0 3px, transparent 3.6px) 0 0 / 11px 8px repeat-x,
+    linear-gradient(180deg, transparent 0 7px, #7a4a28 7px 11px, #4a2b16 11px 14px, #2c180b 14px);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .55));
 }
-.mi-text { min-width: 0; }
-.menu-item .lbl { font-family: var(--font-display); font-size: 18px; transition: color .25s; }
-.menu-item .sub { color: var(--muted); font-size: 12.5px; margin-top: 1px; }
-.mi-go { font-size: 24px; color: rgba(255, 255, 255, .3); transition: transform .3s var(--ease), color .3s; }
-.menu-item:hover { background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03)); }
-.menu-item.active {
-  background: linear-gradient(90deg, rgba(var(--pc), .28), rgba(var(--pc), .06));
-  border-color: rgba(var(--pc), .8); transform: translateX(4px);
-  box-shadow: 0 10px 30px rgba(var(--pc), .2), 0 0 0 1px rgba(var(--pc), .25) inset;
+/* im Menü läuft der Steg pro Bereich bis an dessen Rand (Gruppen-Abstand aufheben) */
+.lu-group .lu-deck { width: auto; margin: -45px -16px 0; border-radius: 0; }
+/* Arena: dunkle Steinplatten mit glühenden Lava-Fugen statt Holz und Geranien */
+.lu-deck-arena {
+  background:
+    linear-gradient(90deg, transparent 0 46px, #ff6a1f 46px 48px) 0 7px / 48px 10px repeat-x,
+    radial-gradient(circle at 10px 5px, #ffb347 0 2.4px, transparent 3px) 0 0 / 31px 8px repeat-x,
+    linear-gradient(180deg, transparent 0 7px, #3a2420 7px 11px, #24140f 11px 14px, #140a07 14px);
+  animation: lu-lava 1.8s ease-in-out infinite alternate;
 }
-.menu-item.active::before { transform: scaleY(1); }
-.menu-item.active::after { transform: translateX(120%); }
-.menu-item.active .mi-badge { transform: scale(1.08) rotate(-4deg); background: linear-gradient(145deg, rgba(var(--pc), .8), rgba(var(--pc), .35)); box-shadow: 0 0 22px rgba(var(--pc), .55); }
-.menu-item.active .lbl { color: rgb(var(--pc)); }
-.menu-item.active .mi-go { color: rgb(var(--pc)); transform: translateX(4px); }
-.portal-arena .menu-item.active .lbl { color: #ffb347; }
-.menu-foot { display: flex; gap: 22px; color: rgba(255, 255, 255, .85); font-size: 13px; letter-spacing: .06em; text-shadow: 0 2px 6px #000; padding-bottom: 4px; }
+@keyframes lu-lava { to { filter: drop-shadow(0 0 8px rgba(255, 90, 20, .8)) drop-shadow(0 6px 10px rgba(0, 0, 0, .55)); } }
+/* Arena-Knöpfe: verkohlte Ziegel, dunkelrotes Glas */
+.lu-btn-arena .lu-roof { background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .3) 0 2px, transparent 2px 8px), linear-gradient(180deg, #5a2a22, #2a1210); }
+.lu-btn-arena .lu-body { background: linear-gradient(180deg, rgba(58, 16, 10, .94), rgba(22, 6, 4, .95)); border-top-color: #1a0a06; }
+.lu-btn-arena .lu-body::after { background: linear-gradient(90deg, #ff6a1f, #ffd36b, #ff6a1f); }
+
+/* ============ Level-Auswahl: Kurstage als Brückengiebel ============ */
+.levels-screen { justify-content: flex-start; padding-bottom: 12px; }
+.levels-screen .menu-stage { min-height: 40px; }
+.lv-bridge { width: min(1320px, 100%); display: flex; flex-direction: column; gap: 46px; }
+.lv-bridge .lu-group-head { opacity: 1; }
+.lv-bridge .lu-deck { margin-top: -47px; }
+.lv-row { gap: 16px; }
+.lv-btn .lu-roof { height: 92px; }
+.lv-btn .lu-tafel { width: 62%; height: 80%; }
+.lv-num {
+  position: absolute; left: 50%; bottom: 3px; z-index: 1; transform: translateX(-50%);
+  font-family: var(--font-display); font-size: 40px; line-height: 1; color: #3a2213;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .5); transition: transform .35s var(--ease);
+}
+.lv-btn.active .lv-num { transform: translateX(-50%) scale(1.14); }
+.lv-btn .lu-body { min-height: 150px; padding: 12px 14px 18px; display: flex; flex-direction: column; }
+.lv-kicker { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: rgb(var(--a2)); margin-bottom: 4px; }
+.lv-btn .lu-lbl { font-size: clamp(16px, 1.25vw, 19px); }
+.lv-btn .lu-sub { flex: 1; }
+.lv-state { margin-top: 8px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .85); }
+/* Platzhalter-Level: Baustelle (gelb-schwarze Absperrung statt Bildtafel-Glanz) */
+.lv-btn.placeholder { filter: saturate(.45) brightness(.8) drop-shadow(0 14px 16px rgba(0, 0, 0, .45)); }
+.lv-btn.placeholder.active { filter: saturate(.8) drop-shadow(0 0 14px rgba(var(--a), .7)) drop-shadow(0 18px 22px rgba(0, 0, 0, .5)); }
+.lv-btn.placeholder .lu-body::after { background: repeating-linear-gradient(135deg, #ffd23f 0 8px, #1b1b25 8px 16px); }
+.menu-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin-top: 10px; color: rgba(255, 255, 255, .88); font-size: 13px; letter-spacing: .06em; text-shadow: 0 2px 6px #000; }
 .menu-foot kbd { margin-right: 3px; }
 .menu-foot .link { cursor: pointer; }
-.portal-wissen .portal-head { background: linear-gradient(90deg, #0b5f8f, #083456); }
-.portal-arena .portal-head { background: linear-gradient(90deg, #a3260b, #4a0c06); }
-.portal-wissen .portal-head h2 { color: #d8f6ff; }
-.portal-arena .portal-head h2 { color: #ffe1a8; font-style: italic; }
-.portal-sub { font-size: 13px; opacity: .8; letter-spacing: .08em; text-transform: uppercase; }
-
-/* ============ Level-Auswahl ============ */
-.levels { display: flex; gap: 22px; perspective: 1200px; flex-wrap: wrap; justify-content: center; }
-.level-card {
-  width: 190px; height: 260px; border-radius: 22px; padding: 18px;
-  display: flex; flex-direction: column; justify-content: space-between;
-  background: linear-gradient(160deg, var(--c1, #2c3d86), var(--c2, #141c3f));
-  border: 1px solid rgba(255, 255, 255, .16); box-shadow: 0 18px 40px rgba(0, 0, 0, .45), 0 1px 0 rgba(255, 255, 255, .2) inset;
-  cursor: pointer; transition: transform .35s var(--ease), box-shadow .35s, filter .35s;
-  transform: rotateX(8deg); position: relative; overflow: hidden;
-}
-.level-card::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .18) 45%, transparent 60%);
-  transform: translateX(-120%); transition: transform .7s var(--ease);
-}
-.level-card.active::after { transform: translateX(120%); }
-.level-card .lv { font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
-.level-card .num { font-family: var(--font-display); font-size: 74px; line-height: 1; text-shadow: 0 6px 0 rgba(0, 0, 0, .3); }
-.level-card .name { font-family: var(--font-display); font-size: 17px; line-height: 1.2; }
-.level-card .state { font-size: 12px; color: rgba(255, 255, 255, .8); margin-top: 4px; }
-.level-card.active { transform: rotateX(0) translateY(-14px) scale(1.06); box-shadow: 0 28px 60px rgba(0, 0, 0, .55), 0 0 0 2px var(--accent); }
-.level-card.placeholder { filter: saturate(.25) brightness(.75); }
-.level-card.placeholder.active { filter: saturate(.5) brightness(.95); }
 
 /* ============ Level-Detail ============ */
 .level-head { text-align: center; }
@@ -448,11 +547,11 @@ body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter
 .path::before { content: ""; position: absolute; left: 40px; right: 40px; top: 50px; height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg, var(--accent) 0 14px, transparent 14px 24px); opacity: .55; }
 .stop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
 .stop .node { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; background: var(--panel-solid); border: 3px solid var(--line); transition: all .3s var(--ease); z-index: 1; }
-.stop .stop-lbl { font-size: 13px; text-align: center; color: rgba(255, 255, 255, .85); max-width: 130px; line-height: 1.3; text-shadow: 0 2px 4px #000; }
+.stop .stop-lbl { font-size: 13px; text-align: center; color: rgba(255, 255, 255, .9); max-width: 130px; line-height: 1.3; text-shadow: 0 1px 3px #000; padding: 3px 9px; border-radius: 10px; background: rgba(6, 10, 26, .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .stop.active .node { border-color: var(--accent); background: var(--accent); transform: scale(1.18); box-shadow: 0 0 30px var(--glow); }
 .stop.active .stop-lbl { color: var(--text); font-weight: 600; }
 .stop.visited .node { border-color: var(--good); }
-.journey .mission-body { flex: 1; }
+.journey .mission-body { flex: 0 1 auto; } /* Panel nur so hoch wie der Inhalt (vorher grosse leere Fläche) */
 
 /* ============ Lexikon ============ */
 .search { width: min(720px, 100%); padding: 14px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-size: 18px; outline: none; margin-bottom: 16px; user-select: text; backdrop-filter: blur(10px); }
@@ -547,8 +646,15 @@ mark { background: color-mix(in srgb, var(--accent) 28%, transparent); color: #f
 ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 
 @media (max-width: 1100px) {
-  .portals { grid-template-columns: 1fr 1fr; }
-  .portal-wissen, .portal-arena { grid-column: auto; }
+  .lu-menu { gap: 0; }
+  .lu-tower { width: 44px; margin: 0 8px; }
+  .lu-group { padding: 12px 10px 0; }
+  .lu-group .lu-deck { margin: -45px -10px 0; }
+  .lv-btn .lu-sub { display: none; }
+  .lu-row { gap: 8px; }
+  .lu-sub { display: none; }
+  .lu-body { min-height: 64px; padding: 9px 9px 14px; }
+  .lu-lbl { font-size: 15px; }
   .cols { grid-template-columns: 1fr 1fr; }
   .level-detail.with-stage { grid-template-columns: 240px 1fr; }
   .stage-col { display: none; }
@@ -556,7 +662,14 @@ mark { background: color-mix(in srgb, var(--accent) 28%, transparent); color: #f
 }
 @media (max-width: 860px) {
   .ov-grid, .rel-wrap { grid-template-columns: 1fr; }
-  .level-detail, .sheet, .portals, .level-detail.with-stage { grid-template-columns: 1fr; }
+  .level-detail, .sheet, .level-detail.with-stage { grid-template-columns: 1fr; }
+  .lu-menu { flex-direction: column; align-items: stretch; gap: 26px; }
+  .lu-row { flex-wrap: wrap; row-gap: 30px; }
+  .lu-btn { flex: 1 1 120px; }
+  .lu-deck, .lu-tower { display: none; }
+  .lv-row { flex-wrap: wrap; row-gap: 40px; }
+  .lv-btn { flex: 1 1 150px; }
+  .menu-stage { min-height: 160px; }
   .sheet-stage { min-height: 220px; }
   .answers, .duell-opts, .cols { grid-template-columns: 1fr; }
   .hud .keys { display: none; }

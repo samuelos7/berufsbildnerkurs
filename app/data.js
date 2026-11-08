@@ -1437,7 +1437,7 @@ window.GAME_DATA = {
   /* =====================================================================
      ARENA – BOSSKAMPF
      ===================================================================== */
-  boss: { name: "Der QV-Drache" },
+  boss: { name: "Der PrintNightmare-Drucker" },
   quiz: [
     { q: "Wie viele Stunden umfasst der Kurs für Berufsbildner/innen?", a: ["20 h", "40 h", "60 h", "100 h"], correct: 1, why: "40 Stunden – der Ausweis gilt lebenslang und in allen Kantonen." },
     { q: "Was unterscheidet die Berufsbildnerin / den Berufsbildner von der Fachperson?", a: ["Fokus auf Resultate", "Korrigiert Fehler", "Nutzt Fehler als Lernchance", "Denkt aus Sicht der Fachkraft"], correct: 2, why: "BB befähigen und denken aus Sicht der Lernenden." },

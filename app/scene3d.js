@@ -2,11 +2,11 @@
    Alles ist prozedural gebaut: keine Modelle, keine Textur-Dateien.
    Kulisse: Vierwaldstättersee mit Kapellbrücke, Wasserturm, Altstadt, Museggmauer, Pilatus & Alpen.
    API für main.js:  World.mode(name, opts) · World.rotateTo(i) · World.menuSide(side) · World.cheer()
-                     World.dragon* · Callbacks World.onScorch / onImpact / onDefeated */
+                     World.boss* (PrintNightmare-Drucker) · Callbacks World.onScorch / onImpact / onDefeated */
 window.World = (() => {
   "use strict";
   const noop = () => {};
-  const stub = { ok: false, mode: noop, rotateTo: noop, dragonBreath: noop, dragonHit: noop, dragonDie: noop, dragonRoar: noop, cheer: noop, menuSide: noop, onScorch: null, onImpact: null };
+  const stub = { ok: false, mode: noop, rotateTo: noop, bossAttack: noop, bossHit: noop, bossDie: noop, bossRoar: noop, cheer: noop, menuSide: noop, onScorch: null, onImpact: null };
   if (!window.THREE) return stub;
   const canvas = document.getElementById("scene");
   let renderer;
@@ -139,8 +139,8 @@ window.World = (() => {
     });
   }
   const flagTex = {
-    // Kantonsfahne Luzern: waagerecht geteilt, Weiss oben, Blau unten
-    luzern: canvasTex(128, 128, (x, w, h) => { x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h / 2); x.fillStyle = "#1f62c8"; x.fillRect(0, h / 2, w, h / 2); }),
+    // Luzern wie im Wappen: senkrecht gespalten – Blau an der Stange, Weiss aussen
+    luzern: canvasTex(128, 128, (x, w, h) => { x.fillStyle = "#1f6fc5"; x.fillRect(0, 0, w / 2, h); x.fillStyle = "#ffffff"; x.fillRect(w / 2, 0, w / 2, h); }),
     schweiz: canvasTex(128, 128, (x, w, h) => { x.fillStyle = "#d52b1e"; x.fillRect(0, 0, w, h); x.fillStyle = "#fff"; x.fillRect(w * 0.4, h * 0.19, w * 0.2, h * 0.62); x.fillRect(w * 0.19, h * 0.4, w * 0.62, h * 0.2); }),
     oda: canvasTex(256, 160, (x, w, h) => { x.fillStyle = "#d94848"; x.fillRect(0, 0, w, h); x.fillStyle = "#fff"; x.font = "bold 78px Segoe UI, Arial"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("OdA", w / 2, h / 2 + 4); }),
   };
@@ -487,7 +487,7 @@ window.World = (() => {
     cyl(2.75, 2.75, 0.35, stone2, 0, 11.3, 0, tower, 8);
     const tr = mesh(new THREE.ConeGeometry(2.95, 4.6, 8), M("#7c3a24", { roughness: 0.8 }), 0, 13.75, 0, tower);
     tr.rotation.y = Math.PI / 8;
-    const fp = flagPole(2.6, flagTex.luzern, 1.6, 1.0);
+    const fp = flagPole(2.6, flagTex.luzern, 1.3, 1.3);
     fp.position.y = 15.9;
     tower.add(fp);
     town.add(tower);
@@ -536,14 +536,15 @@ window.World = (() => {
   }
 
   /* ---------- Wolken & Sterne ---------- */
-  const cloudMat = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 1, flatShading: true, emissive: "#ffffff", emissiveIntensity: 0.18, transparent: true, opacity: 0.95 });
+  // Wolken: weich schattiert, ohne Nebel und kräftiger selbstleuchtend – sonst wirken sie wie dunkle, schwebende Felsbrocken
+  const cloudMat = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 1, flatShading: false, emissive: "#ffffff", emissiveIntensity: 0.5, transparent: true, opacity: 0.92, fog: false });
   const clouds = new THREE.Group();
   scene.add(clouds);
   for (let i = 0; i < 16; i++) {
     const cl = new THREE.Group();
     const parts = 4 + Math.floor(srnd(0, 4));
     for (let k = 0; k < parts; k++) {
-      const s = mesh(new THREE.IcosahedronGeometry(srnd(5, 9), 1), cloudMat, k * srnd(5, 7) - parts * 3, srnd(-1, 2), srnd(-3, 3), cl);
+      const s = mesh(new THREE.IcosahedronGeometry(srnd(5, 9), 2), cloudMat, k * srnd(5, 7) - parts * 3, srnd(-1, 2), srnd(-3, 3), cl);
       s.scale.y = 0.55;
       s.castShadow = false;
     }
@@ -685,18 +686,37 @@ window.World = (() => {
       return m;
     };
     const st = L.hairStyle || "short";
+    // Kopfbedeckungen sitzen als eigene Gruppe AUF dem Kopf: Rand vorne über den Brauen
+    // (Brauen enden bei y≈0.14), hinten tiefer – sonst stecken sie in Kopf und Augen.
+    const hat = (y, tilt) => { const g = new THREE.Group(); g.position.set(0, y, -0.01); g.rotation.x = tilt; head.add(g); return g; };
+    const dome = (r, mat, p) => mesh(G(`dome${r}`, () => new THREE.SphereGeometry(r, 36, 14, 0, TAU, 0, Math.PI / 2)), mat, 0, 0, 0, p);
     if (st === "cap") {
       const cm = M(L.cap || "#ff8a3d", { roughness: 0.7 });
-      cap(0.3, cm, -0.12, 0.42);
-      const visor = mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.025, 24, 1, false, -Math.PI / 2, Math.PI), cm, 0, 0.1, 0.17, head);
-      visor.rotation.x = 0.12;
-      sph(0.03, cm, 0, 0.3, -0.02, head, 8);
+      const g = hat(0.07, -0.3);
+      dome(0.305, cm, g);
+      // Schirm: halbe Scheibe vorne, leicht nach unten geneigt
+      const visor = mesh(new THREE.CylinderGeometry(0.21, 0.21, 0.024, 24, 1, false, -Math.PI / 2, Math.PI), cm, 0, 0.004, 0.2, g);
+      visor.rotation.x = 0.36;
+      sph(0.032, cm, 0, 0.305, 0, g, 8);
+      // Haare schauen unter der Cap hervor
+      [-1, 1].forEach((s) => box(0.05, 0.12, 0.14, hair, s * 0.27, -0.02, -0.04, head).castShadow = false);
     } else if (st === "helmet") {
       const hm = M("#ffd23f", { metalness: 0.25, roughness: 0.35 });
-      cap(0.315, hm, -0.08, 0.48);
-      const brim = mesh(new THREE.TorusGeometry(0.31, 0.03, 8, 32), hm, 0, 0.02, 0, head);
+      const g = hat(0.1, -0.26);
+      const shell = new THREE.Group();
+      shell.scale.y = 0.92;
+      g.add(shell);
+      dome(0.33, hm, shell);
+      // Mittelgrat über den Helm (Bogen von vorne nach hinten)
+      const ridge = mesh(new THREE.TorusGeometry(0.33, 0.03, 6, 24, Math.PI), hm, 0, 0, 0, shell);
+      ridge.rotation.y = Math.PI / 2;
+      // umlaufende Krempe + vorne ein kurzer Schild
+      const brim = mesh(new THREE.TorusGeometry(0.34, 0.03, 6, 36), hm, 0, 0, 0, g);
       brim.rotation.x = Math.PI / 2;
-      box(0.06, 0.06, 0.5, hm, 0, 0.3, -0.02, head);
+      brim.scale.z = 0.6;
+      const peak = mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.024, 24, 1, false, -Math.PI / 2, Math.PI), hm, 0, -0.005, 0.24, g);
+      peak.rotation.x = 0.2;
+      peak.scale.z = 0.6;
     } else {
       cap(0.298, hair);
       if (st === "short" || st === "curly") {
@@ -761,9 +781,11 @@ window.World = (() => {
       const al = M("#c9ced8", { metalness: 0.75, roughness: 0.3 });
       box(0.5, 0.025, 0.34, al, 0, 0, 0, lp);
       box(0.44, 0.005, 0.18, M("#2a2f3a"), 0, 0.015, -0.04, lp).castShadow = false;
+      // Deckel nur leicht nach hinten gekippt und das Notebook weiter vorne –
+      // vorher ragte der Deckel in den Oberkörper
       const lid = new THREE.Group();
       lid.position.set(0, 0.01, -0.17);
-      lid.rotation.x = -0.32;
+      lid.rotation.x = -0.1;
       lp.add(lid);
       box(0.5, 0.33, 0.02, al, 0, 0.165, 0, lid);
       const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.29), new THREE.MeshBasicMaterial({ map: laptopTex }));
@@ -772,7 +794,7 @@ window.World = (() => {
       const glow = glowSprite("#5fd4ff", 0.9, 0.35);
       glow.position.set(0, 0.2, 0.2);
       lid.add(glow);
-      lp.position.set(0, 1.0, 0.44);
+      lp.position.set(0, 1.0, 0.55);
       rig.body.add(lp);
     }
     if (ex.includes("clipboard")) {
@@ -1007,7 +1029,7 @@ window.World = (() => {
       box(5.6, 2.4, 1.8, M("#b2b6c2"), 0, 1.8, -6.5, g);
       box(5.8, 0.3, 3, stone, 0, 3.15, -6, g);
       prism(5.8, 1, 3, stone, 0, 3.3, -6, g);
-      const fp = flagPole(1.6, flagTex.luzern, 0.9, 0.6);
+      const fp = flagPole(1.6, flagTex.luzern, 0.75, 0.75);
       fp.position.set(2.4, 3.3, -6);
       g.add(fp);
       const docs = [];
@@ -1191,7 +1213,7 @@ window.World = (() => {
     mesh(new THREE.DodecahedronGeometry(rnd(0.14, 0.26), 0), F("#6b7590"), Math.cos(a) * 3.15, 0.36, Math.sin(a) * 3.15, island);
   }
   // Luzerner Fahne auf der Wiese neben der Insel
-  const luFlag = flagPole(4.2, flagTex.luzern, 1.5, 0.95);
+  const luFlag = flagPole(4.2, flagTex.luzern, 1.2, 1.2);
   luFlag.position.set(-5.4, 0, -8);
   menuG.add(luFlag);
   island.position.y = 0.2;
@@ -1248,7 +1270,8 @@ window.World = (() => {
   wissenG.add(wPillars);
   for (let i = 0; i < 6; i++) {
     const a = (i / 6) * TAU;
-    const px = Math.cos(a) * 9, pz = -4 + Math.sin(a) * 6;
+    // weiter hinten und aussen: die vorderen Säulen standen sonst mitten vor den Karten
+    const px = Math.cos(a) * 10.5, pz = -6.5 + Math.sin(a) * 5;
     const p = mesh(new THREE.CylinderGeometry(0.35, 0.45, 5, 8), F("#2a5d80", { emissive: "#0b3550", emissiveIntensity: 0.6 }), px, 2.5, pz, wPillars);
     p.rotation.y = a;
     const orb = glowSprite("#5fd4ff", 1.6, 0.8);
@@ -1277,7 +1300,7 @@ window.World = (() => {
   arenaG.add(arenaFloor);
   const lava = F("#3a0d05", { emissive: "#ff3d00", emissiveIntensity: 0.6 });
   for (let i = 0; i < 16; i++) {
-    // nur seitlich und hinten – nie zwischen Kamera und Drache
+    // nur seitlich und hinten – nie zwischen Kamera und Drucker
     const a = Math.PI * 0.92 + (i / 15) * Math.PI * 1.16;
     const r = mesh(new THREE.DodecahedronGeometry(rnd(0.8, 2.4), 0), i % 3 ? F("#2a1210", { roughness: 0.9 }) : lava, Math.cos(a) * rnd(10, 15), rnd(0, 1.5), -6 + Math.sin(a) * rnd(7, 11), arenaG);
     r.rotation.set(rnd(0, 3), rnd(0, 3), 0);
@@ -1299,19 +1322,77 @@ window.World = (() => {
   arenaG.add(arenaRing);
 
   /* =====================================================================
-     KARUSSELL & BÜHNE
+     MÜHLERAD (Rollenwahl) & BÜHNE
+     Die Rollen stehen auf Gondeln vor einem grossen hölzernen Wasserrad.
+     Die gewählte Rolle fährt nach oben ins Scheinwerferlicht, unten dreht
+     das Rad durch den Mühlebach.
      ===================================================================== */
   const carousel = new THREE.Group();
   scene.add(carousel);
   carousel.visible = false;
   let carChars = [];
-  let carIndex = 0, carTurn = 0, carAngle = 0;
-  const CAR_R = 4.9;
-  cyl(CAR_R + 1, CAR_R + 1.2, 0.3, M("#13294a", { metalness: 0.15, roughness: 0.55 }), 0, 0.15, 0, carousel, 64);
-  const platRing = new THREE.Mesh(new THREE.TorusGeometry(CAR_R + 1.05, 0.04, 8, 96), new THREE.MeshBasicMaterial({ color: "#5fd4ff" }));
-  platRing.rotation.x = Math.PI / 2;
-  platRing.position.y = 0.31;
-  carousel.add(platRing);
+  let carIndex = 0, carTurn = 0, carAngle = 0, carPrev = 0;
+  const WR = 4.2, WCY = 0.4, WZ = 1.3, WLVL = 0.2; // Radius, Achshöhe, Gondeln vor dem Rad, Wasserspiegel
+  const WTOP = WCY + WR;
+  const wheel = new THREE.Group();
+  wheel.position.y = WCY;
+  carousel.add(wheel);
+  const woodM = F("#8a5a33", { roughness: 0.85 }), woodDM = F("#5c3a22", { roughness: 0.9 }), ironM = M("#2c2f36", { metalness: 0.7, roughness: 0.4 });
+  const lanterns = [];
+  {
+    [-0.52, 0.52].forEach((z) => {
+      // Felgen aussen + innen, Eisenreif, acht Speichen pro Seite
+      [[WR, 0.14], [WR - 0.78, 0.09]].forEach(([r, tube]) => (mesh(new THREE.TorusGeometry(r, tube, 6, 72), woodM, 0, 0, z, wheel).castShadow = false));
+      mesh(new THREE.TorusGeometry(WR + 0.03, 0.05, 4, 72), ironM, 0, 0, z + Math.sign(z) * 0.1, wheel).castShadow = false;
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * TAU + Math.PI / 8;
+        const sp = box(0.17, WR - 0.25, 0.15, woodDM, (Math.sin(a) * (WR - 0.25)) / 2, (Math.cos(a) * (WR - 0.25)) / 2, z, wheel);
+        sp.rotation.z = -a;
+        sp.castShadow = false;
+      }
+    });
+    // Schaufeln zwischen den Felgen
+    for (let k = 0; k < 30; k++) {
+      const a = (k / 30) * TAU;
+      const p = box(0.08, 0.74, 1.08, woodM, Math.sin(a) * (WR - 0.38), Math.cos(a) * (WR - 0.38), 0, wheel);
+      p.rotation.z = -a;
+      p.castShadow = false;
+    }
+    // Nabe mit Bolzen
+    cyl(0.6, 0.6, 1.5, ironM, 0, 0, 0, wheel, 16).rotation.x = Math.PI / 2;
+    for (let k = 0; k < 6; k++) { const a = (k / 6) * TAU; sph(0.07, M("#c9a227", { metalness: 0.8, roughness: 0.3 }), Math.sin(a) * 0.42, Math.cos(a) * 0.42, 0.77, wheel, 8); }
+    // Achse läuft nach hinten in einen Steinpfeiler (dreht nicht mit)
+    cyl(0.22, 0.22, 2.4, ironM, 0, WCY, -1.7, carousel, 10).rotation.x = Math.PI / 2;
+    box(1.6, WCY + 1.6, 1.2, F("#8d8272", { roughness: 0.95 }), 0, (WCY + 1.6) / 2 - 0.6, -3.2, carousel);
+    box(1.8, 0.25, 1.4, F("#a0947f", { roughness: 0.95 }), 0, WCY + 1.05, -3.2, carousel);
+  }
+  // Mühlebach mit gemauertem Ufer
+  const brookTex = canvasTex(256, 256, (x, w, h) => {
+    x.fillStyle = "#1d6d9a"; x.fillRect(0, 0, w, h);
+    x.strokeStyle = "rgba(200,240,255,0.45)"; x.lineCap = "round";
+    for (let i = 0; i < 40; i++) { const px = rnd(0, w), py = rnd(0, h), l = rnd(14, 46); x.lineWidth = rnd(1.5, 3.5); x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + l / 2, py - 4, px + l, py); x.stroke(); }
+  });
+  brookTex.wrapS = brookTex.wrapT = THREE.RepeatWrapping;
+  brookTex.repeat.set(4, 2);
+  const brook = new THREE.Mesh(new THREE.PlaneGeometry(22, 6), new THREE.MeshStandardMaterial({ map: brookTex, roughness: 0.15, metalness: 0.1, emissive: "#0a3a5a", emissiveIntensity: 0.5, transparent: true, opacity: 0.92 }));
+  brook.rotation.x = -Math.PI / 2;
+  brook.position.set(0, WLVL, 0.4);
+  carousel.add(brook);
+  const wallM = F("#9a8e7c", { roughness: 0.95 });
+  [-2.65, 3.45].forEach((z) => box(22.4, 0.6, 0.5, wallM, 0, WLVL - 0.12, z, carousel));
+  // Gondeln: Holzbrett mit leuchtendem Sockel in der Rollenfarbe
+  const gondolas = [];
+  // Lichtkegel, Ring und Funken markieren den Platz oben am Rad
+  const beamTex = canvasTex(4, 128, (x, w, h) => { const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "rgba(255,255,255,0)"); gr.addColorStop(1, "rgba(255,255,255,1)"); x.fillStyle = gr; x.fillRect(0, 0, w, h); }, false);
+  const hiBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 1.15, 6, 32, 1, true), new THREE.MeshBasicMaterial({ map: beamTex, color: "#ffffff", transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+  hiBeam.position.set(0, WTOP + 3.1, WZ);
+  carousel.add(hiBeam);
+  const hiRing = new THREE.Mesh(new THREE.RingGeometry(0.66, 0.86, 48), new THREE.MeshBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+  hiRing.rotation.x = -Math.PI / 2;
+  hiRing.position.set(0, WTOP + 0.13, WZ);
+  carousel.add(hiRing);
+  const hiSparks = [];
+  for (let i = 0; i < 12; i++) { const s = glowSprite("#ffffff", 0.16, 0.9); carousel.add(s); hiSparks.push(s); }
   let charList = [];
 
   function buildCarousel(list) {
@@ -1319,13 +1400,24 @@ window.World = (() => {
     charList = list;
     const n = list.length;
     list.forEach((c, i) => {
-      const a = (i / n) * TAU;
       const ch = getChar(c, "car");
-      ch.obj.position.set(Math.sin(a) * CAR_R, 0.36, Math.cos(a) * CAR_R);
-      ch.obj.rotation.y = a;
       carousel.add(ch.obj);
-      cyl(0.62, 0.7, 0.12, M(c.color, { emissive: c.color, emissiveIntensity: 0.45, roughness: 0.3 }), Math.sin(a) * CAR_R, 0.36, Math.cos(a) * CAR_R, carousel, 32);
+      const gd = new THREE.Group();
+      box(1.2, 0.1, 1.0, woodM, 0, -0.05, 0, gd);
+      box(0.14, 0.12, WZ - 0.5, woodDM, 0, -0.08, -(WZ - 0.5) / 2 - 0.45, gd); // Halterung zum Rad
+      cyl(0.5, 0.56, 0.08, M(c.color, { emissive: c.color, emissiveIntensity: 0.5, roughness: 0.3 }), 0, 0.04, 0, gd, 28);
+      carousel.add(gd);
+      gondolas.push(gd);
       carChars.push(ch);
+      // Laterne auf der Felge zwischen zwei Gondeln
+      const a = ((i + 0.5) / n) * TAU;
+      const lg = new THREE.Group();
+      lg.position.set(Math.sin(a) * WR, Math.cos(a) * WR, 0.68);
+      sph(0.09, M("#ffd27a", { emissive: "#ffb340", emissiveIntensity: 2 }), 0, 0, 0, lg, 10);
+      const gl = glowSprite("#ffb340", 0.9, 0.7);
+      lg.add(gl);
+      wheel.add(lg);
+      lanterns.push(gl);
     });
   }
 
@@ -1352,96 +1444,193 @@ window.World = (() => {
   let menuHeroes = [];
 
   /* =====================================================================
-     DER QV-DRACHE
+     DER PRINTNIGHTMARE-DRUCKER (Endgegner)
+     Ein vom PrintNightmare-Virus befallener Bürodrucker: flattert mit Papier-
+     flügeln, schnappt mit dem Scannerdeckel, zieht sein Stromkabel hinter sich
+     her und spuckt bei falschen Antworten brennendes Papier ("lp0 on fire").
      ===================================================================== */
-  const dragon = (() => {
+  const paperTex = canvasTex(64, 90, (x, w, h) => {
+    x.fillStyle = "#fbfbf4"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#d63031"; x.fillRect(6, 5, 22, 5);
+    x.fillStyle = "#9aa3b5";
+    for (let i = 0; i < 9; i++) x.fillRect(6, 16 + i * 8, 20 + ((i * 37) % 32), 3);
+  });
+  const paperMat = new THREE.MeshStandardMaterial({ map: paperTex, side: THREE.DoubleSide, roughness: 0.9, emissive: "#ffffff", emissiveIntensity: 0.12 });
+  const printer = (() => {
     const g = new THREE.Group();
     const scale = new THREE.Group();
     g.add(scale);
-    const body = M("#9e1b1b", { emissive: "#2a0000", roughness: 0.45 });
-    const belly = M("#e8a33d", { roughness: 0.6 });
-    const horn = M("#f2e6c9", { roughness: 0.4 });
-    const eyeM = new THREE.MeshBasicMaterial({ color: "#ffe14d" });
-    const segs = [];
-    const N = 14;
-    for (let i = 0; i < N; i++) {
-      const r = i < 3 ? 0.36 - i * 0.03 : Math.max(0.07, 0.55 - (i - 3) * 0.045);
-      const s = sph(r, body, 0, 0, -i * 0.42, scale, 18);
-      if (i >= 3 && i < 9) sph(r * 0.8, belly, 0, -r * 0.35, -i * 0.42, s.parent, 14).userData.bellyOf = i;
-      if (i > 1 && i < N - 1) {
-        const sp = mesh(new THREE.ConeGeometry(r * 0.35, r * 0.9, 6), horn, 0, r * 0.95, 0, s);
-        sp.rotation.x = -0.4;
-      }
-      segs.push(s);
-    }
-    scale.children.filter((c) => c.userData.bellyOf != null).forEach((b) => { b.userData.seg = segs[b.userData.bellyOf]; });
-    const head = new THREE.Group();
-    head.position.set(0, 0.35, 0.45);
-    scale.add(head);
-    const skull = sph(0.42, body, 0, 0, 0, head, 20);
-    skull.scale.set(1, 0.85, 1.1);
-    box(0.46, 0.26, 0.6, body, 0, -0.05, 0.5, head);
-    const jaw = new THREE.Group();
-    jaw.position.set(0, -0.18, 0.15);
-    head.add(jaw);
-    box(0.42, 0.1, 0.62, belly, 0, -0.04, 0.32, jaw);
-    for (let i = 0; i < 4; i++) {
-      const tooth = mesh(new THREE.ConeGeometry(0.03, 0.09, 4), horn, -0.15 + i * 0.1, 0.04, 0.6, jaw);
-      tooth.castShadow = false;
-    }
-    [-1, 1].forEach((s) => {
-      const h = mesh(new THREE.ConeGeometry(0.08, 0.55, 8), horn, s * 0.22, 0.38, -0.15, head);
-      h.rotation.set(-0.9, 0, s * -0.3);
-      const e = mesh(new THREE.SphereGeometry(0.075, 12, 8), eyeM, s * 0.2, 0.12, 0.3, head);
-      e.castShadow = false;
-      const eg = glowSprite("#ffe14d", 0.35, 0.8);
-      eg.position.set(s * 0.2, 0.12, 0.34);
-      head.add(eg);
-      box(0.05, 0.02, 0.05, M("#300"), s * 0.1, 0.02, 0.8, head);
-    });
+    // eigene Materialien (nicht aus dem Cache) – der Treffer-Blitz verändert sie
+    const body = new THREE.MeshStandardMaterial({ color: "#d9dce3", roughness: 0.45, metalness: 0.05, emissive: "#000000" });
+    const dark = M("#3a3f4a", { roughness: 0.5 });
+    const black = M("#15171c", { roughness: 0.4 });
+    const core = new THREE.Object3D();
+    scale.add(core);
+    // Gehäuse + Papierschublade
+    mesh(G("pBody", () => new THREE.BoxGeometry(1.7, 0.72, 1.25)), body, 0, 0, 0, scale);
+    box(1.62, 0.3, 1.18, dark, 0, -0.5, 0.01, scale);
+    box(0.5, 0.06, 0.04, black, 0, -0.5, 0.605, scale);
+    // Ausgabeschlitz = Maul, darunter die Ablage
+    box(1.25, 0.09, 0.05, black, 0, -0.2, 0.61, scale);
+    const tray = box(1.1, 0.03, 0.5, M("#c3c7cf", { roughness: 0.5 }), 0, -0.27, 0.82, scale);
+    tray.rotation.x = 0.18;
+    // herausgestrecktes Blatt = Zunge
+    const tongue = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.42), paperMat);
+    tongue.rotation.x = -Math.PI / 2 + 0.35;
+    tongue.position.set(0, -0.22, 0.8);
+    scale.add(tongue);
     const mouthPos = new THREE.Object3D();
-    mouthPos.position.set(0, -0.12, 0.85);
-    head.add(mouthPos);
-    const wingMat = M("#7a1414", { side: THREE.DoubleSide, emissive: "#3a0500", roughness: 0.55 });
+    mouthPos.position.set(0, -0.2, 0.8);
+    scale.add(mouthPos);
+    // Gesicht: Display vorne, wird laufend neu gezeichnet (Glitch)
+    const faceC = document.createElement("canvas");
+    faceC.width = 256; faceC.height = 112;
+    const faceTex = new THREE.CanvasTexture(faceC);
+    faceTex.encoding = THREE.sRGBEncoding;
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.46), new THREE.MeshBasicMaterial({ map: faceTex }));
+    face.position.set(0, 0.11, 0.645); // vor dem Rahmen (Rahmen-Front liegt bei z = 0.628)
+    scale.add(face);
+    box(1.13, 0.54, 0.02, black, 0, 0.11, 0.618, scale);
+    const faceGlow = glowSprite("#ff2d2d", 2.2, 0.35);
+    faceGlow.position.set(0, 0.11, 0.8);
+    scale.add(faceGlow);
+    // Bedienfeld mit blinkenden LEDs
+    const leds = [];
+    for (let i = 0; i < 4; i++) {
+      const l = sph(0.035, new THREE.MeshBasicMaterial({ color: "#ff3030" }), 0.62 + (i % 2) * 0.1, 0.2 - Math.floor(i / 2) * 0.1, 0.63, scale, 8);
+      l.castShadow = false;
+      leds.push(l);
+    }
+    // Scannerdeckel = Kiefer (Scharnier hinten), darunter grün glühendes Virus-Glas
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.05), new THREE.MeshBasicMaterial({ color: "#39ff7a" }));
+    glass.rotation.x = -Math.PI / 2;
+    glass.position.set(0, 0.362, 0);
+    scale.add(glass);
+    const jaw = new THREE.Group();
+    jaw.position.set(0, 0.36, -0.62);
+    scale.add(jaw);
+    const lid = mesh(G("pLid", () => new THREE.BoxGeometry(1.74, 0.13, 1.27)), body, 0, 0.065, 0.62, jaw);
+    box(1.0, 0.02, 0.4, black, -0.15, 0.135, 0.75, jaw);
+    // Virus: grüne Adern auf dem Gehäuse
+    const veinTex = canvasTex(256, 128, (x, w, h) => {
+      x.clearRect(0, 0, w, h);
+      x.strokeStyle = "#5bff8f"; x.lineCap = "round"; x.lineJoin = "round";
+      for (let i = 0; i < 9; i++) {
+        let px = rnd(0, w), py = rnd(0, h);
+        x.lineWidth = rnd(1.5, 3.5);
+        x.beginPath(); x.moveTo(px, py);
+        for (let k = 0; k < 6; k++) { if (k % 2) px += rnd(-40, 40); else py += rnd(-30, 30); x.lineTo(px, py); }
+        x.stroke();
+        x.fillStyle = "#b6ffcc"; x.beginPath(); x.arc(px, py, 3.5, 0, TAU); x.fill();
+      }
+    });
+    const veinMat = new THREE.MeshBasicMaterial({ map: veinTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+    [-1, 1].forEach((s) => {
+      const v = new THREE.Mesh(new THREE.PlaneGeometry(1.25, 0.72), veinMat);
+      v.rotation.y = s * Math.PI / 2;
+      v.position.set(s * 0.856, 0, 0);
+      scale.add(v);
+    });
+    const vb = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.72), veinMat);
+    vb.position.set(0, 0, -0.63);
+    vb.rotation.y = Math.PI;
+    scale.add(vb);
+    // auch vorne sichtbar: Adern über Gehäuse und Schublade (das Display liegt davor)
+    const vf = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.02), veinMat);
+    vf.position.set(0, -0.15, 0.636);
+    scale.add(vf);
+    // giftgrünes Leuchten aus dem Ausgabeschlitz
+    const slotGlow = glowSprite("#39ff7a", 1.3, 0.55);
+    slotGlow.scale.set(1.9, 0.5, 1);
+    slotGlow.position.set(0, -0.2, 0.7);
+    scale.add(slotGlow);
+    // Flügel aus aufgefächertem Papier
+    const sheetGeo = new THREE.PlaneGeometry(0.95, 0.62);
+    sheetGeo.translate(0.47, 0, 0);
     function wing(side) {
       const w = new THREE.Group();
-      w.position.set(side * 0.3, 0.3, -0.9);
-      // Flughaut mit gewelltem Hinterrand, aufgespannt zwischen Fingerknochen
-      const tips = [[2.7, 0.95], [2.45, -0.15], [1.85, -0.62], [1.1, -0.82], [0.35, -0.7]];
-      const shp = new THREE.Shape();
-      shp.moveTo(0, 0.05);
-      shp.lineTo(1.2, 0.62);
-      shp.lineTo(tips[0][0], tips[0][1]);
-      for (let k = 1; k < tips.length; k++) {
-        const [px, py] = tips[k - 1], [nx, ny] = tips[k];
-        shp.quadraticCurveTo((px + nx) / 2 - 0.12, (py + ny) / 2 + 0.22, nx, ny);
+      w.position.set(side * 0.86, 0.22, -0.1);
+      for (let k = 0; k < 4; k++) {
+        const sh = new THREE.Mesh(sheetGeo, paperMat);
+        sh.castShadow = true;
+        sh.rotation.set(Math.PI / 2 - 0.15, 0, side * (0.45 - k * 0.32));
+        sh.position.set(0, k * 0.012, -k * 0.16);
+        if (side < 0) sh.scale.x = -1;
+        w.add(sh);
       }
-      shp.quadraticCurveTo(0.1, -0.35, 0, -0.25);
-      const memb = new THREE.Mesh(new THREE.ShapeGeometry(shp, 10), wingMat);
-      memb.castShadow = true;
-      if (side < 0) memb.scale.x = -1;
-      w.add(memb);
-      const boneM = M("#3a0808", { roughness: 0.5 });
-      const elbow = new THREE.Vector3(side * 1.2, 0.62, 0.02);
-      const addBone = (a, b, r) => {
-        const d = new THREE.Vector3().subVectors(b, a);
-        const bn = mesh(new THREE.CylinderGeometry(r * 0.6, r, d.length(), 6), boneM, (a.x + b.x) / 2, (a.y + b.y) / 2, 0.02, w);
-        bn.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize());
-      };
-      addBone(new THREE.Vector3(0, 0.05, 0.02), elbow, 0.08);
-      tips.slice(0, 4).forEach(([x, y], k) => addBone(elbow, new THREE.Vector3(side * x, y, 0.02), k ? 0.035 : 0.05));
-      sph(0.07, horn, elbow.x, elbow.y, 0.02, w, 10);
-      w.rotation.x = -0.35;
       scale.add(w);
       return w;
     }
     const wL = wing(-1), wR = wing(1);
-    [-1, 1].forEach((s) => { const l = mesh(new THREE.CapsuleGeometry(0.09, 0.3, 4, 8), body, s * 0.28, -0.45, -1.4, scale); l.rotation.x = 0.6; });
-    scale.scale.setScalar(1.6);
+    // Stromkabel als Schwanz mit Schweizer Stecker (Typ J)
+    const segs = [];
+    for (let i = 0; i < 12; i++) {
+      const s = sph(0.055, black, 0, -0.15 - i * 0.04, -0.68 - i * 0.2, scale, 8);
+      s.userData.base = s.position.clone();
+      segs.push(s);
+    }
+    const plug = new THREE.Group();
+    box(0.2, 0.14, 0.22, M("#f2f2f2", { roughness: 0.5 }), 0, 0, -0.08, plug);
+    [-0.05, 0.05, 0].forEach((x, k) => cyl(0.018, 0.018, 0.12, M("#c9a227", { metalness: 0.8, roughness: 0.3 }), x, k === 2 ? -0.035 : 0.015, -0.24, plug, 6).rotation.x = Math.PI / 2);
+    segs[segs.length - 1].add(plug);
+    scale.scale.setScalar(1.7);
     g.visible = false;
     scene.add(g);
-    return { g, scale, segs, head, jaw, wL, wR, mouthPos, body, state: "fly", t0: 0, hp: 1, base: new THREE.Vector3(0, 3.4, -6) };
+    return { g, scale, segs, core, head: core, jaw, wL, wR, mouthPos, body, tongue, leds, face: { c: faceC, tex: faceTex, t: 0 }, faceGlow, glass, state: "fly", t0: 0, hp: 1 };
   })();
+  // Display-Gesicht: böse Augen, Zickzack-Mund, Fehlermeldung – mit Glitch-Versatz
+  function drawFace(mood, t) {
+    const f = printer.face, x = f.c.getContext("2d"), w = f.c.width, h = f.c.height;
+    const bg = mood === "hit" ? "#0b2a6b" : mood === "attack" ? "#3a0000" : "#050a06";
+    x.fillStyle = bg; x.fillRect(0, 0, w, h);
+    const gx = Math.random() < 0.25 ? rnd(-8, 8) : 0;
+    x.save(); x.translate(gx, 0);
+    const col = mood === "hit" ? "#9fd8ff" : "#ff2d2d";
+    x.fillStyle = col; x.strokeStyle = col; x.lineWidth = 7; x.lineCap = "round";
+    if (mood === "hit") {
+      [[70, 40], [186, 40]].forEach(([cx, cy]) => { x.beginPath(); x.moveTo(cx - 14, cy - 14); x.lineTo(cx + 14, cy + 14); x.moveTo(cx + 14, cy - 14); x.lineTo(cx - 14, cy + 14); x.stroke(); });
+    } else {
+      const blink = Math.sin(t * 2.3) > 0.97;
+      [[70, 1], [186, -1]].forEach(([cx, s]) => {
+        x.beginPath();
+        if (blink) { x.moveTo(cx - 20, 42); x.lineTo(cx + 20, 42); x.stroke(); return; }
+        x.moveTo(cx - 22, 30 - s * 10); x.lineTo(cx + 22, 30 + s * 10); x.lineTo(cx + 16, 56); x.lineTo(cx - 16, 56); x.closePath(); x.fill();
+      });
+      x.fillStyle = "#ffe0e0";
+      [[70, 46], [186, 46]].forEach(([cx, cy]) => x.fillRect(cx - 4, cy - 4, 8, 8));
+    }
+    x.strokeStyle = col; x.lineWidth = 5; x.beginPath();
+    for (let i = 0; i <= 8; i++) x.lineTo(78 + i * 12.5, 76 + (i % 2 ? -7 : 7) * (mood === "attack" ? 1.6 : 1));
+    x.stroke();
+    x.font = "bold 15px Consolas, monospace"; x.textAlign = "center";
+    x.fillStyle = mood === "hit" ? "#cfe9ff" : "#5bff8f";
+    x.fillText(mood === "hit" ? "PATCH WIRD INSTALLIERT…" : mood === "attack" ? "lp0 on fire!" : "CVE-2021-34527", w / 2, 104);
+    x.restore();
+    // Scanlines
+    x.fillStyle = "rgba(0,0,0,0.25)";
+    for (let y = 0; y < h; y += 4) x.fillRect(0, y, w, 1);
+    if (Math.random() < 0.3) { const y = rnd(0, h); x.drawImage(f.c, 0, y, w, 10, rnd(-14, 14), y, w, 10); }
+    f.tex.needsUpdate = true;
+  }
+  // Papierblätter für die Salve und die Explosion
+  const papers = [];
+  const paperGeo = new THREE.PlaneGeometry(0.3, 0.42);
+  for (let i = 0; i < 60; i++) {
+    const m = new THREE.Mesh(paperGeo, paperMat);
+    m.visible = false;
+    scene.add(m);
+    papers.push({ m, v: new THREE.Vector3(), spin: new THREE.Vector3(), life: 0, max: 1 });
+  }
+  let papi = 0;
+  function emitPaper(pos, vel, life) {
+    const p = papers[papi = (papi + 1) % papers.length];
+    p.m.position.copy(pos);
+    p.v.copy(vel);
+    p.spin.set(rnd(-8, 8), rnd(-8, 8), rnd(-8, 8));
+    p.life = p.max = life;
+    p.m.scale.setScalar(1);
+    p.m.visible = true;
+  }
 
   /* ---------- Feuer & Effekte ---------- */
   const fx = [];
@@ -1468,69 +1657,100 @@ window.World = (() => {
   let projectile = null;
   const tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
 
-  function dragonUpdate(t, dt) {
-    const d = dragon;
+  function printerUpdate(t, dt) {
+    const d = printer;
     if (!d.g.visible) return;
     const st = d.state;
-    const flap = st === "die" ? 0 : Math.sin(t * (st === "breath" ? 9 : 6));
-    d.wL.rotation.z = 0.1 + flap * 0.55;
-    d.wR.rotation.z = -0.1 - flap * 0.55;
+    const el = t - d.t0;
+    // Papierflügel flattern, Kabel schlängelt, Zunge (Blatt) wackelt, LEDs blinken
+    const flap = st === "die" ? 0 : Math.sin(t * (st === "breath" ? 15 : 9));
+    d.wL.rotation.z = 0.15 + flap * 0.6;
+    d.wR.rotation.z = -0.15 - flap * 0.6;
     d.segs.forEach((s, i) => {
-      s.position.y = Math.sin(t * 3 - i * 0.55) * 0.12 * (i / 4);
-      s.position.x = Math.sin(t * 2 - i * 0.45) * 0.1 * (i / 3);
+      const b = s.userData.base, k = i / d.segs.length;
+      s.position.set(b.x + Math.sin(t * 2.4 - i * 0.6) * 0.2 * k, b.y + Math.sin(t * 3 - i * 0.5) * 0.15 * k - k * k * 0.5, b.z);
     });
-    d.scale.children.forEach((c) => { if (c.userData.seg) { c.position.y = c.userData.seg.position.y - 0.15; c.position.x = c.userData.seg.position.x; } });
+    d.tongue.rotation.x = -Math.PI / 2 + 0.35 + Math.sin(t * 7) * 0.14;
+    d.leds.forEach((l, i) => l.material.color.set(Math.sin(t * (5 + i * 2.3) + i) > 0 ? (i % 2 ? "#5bff8f" : "#ff3030") : "#301010"));
+    d.glass.material.color.setHSL(0.38, 1, 0.42 + Math.sin(t * 6) * 0.12);
+    // grüne Virus-Partikel steigen auf
+    if (st !== "die" && Math.random() < dt * 16) {
+      d.core.getWorldPosition(tmp);
+      tmp.x += rnd(-1.5, 1.5); tmp.y += rnd(-0.6, 0.9); tmp.z += rnd(-1, 1);
+      emit(tmp, tmp2.set(rnd(-0.3, 0.3), rnd(0.4, 1.1), rnd(-0.3, 0.3)), rnd(0.8, 1.5), "virus", rnd(0.18, 0.36));
+    }
+    // Display ca. 12× pro Sekunde neu zeichnen (Glitch)
+    const mood = st === "hit" ? "hit" : st === "breath" || st === "roar" ? "attack" : "idle";
+    if (t - d.face.t > 0.08 || mood !== d.face.mood) { d.face.t = t; d.face.mood = mood; drawFace(mood, t); }
+    d.faceGlow.material.color.set(mood === "hit" ? "#6fc3ff" : mood === "attack" ? "#ff4d1f" : "#ff2d2d");
     let target;
-    const wander = new THREE.Vector3(Math.sin(t * 0.45) * 3.0, 2.75 + Math.sin(t * 1.1) * 0.45, -6 + Math.sin(t * 0.7) * 1.2);
     if (st === "fly" || st === "roar") {
-      target = wander;
-      d.g.rotation.y = lerp(d.g.rotation.y, -Math.cos(t * 0.45) * 0.5, 0.05);
-      d.g.rotation.z = lerp(d.g.rotation.z, Math.cos(t * 0.45) * 0.3, 0.05);
-      d.g.rotation.x = lerp(d.g.rotation.x, 0, 0.05);
-      d.jaw.rotation.x = lerp(d.jaw.rotation.x, st === "roar" ? 0.55 : 0.05 + Math.max(0, Math.sin(t * 1.3)) * 0.1, 0.15);
-      if (st === "roar" && t - d.t0 > 1.6) d.state = "fly";
+      target = tmp2.set(Math.sin(t * 0.45) * 3.0, 2.75 + Math.sin(t * 1.1) * 0.45, -6 + Math.sin(t * 0.7) * 1.2).clone();
+      d.g.rotation.y = lerp(d.g.rotation.y, Math.cos(t * 0.45) * 0.35, 0.05);
+      d.g.rotation.z = lerp(d.g.rotation.z, -Math.cos(t * 0.45) * 0.22, 0.05);
+      d.g.rotation.x = lerp(d.g.rotation.x, 0.08, 0.05);
+      // Brüllen = Scannerdeckel klappert weit offen
+      const open = st === "roar" ? 0.55 + Math.sin(t * 28) * 0.15 : 0.06 + Math.max(0, Math.sin(t * 1.3)) * 0.14;
+      d.jaw.rotation.x = lerp(d.jaw.rotation.x, -open, 0.2);
+      if (st === "roar" && el > 1.6) d.state = "fly";
     } else if (st === "breath") {
+      // Papierstau-Salve: brennende Blätter, Toner-Feuer und Virus fliegen zur Kamera
       target = new THREE.Vector3(0, 2.3, -2.4);
       d.g.rotation.y = lerp(d.g.rotation.y, 0, 0.1);
       d.g.rotation.z = lerp(d.g.rotation.z, 0, 0.1);
-      d.g.rotation.x = lerp(d.g.rotation.x, 0.15, 0.1);
-      const el = t - d.t0;
-      d.jaw.rotation.x = lerp(d.jaw.rotation.x, el > 0.5 ? 0.7 : 0.2, 0.2);
+      d.g.rotation.x = lerp(d.g.rotation.x, 0.22, 0.1);
+      d.jaw.rotation.x = lerp(d.jaw.rotation.x, el > 0.5 ? -0.75 + Math.sin(t * 34) * 0.08 : -0.2, 0.2);
       if (el > 0.55 && el < 1.9) {
         d.mouthPos.getWorldPosition(tmp);
-        const count = Math.min(60, Math.ceil(dt * 360));
-        for (let k = 0; k < count; k++) {
-          tmp2.copy(camera.position).add(new THREE.Vector3(rnd(-0.8, 0.8), rnd(-0.9, 0.4), 0)).sub(tmp).normalize().multiplyScalar(rnd(7, 10));
+        const aim = () => tmp2.copy(camera.position).add(new THREE.Vector3(rnd(-0.9, 0.9), rnd(-0.9, 0.4), 0)).sub(tmp).normalize();
+        const fire = Math.min(30, Math.ceil(dt * 160));
+        for (let k = 0; k < fire; k++) {
+          aim().multiplyScalar(rnd(7, 10));
           tmp2.x += rnd(-1, 1); tmp2.y += rnd(-0.8, 0.8);
-          emit(tmp, tmp2, rnd(0.6, 0.9), "fire", rnd(0.4, 0.7));
+          emit(tmp, tmp2, rnd(0.5, 0.8), k % 4 ? "fire" : "virus", rnd(0.35, 0.6));
         }
+        if (Math.random() < dt * 34) emitPaper(tmp, aim().multiplyScalar(rnd(6, 9)), rnd(0.8, 1.2));
         if (!breathFired && el > 1.05) { breathFired = true; shake = 0.35; api.onScorch && api.onScorch(); }
       }
       if (el > 2.5) d.state = "fly";
     } else if (st === "hit") {
       target = d.g.position.clone();
-      const el = t - d.t0;
-      d.g.rotation.x = lerp(d.g.rotation.x, el < 0.4 ? -0.6 : 0, 0.15);
-      d.body.emissive.setRGB(el < 0.25 ? 1 : 0.16, el < 0.25 ? 1 : 0, el < 0.25 ? 1 : 0);
-      if (el > 0.25) d.body.emissive.set("#2a0000");
-      if (el > 1) d.state = "fly";
+      d.g.rotation.x = lerp(d.g.rotation.x, el < 0.4 ? -0.6 : 0.08, 0.15);
+      d.jaw.rotation.x = lerp(d.jaw.rotation.x, -0.9, 0.3);
+      d.body.emissive.setScalar(el < 0.25 ? 0.9 : 0);
+      if (el > 1) { d.body.emissive.setScalar(0); d.state = "fly"; }
     } else if (st === "die") {
-      const el = t - d.t0;
       target = d.g.position.clone();
       target.y = Math.max(0.4, 3.4 - el * el * 1.6);
       d.g.rotation.z += dt * 3;
       d.g.rotation.x = lerp(d.g.rotation.x, 0.9, 0.05);
-      d.jaw.rotation.x = 0.6;
+      d.jaw.rotation.x = -0.9;
       if (el > 1.6 && !d.exploded) {
+        // explodiert in Papier-Konfetti und Funken
         d.exploded = true;
         d.g.getWorldPosition(tmp);
-        for (let k = 0; k < 120; k++) emit(tmp, new THREE.Vector3(rnd(-1, 1), rnd(-0.2, 1.2), rnd(-1, 1)).normalize().multiplyScalar(rnd(3, 9)), rnd(0.8, 1.6), k % 2 ? "fire" : "gold", rnd(0.4, 1));
+        for (let k = 0; k < 110; k++) emit(tmp, new THREE.Vector3(rnd(-1, 1), rnd(-0.2, 1.2), rnd(-1, 1)).normalize().multiplyScalar(rnd(3, 9)), rnd(0.8, 1.6), k % 3 === 0 ? "virus" : k % 2 ? "fire" : "gold", rnd(0.4, 1));
+        for (let k = 0; k < 45; k++) emitPaper(tmp, new THREE.Vector3(rnd(-1, 1), rnd(0.2, 1.4), rnd(-1, 1)).normalize().multiplyScalar(rnd(3, 7)), rnd(1.6, 2.6));
         shake = 0.5;
         d.g.visible = false;
         api.onDefeated && api.onDefeated();
       }
     }
     d.g.position.lerp(target, 1 - Math.exp(-dt * (st === "breath" ? 4 : st === "die" ? 6 : 1.8)));
+  }
+  function papersUpdate(dt) {
+    papers.forEach((p) => {
+      if (p.life <= 0) { if (p.m.visible) p.m.visible = false; return; }
+      p.life -= dt;
+      p.v.y -= 3 * dt;
+      p.v.multiplyScalar(1 - Math.min(0.5, dt * 0.7));
+      p.m.position.addScaledVector(p.v, dt);
+      p.m.rotation.x += p.spin.x * dt;
+      p.m.rotation.y += p.spin.y * dt;
+      p.m.rotation.z += p.spin.z * dt;
+      const k = 1 - p.life / p.max;
+      p.m.scale.setScalar(k > 0.8 ? Math.max(0.01, (1 - k) * 5) : 1);
+    });
   }
 
   /* =====================================================================
@@ -1556,9 +1776,9 @@ window.World = (() => {
       show(arenaG, name === "arena" || name === "boss");
       show(carousel, name === "carousel");
       show(stage, name === "character");
-      wPillars.visible = wBooksG.visible = plaza.visible = name !== "carousel";
+      wPillars.visible = wBooksG.visible = plaza.visible = plazaBase.visible = name !== "carousel";
       Object.values(envs).forEach((e) => show(e, false));
-      if (name !== "boss") dragon.g.visible = false;
+      if (name !== "boss") printer.g.visible = false;
       if (arenaHero && !(name === "arena" && o.hero)) { arenaG.remove(arenaHero.obj); arenaHero = null; }
       spot.intensity = 0;
       if (name === "menu") {
@@ -1575,8 +1795,9 @@ window.World = (() => {
             menuHeroes.push(ch);
           });
         }
-        camTgtPos.set(0, 2.7, 11);
-        camTgtLook.set(0, 2.15, 0);
+        // Figuren etwas höher im Bild: unten stehen die Menü-Knöpfe
+        if (o.title) { camTgtPos.set(0, 2.7, 11); camTgtLook.set(0, 2.15, 0); }
+        else { camTgtPos.set(0, 2.45, 11.5); camTgtLook.set(0, 1.45, 0); }
         api.menuSide(o.side || null);
       } else if (name === "wissen") {
         setTheme(THEMES.wissen);
@@ -1599,11 +1820,11 @@ window.World = (() => {
       } else if (name === "carousel") {
         buildCarousel(o.chars);
         api.rotateTo(o.index || 0, true);
-        camTgtPos.set(0, 3.0, CAR_R + 6.6);
-        camTgtLook.set(0, 1.05, CAR_R - 1.6);
-        spot.intensity = 1.6;
-        spot.position.set(0, 7, CAR_R + 2);
-        spot.target.position.set(0, 0, CAR_R);
+        camTgtPos.set(0, WTOP + 1.9, WZ + 11);
+        camTgtLook.set(0, WTOP - 0.25, WZ);
+        spot.intensity = 2.2;
+        spot.position.set(0, WTOP + 7, WZ + 3);
+        spot.target.position.set(0, WTOP, WZ);
       } else if (name === "character") {
         const c = o.char;
         setTheme(themeFromColor(c.color));
@@ -1620,13 +1841,13 @@ window.World = (() => {
         spot.target.position.set(sx, 0, 1.2);
       } else if (name === "boss") {
         setTheme(THEMES.arena);
-        dragon.g.visible = true;
-        dragon.exploded = false;
-        dragon.state = "roar";
-        dragon.t0 = clock.elapsedTime;
-        dragon.g.position.set(0, 9, -16);
-        dragon.g.rotation.set(0, 0, 0);
-        dragon.body.emissive.set("#2a0000");
+        printer.g.visible = true;
+        printer.exploded = false;
+        printer.state = "roar";
+        printer.t0 = clock.elapsedTime;
+        printer.g.position.set(0, 9, -16);
+        printer.g.rotation.set(0, 0, 0);
+        printer.body.emissive.setScalar(0);
         camTgtPos.set(0, 1.7, 7);
         camTgtLook.set(0, 2.5, -4);
         shake = 0.2;
@@ -1641,25 +1862,30 @@ window.World = (() => {
       carIndex = i;
       if (instant) carAngle = -carTurn * (TAU / n);
       const c = charList[i];
-      if (c) setTheme(themeFromColor(c.color));
+      if (c) {
+        setTheme(themeFromColor(c.color));
+        hiBeam.material.color.set(c.color).lerp(C("#ffffff"), 0.35);
+        hiRing.material.color.set(c.color).lerp(C("#ffffff"), 0.2);
+        hiSparks.forEach((s) => s.material.color.set(c.color).lerp(C("#ffffff"), 0.5));
+      }
       const ch = carChars[i];
       if (ch) ch.rigs.forEach((r) => (r.jump = 0.8));
     },
     menuSide(side) {
       menuSide = side;
-      camTgtPos.x = side === "wissen" ? -0.9 : side === "arena" ? 0.9 : 0;
+      camTgtPos.x = side === "wissen" ? -0.6 : side === "arena" ? 0.6 : 0;
     },
     cheer() {
       if (arenaHero) arenaHero.rigs.forEach((r) => (r.jump = 0.8));
       if (stageChar) stageChar.rigs.forEach((r) => (r.jump = 0.8));
     },
-    dragonRoar() { dragon.state = "roar"; dragon.t0 = clock.elapsedTime; shake = 0.15; },
-    dragonBreath() { dragon.state = "breath"; dragon.t0 = clock.elapsedTime; breathFired = false; },
-    dragonHit() {
-      // Wissensblitz fliegt von der Kamera zum Drachen
+    bossRoar() { printer.state = "roar"; printer.t0 = clock.elapsedTime; shake = 0.15; },
+    bossAttack() { printer.state = "breath"; printer.t0 = clock.elapsedTime; breathFired = false; },
+    bossHit() {
+      // Wissensblitz (Patch) fliegt von der Kamera zum Drucker
       projectile = { p: camera.position.clone().add(new THREE.Vector3(0, -0.6, -0.5)), life: 0 };
     },
-    dragonDie() { dragon.state = "die"; dragon.t0 = clock.elapsedTime; },
+    bossDie() { printer.state = "die"; printer.t0 = clock.elapsedTime; },
   };
 
   /* =====================================================================
@@ -1776,19 +2002,50 @@ window.World = (() => {
       arenaFloor.material.emissiveIntensity = 0.55 + Math.sin(t * 1.3) * 0.15;
       if (arenaHero) animateChar(arenaHero, t, true, dt);
     }
-    // Karussell
+    // Mühlerad: Rad dreht, Gondeln bleiben waagrecht, Figuren stehen aufrecht
     if (carousel.visible && carChars.length) {
       const n = carChars.length;
-      carAngle = lerp(carAngle, -carTurn * (TAU / n), Math.min(1, dt * 5));
-      carousel.rotation.y = carAngle;
+      carAngle = lerp(carAngle, -carTurn * (TAU / n), Math.min(1, dt * 4));
+      const spin = dt > 0 ? (carAngle - carPrev) / dt : 0;
+      carPrev = carAngle;
+      wheel.rotation.z = -carAngle;
       carChars.forEach((ch, i) => {
         const act = i === carIndex;
+        const phi = (i / n) * TAU + carAngle;
+        const x = Math.sin(phi) * WR, y = WCY + Math.cos(phi) * WR;
+        const gd = gondolas[i];
+        gd.position.set(x, y, WZ);
+        const above = y > WLVL + 0.15;
+        gd.visible = above;
+        ch.obj.visible = above;
+        ch.obj.position.set(x, y + 0.08, WZ);
+        ch.obj.rotation.y = -Math.sin(phi) * 0.35;
         const bs = ch.obj.userData.baseScale;
-        const s = lerp(ch.obj.scale.x, bs * (act ? 1.12 : 0.92), 1 - Math.exp(-dt * 6));
+        const s = lerp(ch.obj.scale.x, bs * (act ? 1.12 : 0.9), 1 - Math.exp(-dt * 6));
         ch.obj.scale.setScalar(s);
         animateChar(ch, t, act, dt);
       });
-      platRing.material.color.copy(cur.rim);
+      lanterns.forEach((l, i) => l.scale.setScalar(0.8 + Math.sin(t * 3 + i * 1.3) * 0.12));
+      // Highlight oben
+      hiRing.scale.setScalar(1 + Math.sin(t * 3) * 0.06);
+      hiRing.material.opacity = 0.55 + Math.sin(t * 3) * 0.2;
+      hiBeam.material.opacity = 0.18 + Math.sin(t * 1.7) * 0.04;
+      hiSparks.forEach((s, i) => {
+        const a = t * (0.8 + (i % 3) * 0.25) + (i / hiSparks.length) * TAU;
+        s.position.set(Math.cos(a) * 0.95, WTOP + 0.3 + ((t * 0.45 + i / hiSparks.length) % 1) * 2.4, WZ + Math.sin(a) * 0.6);
+        s.material.opacity = 0.5 + Math.sin(t * 5 + i) * 0.4;
+      });
+      // Wasser fliesst, spritzt wo das Rad eintaucht – beim Drehen stärker
+      brookTex.offset.x = (t * 0.06) % 1;
+      const wx = Math.sqrt(WR * WR - (WLVL - WCY) ** 2);
+      const rate = 6 + Math.min(80, Math.abs(spin) * 120);
+      for (let cnt = rate * dt; cnt > 0; cnt--) {
+        if (Math.random() >= cnt) break;
+        [-1, 1].forEach((side) => {
+          tmp.set(side * wx + rnd(-0.2, 0.2), WLVL + 0.05, rnd(-0.5, 0.5));
+          emit(tmp, tmp2.set(side * rnd(0.2, 1.2), rnd(1.6, 3.2), rnd(-0.3, 0.4)), rnd(0.5, 0.9), "spray", rnd(0.25, 0.45));
+        });
+      }
     }
     // Bühne
     if (stage.visible && stageChar) {
@@ -1797,17 +2054,18 @@ window.World = (() => {
     }
     tickers.forEach((fn) => fn(t, dt));
 
-    // Drache, Projektil, Effekte
-    dragonUpdate(t, dt);
+    // Drucker, Projektil, Effekte
+    printerUpdate(t, dt);
+    papersUpdate(dt);
     if (projectile) {
-      dragon.head.getWorldPosition(tmp);
+      printer.core.getWorldPosition(tmp);
       projectile.life += dt;
       projectile.p.lerp(tmp, Math.min(1, dt * 5));
       emit(projectile.p, new THREE.Vector3(rnd(-0.5, 0.5), rnd(-0.5, 0.5), rnd(-0.5, 0.5)), 0.35, "bolt", 0.9);
       if (projectile.p.distanceTo(tmp) < 0.5 || projectile.life > 1.2) {
         for (let k = 0; k < 50; k++) emit(tmp, new THREE.Vector3(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)).normalize().multiplyScalar(rnd(2, 6)), rnd(0.4, 0.8), k % 2 ? "bolt" : "gold", rnd(0.3, 0.6));
-        dragon.state = "hit";
-        dragon.t0 = t;
+        printer.state = "hit";
+        printer.t0 = t;
         shake = 0.15;
         projectile = null;
         api.onImpact && api.onImpact();
@@ -1825,6 +2083,14 @@ window.World = (() => {
       } else if (p.kind === "bolt") {
         p.s.material.color.setHSL(0.55, 1, 0.75 - k * 0.3);
         p.s.scale.setScalar(p.size * (1 - k * 0.7));
+      } else if (p.kind === "spray") {
+        p.v.y -= 7 * dt;
+        p.s.material.color.setHSL(0.55, 0.7, 0.85);
+        p.s.scale.setScalar(p.size * (0.7 + k * 0.6));
+      } else if (p.kind === "virus") {
+        p.v.multiplyScalar(0.97);
+        p.s.material.color.setHSL(0.33, 1, 0.55 - k * 0.2);
+        p.s.scale.setScalar(p.size * (0.5 + Math.sin(k * Math.PI)));
       } else {
         p.v.y -= 4 * dt;
         p.s.material.color.setHSL(0.12, 1, 0.65);
@@ -1863,7 +2129,7 @@ window.World = (() => {
         perfAcc = 0; perfN = 0;
       }
     }
-    if (DBG && frames % 5 === 0) DBG.textContent = `sim ${t.toFixed(1)}s · ${frames} frames · drache y ${dragon.g.position.y.toFixed(2)}`;
+    if (DBG && frames % 5 === 0) DBG.textContent = `sim ${t.toFixed(1)}s · ${frames} frames · drucker y ${printer.g.position.y.toFixed(2)}`;
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
