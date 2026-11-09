@@ -1,0 +1,98 @@
+{
+  "material/Tag 1/Ablaufplan der Lehrzeit-Druckversion ohne Verlinkungen.pdf": {
+    "mtime": 1793880358.1606226,
+    "seen": 1794049806.2279472,
+    "ast_hash": "6c12f8078ffe9bb55e2d885187c9bccd",
+    "semantic_hash": "6c12f8078ffe9bb55e2d885187c9bccd"
+  },
+  "material/Tag 1/DE_Bildungssystem_cmyk_frutiger.pdf": {
+    "mtime": 1793884962.2251647,
+    "seen": 1794049806.2279494,
+    "ast_hash": "5c68ba63ecb90c7bfadf3f260e98674b",
+    "semantic_hash": "5c68ba63ecb90c7bfadf3f260e98674b"
+  },
+  "material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf": {
+    "mtime": 1793881158.147174,
+    "seen": 1794049806.227951,
+    "ast_hash": "9da310253911375f84ecf386bb753e22",
+    "semantic_hash": "9da310253911375f84ecf386bb753e22"
+  },
+  "material/Tag 1/WBZLU_BEKU_Pr\u00e4senz_PP_Tag 1.pdf": {
+    "mtime": 1793874304.3352957,
+    "seen": 1794049806.2279541,
+    "ast_hash": "c6a3e5ea0d0739fade7ff07a86cce7f7",
+    "semantic_hash": "c6a3e5ea0d0739fade7ff07a86cce7f7"
+  },
+  "material/Tag 2/Bildungsverordnung_Informatiker.pdf": {
+    "mtime": 1793951387.487337,
+    "seen": 1794049806.227956,
+    "ast_hash": "32065cc2c966d0abf274d7f61bf6e996",
+    "semantic_hash": "32065cc2c966d0abf274d7f61bf6e996"
+  },
+  "material/Tag 2/Bildungsverordnung_Informatiker_Antworten.pdf": {
+    "mtime": 1793953251.2898624,
+    "seen": 1794049806.2279575,
+    "ast_hash": "703c07e2033d697533b9219355a27c9e",
+    "semantic_hash": "703c07e2033d697533b9219355a27c9e"
+  },
+  "material/Tag 2/Bipla_88611_d.pdf": {
+    "mtime": 1793950752.955005,
+    "seen": 1794049806.2279594,
+    "ast_hash": "e1e317064cb904c857b6ecd0e0d34f1c",
+    "semantic_hash": "e1e317064cb904c857b6ecd0e0d34f1c"
+  },
+  "material/Tag 2/WBZLU BEKU KBB_Mini-Fallbeispiele.pdf": {
+    "mtime": 1793978880.642395,
+    "seen": 1794049806.227961,
+    "ast_hash": "1278e639aa44d5ef74882300d0543454",
+    "semantic_hash": "1278e639aa44d5ef74882300d0543454"
+  },
+  "material/Tag 2/WBZLU_KBB_BEKU_Pr\u00e4senz_PP_Tag 2.pdf": {
+    "mtime": 1793874304.8683608,
+    "seen": 1794049806.2279634,
+    "ast_hash": "654fae8a87df95c7eb972a759e6bd0fc",
+    "semantic_hash": "654fae8a87df95c7eb972a759e6bd0fc"
+  },
+  "app/data.js": {
+    "mtime": 1794231626.7648997,
+    "seen": 1794232044.7636955,
+    "ast_hash": "350416faf312de8cc24b9819d68c6903",
+    "semantic_hash": ""
+  },
+  "app/main.js": {
+    "mtime": 1794231653.6555524,
+    "seen": 1794232044.7637224,
+    "ast_hash": "124e8127df846b4e8d330ba233f76be4",
+    "semantic_hash": ""
+  },
+  "app/scene3d.js": {
+    "mtime": 1794231691.3334918,
+    "seen": 1794232044.7637362,
+    "ast_hash": "c3481902e17a7c1b3ba8a8502fff880a",
+    "semantic_hash": ""
+  },
+  "app/index.html": {
+    "mtime": 1794136326.8628283,
+    "seen": 1794136832.6583939,
+    "ast_hash": "dbc0b5e4d041a41b1a9c37f7b153544c",
+    "semantic_hash": "dbc0b5e4d041a41b1a9c37f7b153544c"
+  },
+  "graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md": {
+    "mtime": 1794134969.7974885,
+    "seen": 1794135063.5243394,
+    "ast_hash": "fb29beb5211733da816f622cef6f099f",
+    "semantic_hash": "fb29beb5211733da816f622cef6f099f"
+  },
+  "graphify-out/converted/WBZLU BEKU_Tabelle meine Rolle als BB_9f57e179.md": {
+    "mtime": 1794134970.6497595,
+    "seen": 1794135063.524342,
+    "ast_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5",
+    "semantic_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5"
+  },
+  "graphify-out/converted/WBZLU BEKU_Vorlage Reflexionen_0d58df28.md": {
+    "mtime": 1794134970.7747476,
+    "seen": 1794135063.524344,
+    "ast_hash": "58fcf8d329030341e1b9e133590c6816",
+    "semantic_hash": "58fcf8d329030341e1b9e133590c6816"
+  }
+}

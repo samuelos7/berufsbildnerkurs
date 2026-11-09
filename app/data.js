@@ -1263,77 +1263,111 @@ window.GAME_DATA = {
   ],
 
   /* =====================================================================
-     LEHRZEIT-REISE (Ablaufplan der Lehrzeit, Stand Januar 2026)
+     LEHRZEIT-REISE – Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026)
+     Perspektive: Lehrbetrieb / Berufsbildner/in. Roter Faden pro Etappe:
+     Ziel → Schritte (chronologisch) → Ergebnis, das in die nächste Etappe überleitet.
+     Schritt: t = was der Betrieb tut · d = Erklärung · when = Zeitpunkt
+              tool = Checkliste/Formular (berufsbildung.ch/downloadcenter) · who = die lernende Person handelt selbst
      ===================================================================== */
+  journeyIntro: {
+    perspective: "Sicht Lehrbetrieb · Berufsbildner/in",
+    text: "Sieben Etappen – vom Entscheid, Lernende auszubilden, bis zum Lehrabschluss. Jede Etappe baut auf der vorherigen auf.",
+  },
   journey: [
     {
-      icon: "🎓", title: "Voraussetzungen", when: "vor allem anderen",
+      icon: "🎓", title: "Voraussetzungen", short: "Voraus­setzungen", when: "bevor der Betrieb ausbildet",
+      goal: "Der Betrieb darf und kann ausbilden.",
       items: [
-        "Kurs für Berufsbildner/innen (40 h) besuchen – der Ausweis gilt lebenslang und in allen Kantonen",
-        "Bildungsbewilligung beim Berufsbildungsamt des Lehrortskantons beantragen",
-        "Rolle der Beteiligten klar definieren – Berufsbildung ist eine Aufgabe mit Verantwortung",
-        "Ressourcen einplanen und die Aufgabe ins Stellenprofil aufnehmen",
-        "Anforderungsprofil erstellen (Checkliste Anforderungsprofil)",
+        { t: "Kurs für Berufsbildner/innen (40 h) besuchen", d: "Der Kursausweis ist lebenslang gültig und wird in allen Kantonen anerkannt." },
+        { t: "Bildungsbewilligung beantragen", d: "Beim Berufsbildungsamt des Lehrortskantons – im Kanton Luzern bei der DBW." },
+        { t: "Rolle der Beteiligten klar definieren", d: "Berufsbildung ist eine Aufgabe mit Verantwortung: Ressourcen einplanen und die Aufgabe als Berufsbildner/in ins Stellenprofil aufnehmen." },
+        { t: "Anforderungsprofil erstellen", d: "Wen suchen wir? Das Profil ist die Grundlage für die Rekrutierung.", tool: "Checkliste Anforderungsprofil" },
       ],
+      result: "Bewilligung und Anforderungsprofil liegen vor – die Lehrstelle kann ausgeschrieben werden.",
     },
     {
-      icon: "🔎", title: "Rekrutierung", when: "6–12 Monate vor Lehrstart",
+      icon: "🔎", title: "Rekrutierung", when: "ca. 12–6 Monate vor Lehrstart",
+      goal: "Die passende lernende Person finden – fair und transparent.",
       items: [
-        "Lehrstelle ausschreiben – frühestens im August vor Lehrstart, keine Genehmigung vor September (Chancengleichheit)",
-        "Bewerbungen prüfen, Vorselektion und Gespräche (Checklisten Vorselektion, Vorstellungsgespräch)",
-        "Schnupperlehre planen – Einblick in den Beruf und gegenseitiges Kennenlernen",
-        "Lernende auswählen (Selektionsmappe), Nachteilsausgleich und BM 1 klären",
-        "Lehrvertrag frühestens 12 Monate vor Lehrstart unterschreiben und einreichen",
+        { t: "Lehrstelle ausschreiben", when: "ca. 6–12 Monate vor Lehrstart", d: "Beim Berufsbildungsamt des Lehrortskantons. Verbundpartner-Commitment: Lehrstellen frühestens im August vor Lehrstart ausschreiben, vor September werden keine Lehrverträge genehmigt – für Chancengleichheit." },
+        { t: "Bewerbungen prüfen, vorselektionieren und Gespräche führen", tool: "Checklisten Vorselektion · Vorstellungsgespräch" },
+        { t: "Schnupperlehre planen und durchführen", when: "ca. 6–12 Monate vor Lehrstart", d: "Einblick in den Beruf und gegenseitiges Kennenlernen – vor dem Vertragsabschluss.", tool: "Checkliste Schnupperlehre · Formulare Programm, Bericht, Tagebuch" },
+        { t: "Lernende Person auswählen", when: "ca. 6–12 Monate vor Lehrstart", tool: "Checkliste Selektionsverfahren · Formular Selektionsmappe" },
+        { t: "Nachteilsausgleich und BM 1 klären", d: "Infos zum Nachteilsausgleich gibt das Berufsbildungsamt. Ist der Betrieb mit der BM 1 einverstanden, meldet sich die lernende Person selbst an.", who: "meldet sich selbst für die BM 1 an" },
+        { t: "Lehrvertrag ausfüllen, unterschreiben und einreichen", when: "frühestens 12 Monate vor Lehrstart", d: "Auf Papier oder im digitalen Portal beim Berufsbildungsamt des Lehrortskantons.", tool: "Formular Lehrvertrag" },
       ],
+      result: "Der Lehrvertrag ist eingereicht – jetzt wird die Lehre konkret geplant.",
     },
     {
-      icon: "📋", title: "Lehre planen", when: "bis 2 Wochen vor Start",
+      icon: "📋", title: "Lehre planen", when: "ca. 12 Monate bis 2 Wochen vor Lehrstart",
+      goal: "Am ersten Tag ist alles bereit – im Betrieb und bei der lernenden Person.",
       items: [
-        "6–12 Monate vorher: betriebliche und individuelle Planung – Bildungsplan (SBFI) als verbindliche Grundlage",
-        "Ca. 3 Monate vorher: Arbeitskleidung, Lehrmittel, üK-Termine, gebuchte Ferien, Lohnkonto, Versicherung",
-        "2–4 Wochen vorher: Willkommensmail an die lernende Person",
-        "2–4 Wochen vorher: Arbeitsplatz vorbereiten, Arbeiten für die erste Woche definieren",
+        { t: "Betriebliche und individuelle Planung erstellen", when: "ca. 6–12 Monate vor Lehrstart", d: "Der Bildungsplan (SBFI) ist die verbindliche Grundlage.", tool: "Checklisten Ausbildungsprogramm · Planen der betrieblichen Grundbildung · Vorlage Individueller Bildungsplan" },
+        { t: "Informationen zur Vorbereitung kommunizieren", when: "ca. 3 Monate vor Lehrstart", d: "z. B. Arbeitskleidung, Lehrmittel, üK-Termine, gebuchte Ferien, Lohnkonto, Versicherung." },
+        { t: "Informationen zum Lehrstart kommunizieren", when: "ca. 2–4 Wochen vor Lehrstart", d: "Willkommensmail an die lernende Person." },
+        { t: "Lehrstart planen und Arbeitsplatz vorbereiten", when: "ca. 2–4 Wochen vor Lehrstart", d: "Arbeiten für die erste Woche definieren.", tool: "Checklisten Vorbereitung erster Arbeitstag · erste Arbeitswoche" },
       ],
+      result: "Arbeitsplatz, Programm und Informationen stehen – der Lehrstart kann kommen.",
     },
     {
-      icon: "🚀", title: "Lehrstart", when: "August",
+      icon: "🚀", title: "Lehrstart im August", short: "Lehrstart", when: "erster Arbeitstag bis Ende Probezeit",
+      goal: "Gut ankommen: Die lernende Person findet sich im Betrieb zurecht.",
       items: [
-        "Ersten Arbeitstag begleiten: Vorstellungsrunde, Einführung, erste Aufgaben",
-        "Erste Woche begleiten: Lerndokumentation erklären, Regeln zeigen, Termine besprechen",
-        "Probezeitgespräch ca. 2 Wochen vor Ende der Probezeit",
-        "Bedarf an Stütz- und Freikursen im ersten Semester abklären",
+        { t: "Ersten Arbeitstag begleiten", d: "Vorstellungsrunde, Einführung, erste Aufgaben." },
+        { t: "Erste Arbeitswoche begleiten", d: "z. B. Lerndokumentation erklären, Regelungen des Betriebs aufzeigen, wichtige Termine besprechen." },
+        { t: "Bedarf an Stütz- und Freikursen abklären", when: "im ersten Semester oder bei Bedarf", d: "Die Möglichkeiten der Berufsfachschule prüfen." },
+        { t: "Probezeitgespräch durchführen", when: "ca. 2 Wochen vor Ende der Probezeit", tool: "Vorlage Bericht Probezeitgespräch" },
       ],
+      result: "Die Probezeit ist ausgewertet – jetzt beginnt der Ausbildungsalltag.",
     },
     {
-      icon: "📈", title: "Ausbilden & Qualität", when: "die ganze Lehrzeit",
+      icon: "📈", title: "Ausbilden und Qualität sicherstellen", short: "Ausbilden & Qualität", when: "jedes Semester – die ganze Lehrzeit",
+      goal: "Kompetenzen Schritt für Schritt aufbauen und den Stand regelmässig überprüfen.",
       items: [
-        "Semesterplanung zu Beginn jedes Semesters – Ziele für Betrieb, üK und BFS",
-        "Bildungsbericht am Ende jedes Semesters ausfüllen und besprechen",
-        "Lerndokumentation ca. 1x pro Monat prüfen und Feedback geben",
-        "QualiCarte 1x pro Jahr · Fragebogen der lernenden Person am Ende des 1. Lehrjahres",
-        "Führen und motivieren: Feedback, Zielvereinbarungen, Praxisaufträge, Gleichstellung",
-        "Herausforderungen: Mobbing, Rassismus, Sucht, Depression, Belästigung, Gewalt, Prüfungsangst",
+        { t: "Semesterplanung besprechen", when: "zu Beginn jedes Semesters", d: "Erwartungen klären, Ziele für Betrieb, üK und Berufsfachschule definieren." },
+        { t: "Lernende Person führen und aktiv kommunizieren", d: "In neue Aufgaben einführen, Wissen vermitteln, Rückmeldung auf erledigte Aufgaben geben, in Entscheidungen einbeziehen, Verantwortung übertragen." },
+        { t: "Lerndokumentation / Portfolio prüfen und Feedback geben", when: "ca. 1× pro Monat", tool: "Checkliste Einführung Lerndokumentation · Vorlage Lernbericht" },
+        { t: "Bildungsbericht ausfüllen und besprechen", when: "am Ende jedes Semesters", tool: "Formular Bildungsbericht" },
+        { t: "Qualität überprüfen", when: "1× pro Jahr", tool: "Formular QualiCarte" },
+        { t: "Fragebogen der lernenden Person auswerten", when: "am Ende des 1. Lehrjahres", tool: "QualiCarte-Fragebogen", who: "füllt den Fragebogen aus" },
+        { t: "Aufnahme an die BM 2 klären", d: "Angebote des Lehrortskantons klären.", who: "meldet sich selbst für die BM 2 an" },
       ],
+      always: {
+        title: "Daueraufgaben während der ganzen Lehrzeit",
+        list: [
+          ["⚖️", "Rechtliche Grundlagen beachten", "BBG, BBV, ArG, OR, BiVo & Bildungsplan (inkl. Arbeitssicherheit), DSG, ArGV 5, BehiG, GAV – alle unter fedlex.admin.ch"],
+          ["🤝", "Lernende Person unterstützen", "Nachteilsausgleich, Case Management Berufsbildung, FiB für EBA, Stützkurse"],
+          ["📅", "Abwesenheiten handhaben", "üK-Tage, Ferien, Kompensation, Militär/Zivildienst, Krankheit/Unfall, Jugendurlaub …"],
+          ["💬", "Führen und motivieren", "Gesprächsführung, Feedback, Zielvereinbarungen, Praxisaufträge, Coaching, Gleichstellung, Talentförderung"],
+          ["🛟", "Mit Herausforderungen umgehen", "Mobbing, Rassismus, Sucht, Depression, sexuelle Belästigung, Gewalt, Prüfungsangst, ungenügende Leistungen, fehlende Motivation"],
+        ],
+        note: "Berufsbildungsamt, OdA und Fachstellen unterstützen bei Fragen. Vor einer Lehrvertragsauflösung das Berufsbildungsamt früh einbeziehen.",
+      },
+      result: "Bildungsberichte und Lerndokumentation zeigen den Stand – im letzten Lehrjahr rückt das QV in den Fokus.",
     },
     {
-      icon: "🏁", title: "Qualifikations­verfahren", when: "letztes Lehrjahr",
+      icon: "🏁", title: "Qualifikationsverfahren", short: "Qualifikations­verfahren", when: "letztes Lehrjahr",
+      goal: "Die lernende Person geht gut vorbereitet ins QV.",
       items: [
-        "Nachteilsausgleich spätestens im September vor dem QV beantragen",
-        "Ca. 10 Monate vorher zum QV anmelden (nicht in jedem Kanton nötig)",
-        "QV-Vorbereitung unterstützen: Zeit und Material bereitstellen",
-        "IPA / VPA im letzten Semester begleiten",
-        "Nicht bestanden? Berufsbildungsamt kontaktieren, ungenügende Positionen wiederholen",
+        { t: "Bedarf Nachteilsausgleich für das QV abklären", when: "spätestens im September vor dem QV", d: "Gesuch beim Berufsbildungsamt des Lehrortskantons einreichen. Die Frist kann kantonal variieren." },
+        { t: "Lernende Person zum QV anmelden", when: "ca. 10 Monate vor dem QV", d: "Nicht in jedem Kanton erforderlich, die Frist kann kantonal variieren." },
+        { t: "Bei der QV-Vorbereitung unterstützen", when: "ca. 10 Monate vor dem QV", d: "Beim Lernen unterstützen, Zeit und Material bereitstellen. Bei vielen Berufen ist die Lerndokumentation im QV zugelassen." },
+        { t: "IPA / VPA begleiten", when: "im letzten Semester" },
       ],
+      alt: "QV nicht bestanden? Das Berufsbildungsamt für die Anmeldung kontaktieren und die ungenügenden Positionen wiederholen – mit oder ohne Lehrzeitverlängerung.",
+      result: "Das QV ist abgelegt – jetzt geht es um den Übergang ins Berufsleben.",
     },
     {
-      icon: "🎉", title: "Abschluss", when: "1–6 Monate vorher",
+      icon: "🎉", title: "Austritt / Anstellung", when: "ca. 6 Monate bis Lehrabschluss",
+      goal: "Ein sauberer Abschluss und ein guter Übergang.",
       items: [
-        "Ca. 6 Monate vorher: Austritt oder Anstellung planen",
-        "Ca. 1 Monat vorher: Lehrzeugnis erstellen und Abschlussgespräch führen",
-        "Den erfolgreichen Abschluss feiern!",
+        { t: "Austritt oder Anstellung planen", when: "ca. 6 Monate vor Lehrabschluss", tool: "Checkliste Austritt" },
+        { t: "Lehrzeugnis erstellen und Abschlussgespräch führen", when: "ca. 1 Monat vor Lehrabschluss", tool: "Checkliste Lehrzeugnis" },
+        { t: "Den erfolgreichen Abschluss feiern" },
       ],
+      result: "Geschafft – aus der lernenden Person ist eine Fachperson geworden. Und mit der nächsten Lehrstelle beginnt die Reise von vorn.",
     },
-  ].map((j) => ({ ...j, source: "Ablaufplan der Lehrzeit (Stand Januar 2026)" })),
+  ].map((j) => ({ ...j, source: "Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026) · Checklisten & Formulare: berufsbildung.ch/downloadcenter" })),
 
   /* =====================================================================
      LEXIKON
@@ -1491,11 +1525,65 @@ window.GAME_DATA = {
     { icon: "🤝", lbl: "Weiterverweisen" },
   ],
 
-  credits: [
-    "Take-away im Berufsbildnerkurs – WBZ Kanton Luzern.",
-    "Inhalte: Kursunterlagen Tag 1 und Tag 2 – PP-Präsentationen, Ablaufplan der Lehrzeit, Planung und Umsetzung der betrieblichen Bildung, Glossar, BiVo und Bildungsplan Informatiker/in EFZ, Mini-Fallbeispiele.",
-    "Beispielberuf: Informatiker/in EFZ – die allgemeinen Inhalte gelten für alle Berufe.",
-    "Kulisse: Luzern am Vierwaldstättersee mit Kapellbrücke, Wasserturm, Museggmauer und Pilatus.",
-    "3D-Grafik mit Three.js (WebGL) · HTML, CSS und JavaScript · läuft ohne Internet.",
-  ],
+  /* Credits & Quellen – Titel, Herausgeber und Stand stammen aus den Kursunterlagen selbst
+     (ausgelesen über den graphify-Wissensgraphen in graphify-out/). */
+  credits: {
+    version: "Version 1.0 · Stand November 2026",
+    author: "", // ← hier den eigenen Namen eintragen, dann erscheint er auf dem Credits-Screen
+    about: [
+      "Take-away aus dem Berufsbildnerkurs am Weiterbildungszentrum (WBZ) Kanton Luzern – eine spielerische Zusammenfassung der Kursinhalte für die Präsentation am letzten Kurstag.",
+      "Beispielberuf: Informatiker/in EFZ. Die allgemeinen Inhalte gelten für alle Berufe.",
+      "Kulisse: Luzern am Vierwaldstättersee mit Kapellbrücke, Wasserturm, Museggmauer, Hofkirche und Pilatus – frei nachempfunden.",
+    ],
+    sources: [
+      {
+        group: "Kursunterlagen Präsenztag 1",
+        items: [
+          ["Präsenztag 1: Grundlagen Berufsbildung, Bildungslandschaft & Lebenswelt der Jugendlichen (Präsentation)", "WBZ Kanton Luzern"],
+          ["Planung und Umsetzung der betrieblichen Bildung", "WBZ Kanton Luzern"],
+          ["Ablaufplan der Lehrzeit für Berufsbildner/innen (Stand Januar 2026)", "berufsbildung.ch · Downloadcenter"],
+          ["Bildungssystem Schweiz – Schaubild (2026)", "SBFI"],
+          ["Glossar zum Bildungssystem der Schweiz", "WBZ Kanton Luzern"],
+          ["Tabelle «Meine Rolle als Berufsbildner/in» und Vorlage Reflexionen", "WBZ Kanton Luzern"],
+        ],
+      },
+      {
+        group: "Kursunterlagen Präsenztag 2 – Rechtstag",
+        items: [
+          ["Präsenztag 2 – Rechtstag: Rahmenbedingungen der Berufsbildung (Präsentation)", "WBZ Kanton Luzern"],
+          ["Bildungsverordnung Informatikerin/Informatiker EFZ (SR 412.101.220.10), in Kraft seit 1. Januar 2021", "SBFI"],
+          ["Bildungsplan Informatikerin/Informatiker EFZ (88611)", "ICT-Berufsbildung Schweiz"],
+          ["Auftrag «Fragen zur Bildungsverordnung» mit Antworten", "WBZ Kanton Luzern"],
+          ["Mini-Fallbeispiele zu Interventionen", "WBZ Kanton Luzern"],
+        ],
+      },
+      {
+        group: "In den Unterlagen zitiert",
+        items: [
+          ["Handbuch betriebliche Grundbildung (Knutti, Dirren & Lehmann, 2019)", "SDBB"],
+          ["Hurrelmann & Quenzel (2016)", "zitiert in Präsenztag 1"],
+          ["Merck Jugendbarometer 2025", "zitiert in Präsenztag 1"],
+          ["Berufsbildung Luzern in Zahlen 2025", "zitiert in Präsenztag 2"],
+        ],
+      },
+    ],
+    tech: [
+      ["3D-Grafik", "Three.js r149 (WebGL) · © 2010–2023 three.js authors · MIT-Lizenz"],
+      ["3D-Welt & Figuren", "komplett im Code modelliert – keine fremden Modelle oder Texturen"],
+      ["Sound", "live erzeugt mit der Web Audio API – keine Audiodateien"],
+      ["Schriften & Icons", "Systemschriften (Segoe UI, Bahnschrift) und System-Emoji – nicht mitgeliefert"],
+      ["Technik", "HTML, CSS und JavaScript ohne Framework · läuft offline im Browser"],
+      ["Werkzeuge", "programmiert mit Unterstützung von Claude Code (Anthropic) · Kursunterlagen als Wissensgraph mit graphify erschlossen"],
+    ],
+    keys: [
+      [["←", "→", "↑", "↓"], "Auswahl bewegen"],
+      [["Enter"], "Öffnen / bestätigen"],
+      [["Esc"], "Zurück"],
+      [["1–8"], "Direktwahl im Menü"],
+      [["M"], "Ton an / aus"],
+      [["C"], "Credits (im Hauptmenü)"],
+    ],
+    thanks: "Danke an die Kursleitung des WBZ Kanton Luzern und an alle Mitlernenden für den Austausch während des Kurses.",
+    disclaimer: "Private Lernhilfe ohne Gewähr – kein offizielles Angebot des Kantons Luzern oder des WBZ. Wappen und Logo dienen nur der Illustration. Massgebend sind die geltenden Erlasse (BBG, BBV, BiVo, Bildungsplan) und die Vorgaben der Dienststelle Berufs- und Weiterbildung (DBW) Luzern.",
+  },
 };

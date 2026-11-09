@@ -1,6 +1,6 @@
 /* =====================================================================
    Grundlagen & Zonen-Farben
-   menu = Gold (Hub) · wissen = Eisblau (ruhig, informativ) · arena = Feuer (Spiel)
+   menu = Gold (Hub) · wissen = Luzerner Blau-Weiss (ruhig, informativ) · arena = Feuer (Schwingfest am Abend)
    ===================================================================== */
 :root {
   --bg-0: #05060f;
@@ -22,13 +22,14 @@
   --title-grad: linear-gradient(180deg, #ffffff 0%, #ffe39a 45%, #ffb020 100%);
 }
 body[data-zone="wissen"] {
-  --accent: #5fd4ff;
-  --accent-2: #c9f4ff;
-  --panel: rgba(6, 22, 40, 0.74);
-  --panel-solid: #06223a;
-  --line: rgba(95, 212, 255, 0.3);
-  --glow: rgba(95, 212, 255, 0.2);
-  --title-grad: linear-gradient(180deg, #ffffff 0%, #d6f6ff 50%, #7fdcff 100%);
+  /* Blau aus dem Luzerner Wappen (#1f6fc5), für Text auf dunklem Grund aufgehellt */
+  --accent: #7fb8f5;
+  --accent-2: #e4f0ff;
+  --panel: rgba(10, 28, 58, 0.76);
+  --panel-solid: #0c2142;
+  --line: rgba(127, 184, 245, 0.32);
+  --glow: rgba(31, 111, 197, 0.34);
+  --title-grad: linear-gradient(180deg, #ffffff 0%, #eef5ff 50%, #9cc8f7 100%);
 }
 body[data-zone="arena"] {
   --accent: #ff7a3d;
@@ -65,9 +66,10 @@ body.has-3d #bg { display: none; }
     radial-gradient(ellipse 120% 90% at 50% 45%, transparent 55%, rgba(2, 3, 10, .55) 100%);
 }
 #app { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+@supports (height: 100dvh) { #app { height: 100dvh; } } /* Handy: Adressleiste nicht überdecken */
 #flash { position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0; }
 #flash.burn { animation: burn 1.3s ease-out; background: radial-gradient(circle at 50% 45%, rgba(255, 240, 180, .95) 0%, rgba(255, 140, 30, .85) 30%, rgba(200, 30, 0, .7) 65%, rgba(60, 0, 0, .8) 100%); }
-#flash.zap { animation: zap .5s ease-out; background: radial-gradient(circle at 50% 30%, rgba(200, 245, 255, .7), rgba(95, 212, 255, .2) 50%, transparent 75%); }
+#flash.zap { animation: zap .5s ease-out; background: radial-gradient(circle at 50% 30%, rgba(235, 244, 255, .75), rgba(31, 111, 197, .25) 50%, transparent 75%); }
 @keyframes burn { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes zap { 0% { opacity: .9; } 100% { opacity: 0; } }
 
@@ -100,6 +102,11 @@ body.has-3d #bg { display: none; }
 .hud .keys { display: flex; gap: 14px; white-space: nowrap; }
 .hud .keys span { display: inline-flex; align-items: center; transition: opacity .3s; }
 .hud .keys span.off { opacity: 0; }
+.hud .keys .hk { all: unset; display: inline-flex; align-items: center; cursor: pointer; transition: opacity .3s, color .2s, background .2s; }
+.hud .keys .hk:hover { color: var(--text); }
+.hud .keys .hk:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.hud .keys .hk.off { opacity: 0; pointer-events: none; }
+.hud .keys .hk .hk-ico { display: none; }
 kbd {
   display: inline-block; min-width: 24px; padding: 2px 7px;
   border: 1px solid rgba(255, 255, 255, .28); border-bottom-width: 3px; border-radius: 7px;
@@ -183,6 +190,38 @@ body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter
 }
 @keyframes pulse { 50% { opacity: .55; box-shadow: 0 0 0 6px rgba(255, 204, 77, .08); } }
 .title-meta { color: rgba(255, 255, 255, .85); font-size: 13px; letter-spacing: .12em; text-shadow: 0 2px 6px #000; }
+.title-credits { color: rgba(255, 255, 255, .7); font-size: 12px; letter-spacing: .08em; text-shadow: 0 2px 6px #000; cursor: pointer; transition: color .2s; }
+.title-credits:hover { color: #fff; }
+.title-credits kbd { font-size: 11px; padding: 1px 6px; }
+
+/* ============ Credits & Quellen ============ */
+.credits {
+  width: min(1180px, 100%); flex: 1; min-height: 0; overflow: auto; padding: 22px 28px 8px;
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 0 36px; align-content: start;
+}
+.cr-sec { margin-bottom: 20px; }
+.cr-sec h4 {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+}
+/* kleines Luzerner Wappen vor jedem Titel */
+.cr-sec h4::before {
+  content: ""; flex: none; width: 13px; height: 15px; border-radius: 2px 2px 7px 7px;
+  background: linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%); box-shadow: 0 0 0 1.5px #0b2340;
+}
+.cr-sec p { margin: 0 0 8px; font-size: 15px; line-height: 1.5; }
+.cr-src h5 { margin: 14px 0 7px; font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--accent-2); }
+.cr-src h5:first-child { margin-top: 0; }
+.cr-src ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.cr-src li { padding: 7px 12px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: rgba(255, 255, 255, .045); font-size: 14px; line-height: 1.4; }
+.cr-src li small { display: block; margin-top: 1px; font-size: 12px; color: var(--muted); }
+.cr-dl { display: grid; grid-template-columns: max-content 1fr; gap: 7px 14px; margin: 0; font-size: 14px; line-height: 1.4; }
+.cr-dl dt { font-weight: 700; color: var(--accent-2); }
+.cr-dl dd { margin: 0; }
+.cr-keys { align-items: center; }
+.cr-keys kbd { margin-right: 3px; }
+.cr-note { margin: 4px 0 18px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+@media (max-width: 900px) { .credits { grid-template-columns: 1fr; } }
 
 /* ============ Hauptmenü: einzelne Knöpfe im Kapellbrücken-Stil ============
    Jeder Knopf = ein Giebel der Kapellbrücke mit dreieckiger Bildtafel (wie die
@@ -542,15 +581,52 @@ body[data-zone="arena"] .screen-title, .arena-title { font-style: italic; filter
 .rel .go { margin-left: auto; font-size: 24px; color: var(--muted); }
 
 /* ============ Lehrzeit-Reise ============ */
-.journey { width: min(1250px, 100%); display: flex; flex-direction: column; gap: 18px; flex: 1; min-height: 0; }
-.path { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 18px 10px 6px; }
-.path::before { content: ""; position: absolute; left: 40px; right: 40px; top: 50px; height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg, var(--accent) 0 14px, transparent 14px 24px); opacity: .55; }
-.stop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
-.stop .node { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; background: var(--panel-solid); border: 3px solid var(--line); transition: all .3s var(--ease); z-index: 1; }
+/* ============ Lehrzeit-Reise ============
+   Zeitleiste: gestrichelte Linie = ganze Lehrzeit, durchgezogene Linie = bisheriger Weg (--p = 0…1) */
+.journey { width: min(1250px, 100%); display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; }
+.journey-screen .screen-sub { margin-bottom: 12px; }
+.persp { display: inline-block; padding: 1px 10px; border-radius: 999px; background: #1f6fc5; color: #fff; font-weight: 700; font-size: .9em; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .55) inset; }
+.path-wrap { flex: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.path-wrap::-webkit-scrollbar { display: none; }
+.path { --edge: calc((100% - 20px) / (2 * var(--n, 7)) + 10px); display: flex; align-items: flex-start; position: relative; padding: 16px 10px 4px; }
+.path::before, .path::after { content: ""; position: absolute; left: var(--edge); top: 45px; height: 6px; border-radius: 3px; }
+.path::before { right: var(--edge); background: repeating-linear-gradient(90deg, var(--accent) 0 14px, transparent 14px 24px); opacity: .45; }
+.path::after { width: calc((100% - 20px) * (var(--n, 7) - 1) / var(--n, 7) * var(--p, 0)); background: linear-gradient(90deg, #1f6fc5, #fff); box-shadow: 0 0 10px rgba(31, 111, 197, .7); transition: width .5s var(--ease); }
+.stop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; flex: 1 1 0; min-width: 0; }
+.stop .node { position: relative; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; background: var(--panel-solid); border: 3px solid var(--line); transition: all .3s var(--ease); z-index: 1; }
+.stop .node i { position: absolute; right: -5px; bottom: -5px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: normal 800 11px var(--font); background: #fff; color: #0c2142; box-shadow: 0 0 0 2px var(--panel-solid); }
+/* Inhalt einer Etappe: Ziel → Schritte → (Daueraufgaben / Plan B) → Ergebnis */
+.js-goal { display: flex; gap: 12px; align-items: baseline; margin: 8px 0 14px; padding: 10px 14px; border-radius: 12px; border-left: 4px solid #fff; background: linear-gradient(90deg, rgba(31, 111, 197, .4), rgba(31, 111, 197, .06)); font-size: 17px; line-height: 1.4; }
+.js-goal b, .js-alt b, .js-result b { flex: none; font-family: var(--font-display); letter-spacing: .04em; }
+.js-goal b, .js-result b { color: #fff; }
+.js-steps li { position: relative; }
+.js-steps li:not(:last-child)::after { content: ""; position: absolute; left: 24px; top: 36px; bottom: -8px; width: 2px; background: linear-gradient(var(--accent), rgba(255, 255, 255, .25)); } /* der rote Faden zwischen den Schritten */
+.js-text { min-width: 0; }
+.js-text b { display: block; font-weight: 700; }
+.js-text p { margin: 2px 0 0; font-size: 15px; line-height: 1.45; color: rgba(241, 244, 255, .82); }
+.js-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); background: rgba(255, 255, 255, .05); color: var(--accent-2); }
+.tag-when { border-color: rgba(255, 255, 255, .4); color: #fff; }
+.tag-who { border-color: rgba(255, 204, 77, .55); background: rgba(255, 204, 77, .12); color: #ffe39a; }
+.js-always { margin-top: 18px; }
+.js-always-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+.js-card { display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .045); }
+.js-card span { font-size: 20px; }
+.js-card b { font-size: 15px; color: var(--accent-2); }
+.js-card small { font-size: 13px; line-height: 1.4; color: var(--muted); }
+.js-hint { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
+.js-alt { display: flex; gap: 12px; align-items: baseline; margin-top: 14px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 150, 90, .45); background: rgba(255, 122, 61, .12); font-size: 15px; line-height: 1.45; }
+.js-alt b { color: #ffb38a; }
+.js-result { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin-top: 18px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .07); }
+.js-result > div { display: flex; gap: 12px; align-items: baseline; flex: 1 1 320px; font-size: 15.5px; line-height: 1.45; }
+.js-next { flex: none; display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border: 0; border-radius: 999px; cursor: pointer; background: #1f6fc5; color: #fff; font: 700 14px var(--font); box-shadow: 0 0 0 2px rgba(255, 255, 255, .5) inset; transition: transform .2s, background .2s; }
+.js-next:hover { transform: translateY(-1px); background: #2a80dc; }
+.js-next kbd { margin: 0; font-size: 11px; background: rgba(255, 255, 255, .18); }
 .stop .stop-lbl { font-size: 13px; text-align: center; color: rgba(255, 255, 255, .9); max-width: 130px; line-height: 1.3; text-shadow: 0 1px 3px #000; padding: 3px 9px; border-radius: 10px; background: rgba(6, 10, 26, .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.stop.active .node { border-color: var(--accent); background: var(--accent); transform: scale(1.18); box-shadow: 0 0 30px var(--glow); }
+/* besucht = weisser Rand, aktiv = blau mit weissem Ring (Luzerner Farben) */
+.stop.visited .node { border-color: rgba(255, 255, 255, .6); }
+.stop.active .node { border-color: #fff; background: var(--accent); transform: scale(1.18); box-shadow: 0 0 0 4px rgba(31, 111, 197, .45), 0 10px 26px rgba(0, 0, 0, .45); }
 .stop.active .stop-lbl { color: var(--text); font-weight: 600; }
-.stop.visited .node { border-color: var(--good); }
 .journey .mission-body { flex: 0 1 auto; } /* Panel nur so hoch wie der Inhalt (vorher grosse leere Fläche) */
 
 /* ============ Lexikon ============ */
@@ -624,7 +700,9 @@ mark { background: color-mix(in srgb, var(--accent) 28%, transparent); color: #f
 .answer.right { border-color: var(--good); background: rgba(91, 227, 160, .18); }
 .answer.wrong { border-color: var(--bad); background: rgba(255, 93, 115, .2); }
 .explain { color: #f3d9c6; font-size: 15px; min-height: 22px; margin-top: 12px; }
-.duell-screen { justify-content: flex-end; }
+/* unten ausrichten, aber bei wenig Platz nicht nach oben hinter die Kopfleiste überlaufen */
+.duell-screen { justify-content: flex-start; overflow-y: auto; }
+.duell-screen > :first-child { margin-top: auto; }
 .case { font-size: 24px; line-height: 1.45; font-weight: 600; margin: 8px 0 18px; color: #fff3e6; }
 .duell-opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
 .dopt { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px; border-radius: 16px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 122, 61, .25); cursor: pointer; transition: transform .2s var(--ease), background .2s, border-color .2s; }
@@ -672,11 +750,70 @@ mark { background: color-mix(in srgb, var(--accent) 28%, transparent); color: #f
   .menu-stage { min-height: 160px; }
   .sheet-stage { min-height: 220px; }
   .answers, .duell-opts, .cols { grid-template-columns: 1fr; }
-  .hud .keys { display: none; }
   .hud .crumbs .lu-logo { display: none; }
   .screen { padding: 0 16px 16px; }
   .lu-logo-lg { top: 14px; left: 16px; }
   html, body { overflow: auto; }
+  /* Lehrzeit-Reise: Zeitleiste wird seitlich wischbar statt gequetscht */
+  .path { min-width: calc(var(--n, 7) * 96px + 20px); }
+  .path::before, .path::after { top: 39px; }
+  .stop .node { width: 52px; height: 52px; font-size: 23px; }
+  .stop .stop-lbl { font-size: 12px; }
+}
+
+/* Schmale Bildschirme und Touch-Geräte: Tastenhinweise weg, Zurück und Ton als runde Knöpfe */
+@media (max-width: 860px), (hover: none) and (pointer: coarse) {
+  .hud .keys { display: flex; gap: 8px; }
+  .hud .keys .k-nav, .hud .keys .hk kbd, .hud .keys .hk .hk-lbl { display: none; }
+  .hud .keys .hk .hk-ico { display: block; line-height: 1; }
+  .hud .keys .hk {
+    width: 42px; height: 42px; justify-content: center; border-radius: 50%; font-size: 20px; color: var(--text);
+    background: var(--glow); border: 1px solid var(--line); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .menu-foot > span:not(.link), .menu-foot kbd, .js-next kbd, .title-credits kbd { display: none; }
+}
+
+/* Handy hochkant */
+@media (max-width: 560px) {
+  .hud { padding: 10px 12px; min-height: 56px; gap: 8px; }
+  .hud .trail > :not(b) { display: none; } /* nur die aktuelle Seite zeigen */
+  .zone-badge { padding: 4px 10px; font-size: 11px; }
+  .screen { padding: 0 10px 10px; }
+  .screen-title { font-size: 26px; }
+  .screen-sub { font-size: 13.5px; margin-bottom: 10px; border-radius: 14px; }
+  .mission-body { padding: 16px 14px; }
+  .mission-body h3 { font-size: 22px; }
+  .steps li { font-size: 15px; padding: 8px 10px; gap: 10px; }
+  .js-steps li:not(:last-child)::after { left: 22px; }
+  .js-intro { display: none; }
+  .journey-screen .screen-sub { padding: 4px 10px; }
+  .js-goal, .js-alt, .js-result > div { flex-direction: column; gap: 2px; font-size: 15px; }
+  .js-next { width: 100%; justify-content: center; }
+  /* Arena: Antworten kompakt in zwei Spalten, damit die Szene sichtbar bleibt */
+  .duell-opts { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .dopt { flex-direction: row; justify-content: flex-start; gap: 8px; padding: 10px 10px; text-align: left; }
+  .dopt .dico { font-size: 20px; }
+  .dopt .dot { width: 20px; height: 20px; flex: none; }
+  .dopt b { font-size: 14px; line-height: 1.25; flex: 1; }
+  .dopt kbd { display: none; }
+  .case { font-size: 18px; margin: 4px 0 10px; }
+  .riddle-q { font-size: 24px; }
+  .clues li { font-size: 15px; padding: 8px 10px; }
+  .credits { padding: 16px 14px 4px; }
+  .cr-dl { grid-template-columns: 1fr; gap: 0; }
+  .cr-dl dd { margin-bottom: 8px; }
+  .lu-logo-lg span { font-size: 15px; }
+}
+
+/* Niedrige Bildschirme (Handy quer, kleine Laptops): Titelbereich kompakter */
+@media (max-height: 620px) {
+  .hud { min-height: 50px; padding-top: 8px; padding-bottom: 8px; }
+  .screen-title { font-size: 26px; margin-bottom: 2px; }
+  .screen-sub { margin-bottom: 8px; padding-top: 3px; padding-bottom: 3px; }
+  .path { padding-top: 8px; }
+  .path::before, .path::after { top: 37px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

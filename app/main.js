@@ -97,6 +97,9 @@
   const luLogo = (cls = "") => h("div", { class: "lu-logo " + cls, title: "Kanton Luzern" }, h("i"), h("span", {}, "Kanton", h("b", {}, "Luzern")));
   const wrap = (i, n) => ((i % n) + n) % n;
   const shuffle = (a) => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+  function toggleMute() { muted = !muted; toast(muted ? "🔇 Ton aus" : "🔊 Ton an"); render(); }
+  // Touch-Gerät ohne Maus/Tastatur? → Texte wie «Enter drücken» passend formulieren
+  const TOUCH = window.matchMedia && matchMedia("(hover: none) and (pointer: coarse)").matches;
   function toast(msg) {
     document.querySelectorAll(".toast").forEach((t) => t.remove());
     const t = h("div", { class: "toast" }, msg);
@@ -143,11 +146,12 @@
       const zoneName = { wissen: "📘 Wissen", arena: "⚔️ Arena", menu: "🏠 Hub" }[current.zone || "menu"];
       hud = h("div", { class: "hud" },
         h("div", { class: "crumbs" }, luLogo(), h("span", { class: "zone-badge" }, zoneName), h("span", { class: "trail" }, ...crumbs())),
+        // Zurück und Ton sind echte Knöpfe (Touch/Maus), die Tastenhinweise blenden auf Touch-Geräten aus
         h("div", { class: "keys" },
-          h("span", {}, h("kbd", {}, "←↑↓→"), "Navigieren"),
-          h("span", {}, h("kbd", {}, "Enter"), "Wählen"),
-          h("span", { class: stack.length > 1 ? "" : "off" }, h("kbd", {}, "Esc"), "Zurück"),
-          h("span", {}, h("kbd", {}, "M"), muted ? "Ton an" : "Ton aus"),
+          h("span", { class: "k-nav" }, h("kbd", {}, "←↑↓→"), "Navigieren"),
+          h("span", { class: "k-nav" }, h("kbd", {}, "Enter"), "Wählen"),
+          h("button", { class: "hk" + (stack.length > 1 ? "" : " off"), onclick: back, title: "Zurück (Esc)", "aria-label": "Zurück" }, h("kbd", {}, "Esc"), h("span", { class: "hk-ico" }, "‹"), h("span", { class: "hk-lbl" }, "Zurück")),
+          h("button", { class: "hk", onclick: toggleMute, title: "Ton an/aus (M)", "aria-label": muted ? "Ton an" : "Ton aus" }, h("kbd", {}, "M"), h("span", { class: "hk-ico" }, muted ? "🔇" : "🔊"), h("span", { class: "hk-lbl" }, muted ? "Ton an" : "Ton aus")),
         ),
       );
     }
@@ -214,11 +218,15 @@
           h("div", { class: "tagline" }, D.tagline),
         ),
         h("div", { class: "title-bottom" },
-          h("div", { class: "press-start", onclick: start }, "Enter drücken"),
+          h("div", { class: "press-start", onclick: start }, TOUCH ? "Tippen zum Starten" : "Enter drücken"),
           h("div", { class: "title-meta" }, D.meta),
+          h("div", { class: "title-credits link", onclick: () => { sfx.ok(); go(MainMenu()); go(Credits()); } }, h("kbd", {}, "C"), "Credits & Quellen"),
         ),
       ),
-    key: (e) => { if (e.key === "Enter" || e.key === " ") start(); },
+    key: (e) => {
+      if (e.key === "Enter" || e.key === " ") start();
+      if (e.key === "c" || e.key === "C") { sfx.ok(); go(MainMenu()); go(Credits()); }
+    },
   });
   function start() { sfx.ok(); go(MainMenu()); }
 
@@ -610,28 +618,56 @@
   const Journey = (start = 0) => {
     const s = { i: start, seen: new Set([start]) };
     const J = D.journey;
+    const goTo = (i) => { s.i = i; s.seen.add(i); sfx.move(); render(); };
+    const bodyEl = () => app.querySelector(".journey .mission-body");
+    let shownI = -1;
+    // ein Schritt: was der Betrieb tut, darunter Erklärung und Etiketten (wann · Hilfsmittel · lernende Person)
+    const step = (it, n) => h("li", {},
+      h("span", { class: "sn" }, n + 1),
+      h("div", { class: "js-text" },
+        h("b", {}, it.t),
+        it.d ? h("p", {}, it.d) : null,
+        (it.when || it.tool || it.who) ? h("div", { class: "js-tags" },
+          it.when ? h("span", { class: "tag tag-when" }, "⏱ " + it.when) : null,
+          it.tool ? h("span", { class: "tag tag-tool" }, "📄 " + it.tool) : null,
+          it.who ? h("span", { class: "tag tag-who" }, "🎒 Lernende Person " + it.who) : null) : null));
     return {
       id: "journey", title: "Lehrzeit-Reise", zone: "wissen",
       world: () => W.mode("wissen"),
       view: () => {
-        const st = J[s.i];
-        return h("div", { class: "screen" },
+        const st = J[s.i], nx = J[s.i + 1];
+        return h("div", { class: "screen journey-screen" },
           h("h2", { class: "screen-title" }, "Lehrzeit-Reise"),
-          h("div", { class: "screen-sub" }, "Die Etappen einer Lehre aus Sicht der Berufsbildner/innen – gemäss Ablaufplan der Lehrzeit."),
+          h("div", { class: "screen-sub" }, h("span", { class: "persp" }, "👔 " + D.journeyIntro.perspective), h("span", { class: "js-intro" }, " " + D.journeyIntro.text)),
           h("div", { class: "journey" },
-            h("div", { class: "path" }, J.map((j, i) =>
-              h("div", { class: "stop" + (i === s.i ? " active" : "") + (s.seen.has(i) ? " visited" : ""), onclick: () => { s.i = i; s.seen.add(i); sfx.move(); render(); } },
-                h("div", { class: "node" }, j.icon), h("div", { class: "stop-lbl" }, j.title)))),
+            h("div", { class: "path-wrap" }, h("div", { class: "path", style: { "--p": String(s.i / (J.length - 1)), "--n": String(J.length) } }, J.map((j, i) =>
+              h("div", { class: "stop" + (i === s.i ? " active" : "") + (s.seen.has(i) ? " visited" : ""), onclick: () => goTo(i) },
+                h("div", { class: "node" }, j.icon, h("i", {}, i + 1)), h("div", { class: "stop-lbl" }, j.short || j.title))))),
             h("div", { class: "mission-body panel" }, h("div", { class: "swap", "data-k": "j" + s.i },
-              h("div", { class: "goal" }, `Etappe ${s.i + 1} von ${J.length}` + (st.when ? ` · ${st.when}` : "")),
+              h("div", { class: "goal" }, `Etappe ${s.i + 1} von ${J.length} · ${st.when}`),
               h("h3", {}, st.title),
-              h("ol", { class: "steps" }, st.items.map((p, n) => h("li", {}, h("span", { class: "sn" }, n + 1), h("span", {}, p)))),
+              h("div", { class: "js-goal" }, h("b", {}, "🎯 Ziel"), h("span", {}, st.goal)),
+              h("ol", { class: "steps js-steps" }, st.items.map(step)),
+              st.always ? h("div", { class: "js-always" },
+                h("h4", { class: "blk-h" }, st.always.title),
+                h("div", { class: "js-always-grid" }, st.always.list.map(([ico, t, d]) => h("div", { class: "js-card" }, h("span", {}, ico), h("b", {}, t), h("small", {}, d)))),
+                h("p", { class: "js-hint" }, "💡 " + st.always.note)) : null,
+              st.alt ? h("div", { class: "js-alt" }, h("b", {}, "⚠️ Plan B"), h("span", {}, st.alt)) : null,
+              h("div", { class: "js-result" },
+                h("div", {}, h("b", {}, "✔ Ergebnis"), h("span", {}, st.result)),
+                nx ? h("button", { class: "js-next", onclick: () => goTo(s.i + 1) }, "Weiter: " + (nx.short || nx.title).replace(/­/g, ""), h("kbd", {}, "→"))
+                   : h("button", { class: "js-next", onclick: () => goTo(0) }, "Zurück zum Start", h("kbd", {}, "Home"))),
               h("div", { class: "source" }, "Quelle: " + st.source),
             )),
           ),
         );
       },
+      after: () => { if (shownI !== s.i) { shownI = s.i; const b = bodyEl(); if (b) b.scrollTop = 0; const p = app.querySelector(".journey .path-wrap"), a = p && p.querySelector(".stop.active"); if (a && p.scrollWidth > p.clientWidth) p.scrollTo({ left: a.offsetLeft - (p.clientWidth - a.offsetWidth) / 2, behavior: "smooth" }); } },
       key: (e) => {
+        const b = bodyEl();
+        if (e.key === "ArrowDown" || e.key === "PageDown") { b && b.scrollBy({ top: 220, behavior: "smooth" }); return true; }
+        if (e.key === "ArrowUp" || e.key === "PageUp") { b && b.scrollBy({ top: -220, behavior: "smooth" }); return true; }
+        if (e.key === "Home") { goTo(0); return true; }
         const r = listNav(e, s, J.length, null, "x");
         if (r) { s.seen.add(s.i); render(); }
         return r;
@@ -664,7 +700,12 @@
       });
     };
     D.levels.filter((l) => !l.placeholder).concat([D.beruf]).forEach((lv) => lv.missions.forEach((m, mi) => walk(lv, mi, m)));
-    D.journey.forEach((j, ji) => j.items.forEach((it) => add(it, { journey: ji, label: "Lehrzeit-Reise · " + j.title })));
+    D.journey.forEach((j, ji) => {
+      const link = { journey: ji, label: "Lehrzeit-Reise · " + j.title };
+      j.items.forEach((it) => add(`${it.t}${it.d ? " – " + it.d : ""}`, link));
+      (j.always ? j.always.list : []).forEach(([, t, d]) => add(`${t} – ${d}`, link));
+      [j.alt, j.always && j.always.note].forEach((x) => add(x, link));
+    });
     lexIndex = {};
     D.lexikon.forEach(([k, v]) => {
       const re = termRe(k);
@@ -988,24 +1029,52 @@
     };
   };
 
-  /* --- Credits --- */
-  const Credits = () => ({
-    id: "credits", title: "Credits", zone: "menu",
-    world: () => W.mode("menu", { side: null, heroes, title: true }),
-    view: () => h("div", { class: "screen" }, h("div", { class: "placeholder-box panel" },
-      h("div", { class: "big" }, "🎓"),
-      h("h2", { class: "screen-title" }, "Credits"),
-      D.credits.map((line) => h("p", {}, line)))),
-    key: () => false,
-  });
+  /* --- Credits & Quellen --- */
+  const Credits = () => {
+    const C = D.credits;
+    const sec = (title, ...kids) => h("section", { class: "cr-sec" }, h("h4", {}, title), ...kids);
+    const scroller = () => app.querySelector(".credits");
+    return {
+      id: "credits", title: "Credits & Quellen", zone: "menu",
+      world: () => W.mode("menu", { side: null, heroes, title: true }),
+      view: () => h("div", { class: "screen" },
+        h("h2", { class: "screen-title" }, "Credits & Quellen"),
+        h("div", { class: "screen-sub" }, [D.title + " – " + D.subtitle, C.author && "von " + C.author, C.version].filter(Boolean).join(" · ")),
+        h("div", { class: "credits panel" },
+          h("div", { class: "cr-col" },
+            sec("Über das Spiel", C.about.map((p) => h("p", {}, p))),
+            sec("Quellen", h("div", { class: "cr-src" }, C.sources.map((g) =>
+              [h("h5", {}, g.group), h("ol", {}, g.items.map(([t, by]) => h("li", {}, t, h("small", {}, by))))]))),
+          ),
+          h("div", { class: "cr-col" },
+            sec("Technik & Lizenzen", h("dl", { class: "cr-dl" }, C.tech.map(([k, v]) => [h("dt", {}, k), h("dd", {}, v)]))),
+            sec("Bedienung", h("dl", { class: "cr-dl cr-keys" }, C.keys.map(([ks, v]) => [h("dt", {}, ks.map((k) => h("kbd", {}, k))), h("dd", {}, v)]))),
+            sec("Dank", h("p", {}, C.thanks)),
+            h("p", { class: "cr-note" }, C.disclaimer),
+          ),
+        ),
+        h("div", { class: "menu-foot" },
+          h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Scrollen"),
+          h("span", { class: "link", onclick: back }, h("kbd", {}, "Esc"), " Zurück")),
+      ),
+      key: (e) => {
+        const b = scroller();
+        if (e.key === "ArrowDown" || e.key === "PageDown") { b && b.scrollBy({ top: 220, behavior: "smooth" }); return true; }
+        if (e.key === "ArrowUp" || e.key === "PageUp") { b && b.scrollBy({ top: -220, behavior: "smooth" }); return true; }
+        return false;
+      },
+    };
+  };
 
   /* ---------- Tastatur ---------- */
   window.addEventListener("keydown", (e) => {
     const typing = e.target && e.target.tagName === "INPUT";
+    // angeklickte Knöpfe behalten den Fokus – Enter/Leertaste sollen trotzdem nur die Bildschirm-Aktion auslösen
+    if (e.target && e.target.tagName === "BUTTON" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.target.blur(); }
     if (e.key === "Escape") { e.preventDefault(); if (current.esc && current.esc()) return; back(); return; }
     if (typing) return;
     if (e.key === "Backspace") { e.preventDefault(); back(); return; }
-    if ((e.key === "m" || e.key === "M") && current.id !== "raetsel") { muted = !muted; toast(muted ? "🔇 Ton aus" : "🔊 Ton an"); render(); return; }
+    if ((e.key === "m" || e.key === "M") && current.id !== "raetsel") { toggleMute(); return; }
     if (current.key) current.key(e);
   });
 
@@ -1022,7 +1091,7 @@
     if (what === "chars") go(CharSelect());
     if (what === "sheet" && charById[arg]) { go(CharSelect()); go(CharSheet(arg)); }
     if (what === "beruf") go(LevelDetail(D.beruf, (+arg || 1) - 1));
-    if (what === "journey") go(Journey());
+    if (what === "journey") go(Journey(Math.max(0, Math.min(D.journey.length - 1, (+arg || 1) - 1))));
     if (what === "lexikon") go(Lexikon(arg ? decodeURIComponent(jump.slice(8)) : null));
     if (what === "boss") {
       go(Boss());
@@ -1031,5 +1100,6 @@
     }
     if (what === "duell") go(Duell());
     if (what === "raetsel") go(Raetsel());
+    if (what === "credits") go(Credits());
   }
 })();

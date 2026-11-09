@@ -408,6 +408,7 @@ window.World = (() => {
       const x = Math.cos(a) * d, z = Math.sin(a) * d;
       if (lakeMask(x, z) > 0) continue;
       if (z > 2 && Math.abs(x) < 10) continue; // nichts direkt vor der Kamera
+      if (Math.hypot(x, z + 2) < 8.3) continue; // nicht durch Dorfplatz / Sägemehl-Ring wachsen
       const k = srnd(0.7, 1.6);
       m4.compose(v.set(x, groundH(x, z), z), q.setFromAxisAngle(v.set(0, 1, 0).normalize(), srnd(0, TAU)), s.set(k, k, k));
       m4.setPosition(x, groundH(x, z), z);
@@ -586,8 +587,9 @@ window.World = (() => {
      ===================================================================== */
   const THEMES = {
     menu: { top: "#152260", hor: "#ff9a62", bot: "#3a2c48", sun: "#ffad6a", sunDir: [-0.42, 0.05, -1], fog: "#8a6a86", fogN: 60, fogF: 560, key: "#ffd9b0", keyI: 2.1, back: "#ff9a62", backI: 1.3, hemiS: "#a9b8ff", hemiG: "#3b2a33", hemiI: 0.45, rim: "#ff9a62", p: "#ffd9a0", pm: "motes", tint: "#cbc3e8", water: "#2c4a7c", stars: 0.75, cloud: "#ffc7b0" },
-    wissen: { top: "#1a5aa8", hor: "#a6d9f2", bot: "#5c7f99", sun: "#fff1d0", sunDir: [0.35, 0.42, -1], fog: "#9cc4dd", fogN: 80, fogF: 640, key: "#ffffff", keyI: 2.3, back: "#cfefff", backI: 0.7, hemiS: "#d2ecff", hemiG: "#3b4a3a", hemiI: 0.5, rim: "#5fd4ff", p: "#c8f2ff", pm: "motes", tint: "#ffffff", water: "#2f6fa0", stars: 0, cloud: "#ffffff" },
-    arena: { top: "#1d0403", hor: "#9a2a0c", bot: "#140302", sun: "#ff5a1f", sunDir: [0.08, 0.1, -1], fog: "#3d0d06", fogN: 14, fogF: 120, key: "#ffb486", keyI: 1.7, back: "#ff5a1f", backI: 1.4, hemiS: "#ff9a70", hemiG: "#1a0505", hemiI: 0.35, rim: "#ff6a2a", p: "#ffb347", pm: "embers", tint: "#6a2a1e", water: "#5a1408", stars: 0.3, cloud: "#7a2a18" },
+    wissen: { top: "#1a5aa8", hor: "#a6d9f2", bot: "#5c7f99", sun: "#fff1d0", sunDir: [0.35, 0.42, -1], fog: "#9cc4dd", fogN: 80, fogF: 640, key: "#ffffff", keyI: 2.3, back: "#cfefff", backI: 0.7, hemiS: "#d2ecff", hemiG: "#3b4a3a", hemiI: 0.5, rim: "#6aa6ec", p: "#e4f0ff", pm: "motes", tint: "#ffffff", water: "#2f6fa0", stars: 0, cloud: "#ffffff" },
+    // Abendstimmung am Schwingfest: Alpenglühen statt Lava-Hölle
+    arena: { top: "#1c1844", hor: "#ff7a3a", bot: "#2a1a24", sun: "#ff8a3d", sunDir: [0.08, 0.05, -1], fog: "#6a4058", fogN: 40, fogF: 320, key: "#ffc49a", keyI: 1.8, back: "#ff7a3a", backI: 1.3, hemiS: "#b8a0e0", hemiG: "#2a1a1e", hemiI: 0.42, rim: "#ff8a3a", p: "#ffb347", pm: "embers", tint: "#d8aa9a", water: "#3a3462", stars: 0.55, cloud: "#ffa088" },
   };
   const COLOR_KEYS = ["top", "hor", "bot", "sun", "fog", "key", "back", "hemiS", "hemiG", "rim", "p", "tint", "water", "cloud"];
   const NUM_KEYS = ["fogN", "fogF", "keyI", "backI", "hemiI", "stars"];
@@ -1218,107 +1220,218 @@ window.World = (() => {
   menuG.add(luFlag);
   island.position.y = 0.2;
   // Seitenlicht statt Kristallen: die gewählte Menü-Seite färbt die Insel leicht ein
-  const sideLights = { wissen: new THREE.PointLight("#5fd4ff", 0, 9), arena: new THREE.PointLight("#ff7a3d", 0, 9) };
+  const sideLights = { wissen: new THREE.PointLight("#4a95e8", 0, 9), arena: new THREE.PointLight("#ff7a3d", 0, 9) };
   sideLights.wissen.position.set(-3.2, 2.6, 1.2);
   sideLights.arena.position.set(3.2, 2.6, 1.2);
   menuG.add(sideLights.wissen, sideLights.arena);
   let menuSide = null;
 
+  /* ---------- Dorfplatz (Wissen): Kopfsteinpflaster, Brunnen, Laternen, Wimpelketten ---------- */
   const wissenG = new THREE.Group();
   scene.add(wissenG);
   wissenG.visible = false;
-  const plazaTex = canvasTex(1024, 1024, (x, w, h) => {
+  const PZ = -2; // Mitte des Dorfplatzes
+  const cobbleTex = canvasTex(1024, 1024, (x, w, h) => {
     const cx = w / 2, cy = h / 2;
-    x.clearRect(0, 0, w, h);
-    x.strokeStyle = "rgba(160,235,255,0.9)";
-    [0.48, 0.44, 0.3, 0.16].forEach((r, i) => { x.lineWidth = i === 1 ? 2 : 5; x.beginPath(); x.arc(cx, cy, r * w, 0, TAU); x.stroke(); });
-    x.lineWidth = 3;
-    for (let i = 0; i < 24; i++) {
-      const a = (i / 24) * TAU;
-      x.beginPath();
-      x.moveTo(cx + Math.cos(a) * 0.3 * w, cy + Math.sin(a) * 0.3 * w);
-      x.lineTo(cx + Math.cos(a) * (i % 2 ? 0.44 : 0.48) * w, cy + Math.sin(a) * (i % 2 ? 0.44 : 0.48) * w);
-      x.stroke();
+    x.fillStyle = "#7d7466"; // Fugen
+    x.fillRect(0, 0, w, h);
+    // Fächerpflaster: Steinreihen in Kreisen um den Brunnen
+    for (let r = 12, row = 0; r < w / 2 - 14; r += 17, row++) {
+      const n = Math.max(6, Math.round((TAU * r) / 19));
+      for (let k = 0; k < n; k++) {
+        const a = ((k + (row % 2) * 0.5) / n) * TAU;
+        x.fillStyle = `hsl(${rnd(26, 40)}, ${rnd(8, 18)}%, ${rnd(56, 72)}%)`;
+        x.save();
+        x.translate(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+        x.rotate(a + rnd(-0.06, 0.06));
+        x.beginPath();
+        x.roundRect(-6.5, -7.5, 13, 15, 4);
+        x.fill();
+        x.restore();
+      }
     }
-    x.font = "bold 34px Segoe UI, Arial";
-    x.fillStyle = "rgba(190,240,255,0.95)";
-    x.textAlign = "center";
-    x.textBaseline = "middle";
-    ["BBG", "BiVo", "Bipla", "OR", "ArG", "QV", "LOK", "üK"].forEach((s, i) => {
-      const a = (i / 8) * TAU + 0.2;
-      x.save(); x.translate(cx + Math.cos(a) * 0.37 * w, cy + Math.sin(a) * 0.37 * w); x.rotate(a + Math.PI / 2); x.fillText(s, 0, 0); x.restore();
-    });
+    // Randsteine
+    x.strokeStyle = "#b3a68f";
+    x.lineWidth = 22;
+    x.beginPath(); x.arc(cx, cy, w / 2 - 11, 0, TAU); x.stroke();
   });
-  const plaza = new THREE.Mesh(new THREE.CircleGeometry(7.5, 64), new THREE.MeshBasicMaterial({ map: plazaTex, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, color: "#5fd4ff" }));
-  plaza.rotation.x = -Math.PI / 2;
-  plaza.position.set(0, 0.04, -2);
+  const curbM = F("#a39780", { roughness: 0.95 });
+  const plaza = new THREE.Mesh(new THREE.CylinderGeometry(7.8, 7.95, 0.14, 64), [curbM, new THREE.MeshStandardMaterial({ map: cobbleTex, roughness: 0.92 }), curbM]);
+  plaza.position.set(0, 0.05, PZ);
+  plaza.receiveShadow = true;
   wissenG.add(plaza);
-  const plazaBase = mesh(new THREE.CylinderGeometry(7.7, 7.9, 0.12, 64), M("#21364a", { roughness: 0.35, metalness: 0.3 }), 0, -0.02, -2, wissenG);
-  plazaBase.castShadow = false;
-  const wBooks = [];
-  const wBooksG = new THREE.Group();
-  wissenG.add(wBooksG);
-  const bcol = ["#5fd4ff", "#9b8cff", "#5be3a0", "#ffcc4d", "#ff8fb1"];
-  for (let i = 0; i < 16; i++) {
-    const b = new THREE.Group();
-    box(0.7, 0.16, 0.5, M(bcol[i % 5], { emissive: bcol[i % 5], emissiveIntensity: 0.2 }), 0, 0, 0, b);
-    box(0.66, 0.12, 0.46, M("#f5f0e1"), 0.03, 0, 0, b);
-    wBooksG.add(b);
-    wBooks.push({ b, a: (i / 16) * TAU, rad: rnd(5, 9), y: rnd(1.5, 6.5), s: rnd(0.1, 0.25) });
+
+  // Brunnen in der Platzmitte (achteckiger Trog, Säule, Luzerner Fähnchen)
+  const fountain = new THREE.Group();
+  fountain.position.set(0, 0.12, PZ);
+  wissenG.add(fountain);
+  const fStone = F("#bfae90", { roughness: 0.9 }), fStone2 = F("#a5916f", { roughness: 0.9 });
+  const fIron = M("#3a3c42", { metalness: 0.7, roughness: 0.4 });
+  cyl(1.75, 1.85, 0.66, fStone2, 0, 0.33, 0, fountain, 8);
+  cyl(1.52, 1.52, 0.04, M("#3f86b8", { roughness: 0.08, metalness: 0.25, emissive: "#0d3a5a", emissiveIntensity: 0.35 }), 0, 0.67, 0, fountain, 8);
+  cyl(0.24, 0.3, 2.1, fStone, 0, 1.7, 0, fountain, 8);
+  cyl(0.62, 0.24, 0.26, fStone2, 0, 1.55, 0, fountain, 8);
+  cyl(0.34, 0.27, 0.2, fStone2, 0, 2.82, 0, fountain, 8);
+  const fFlag = flagPole(0.9, flagTex.luzern, 0.55, 0.4);
+  fFlag.position.y = 2.92;
+  fountain.add(fFlag);
+  const spouts = [];
+  for (let k = 0; k < 4; k++) {
+    const a = (k / 4) * TAU + Math.PI / 4;
+    const s = cyl(0.035, 0.035, 0.55, fIron, Math.cos(a) * 0.5, 1.25, Math.sin(a) * 0.5, fountain, 6);
+    s.rotation.set(0, -a, Math.PI / 2 - 0.25);
+    spouts.push({ p: new THREE.Vector3(Math.cos(a) * 0.78, 1.3, PZ + Math.sin(a) * 0.78), d: new THREE.Vector3(Math.cos(a), 0, Math.sin(a)) });
   }
-  const wPillars = new THREE.Group();
-  wissenG.add(wPillars);
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * TAU;
-    // weiter hinten und aussen: die vorderen Säulen standen sonst mitten vor den Karten
-    const px = Math.cos(a) * 10.5, pz = -6.5 + Math.sin(a) * 5;
-    const p = mesh(new THREE.CylinderGeometry(0.35, 0.45, 5, 8), F("#2a5d80", { emissive: "#0b3550", emissiveIntensity: 0.6 }), px, 2.5, pz, wPillars);
-    p.rotation.y = a;
-    const orb = glowSprite("#5fd4ff", 1.6, 0.8);
-    orb.position.set(px, 5.4, pz);
-    wPillars.add(orb);
+
+  // Strassenlaternen im Halbkreis hinter dem Brunnen
+  const lampM = M("#2b2d33", { metalness: 0.6, roughness: 0.45 });
+  const lampGlass = M("#ffe2a0", { emissive: "#ffb84a", emissiveIntensity: 1.6 });
+  const lampTops = [], lampGlows = [];
+  [1.04, 1.22, 1.41, 1.59, 1.78, 1.96].forEach((k) => {
+    const a = k * Math.PI, x = Math.cos(a) * 8.7, z = PZ + Math.sin(a) * 8.7;
+    const g = new THREE.Group();
+    g.position.set(x, 0, z);
+    wissenG.add(g);
+    cyl(0.2, 0.26, 0.3, lampM, 0, 0.15, 0, g, 8);
+    cyl(0.06, 0.08, 3.0, lampM, 0, 1.6, 0, g, 8);
+    box(0.42, 0.05, 0.42, lampM, 0, 3.05, 0, g);
+    box(0.32, 0.42, 0.32, lampGlass, 0, 3.28, 0, g).castShadow = false;
+    mesh(new THREE.ConeGeometry(0.32, 0.26, 4), lampM, 0, 3.62, 0, g).rotation.y = Math.PI / 4;
+    const gl = glowSprite("#ffc46b", 1.4, 0.65);
+    gl.position.y = 3.28;
+    g.add(gl);
+    lampGlows.push(gl);
+    lampTops.push(new THREE.Vector3(x, 3.05, z));
+  });
+
+  // Wimpelketten zwischen den Laternen (rot-weiss-blau wie an einem Dorffest)
+  const pennantGeo = new THREE.BufferGeometry();
+  pennantGeo.setAttribute("position", new THREE.Float32BufferAttribute([-0.15, 0, 0, 0.15, 0, 0, 0, -0.36, 0], 3));
+  pennantGeo.computeVertexNormals();
+  const pennantM = ["#d52b1e", "#ffffff", "#1f6fc5", "#ffd23f"].map((c) => F(c, { side: THREE.DoubleSide, roughness: 0.8 }));
+  const ropeM = new THREE.LineBasicMaterial({ color: "#3a3026" });
+  const pennants = [];
+  for (let i = 0; i < lampTops.length - 1; i++) {
+    const A = lampTops[i], B = lampTops[i + 1];
+    const at = (u) => new THREE.Vector3().lerpVectors(A, B, u).add(new THREE.Vector3(0, -0.7 * 4 * u * (1 - u), 0));
+    const pts = [];
+    for (let k = 0; k <= 16; k++) pts.push(at(k / 16));
+    wissenG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), ropeM));
+    const n = Math.round(A.distanceTo(B) / 0.45);
+    const yaw = -Math.atan2(B.z - A.z, B.x - A.x);
+    for (let k = 1; k < n; k++) {
+      const p = new THREE.Mesh(pennantGeo, pennantM[(k + i) % 4]);
+      p.position.copy(at(k / n));
+      p.rotation.order = "YXZ";
+      p.rotation.y = yaw;
+      wissenG.add(p);
+      pennants.push(p);
+    }
   }
+
+  // Sitzbänke und Geranien-Tröge am Platzrand
+  const benchWood = F("#8a5a33", { roughness: 0.85 }), benchDark = F("#5c3a22", { roughness: 0.9 });
+  [1.13, 1.87].forEach((k) => {
+    const a = k * Math.PI, g = new THREE.Group();
+    g.position.set(Math.cos(a) * 6.4, 0.12, PZ + Math.sin(a) * 6.4);
+    g.rotation.y = -a - Math.PI / 2;
+    box(1.8, 0.08, 0.45, benchWood, 0, 0.45, 0, g);
+    box(1.8, 0.35, 0.06, benchWood, 0, 0.75, -0.22, g).rotation.x = -0.15;
+    [-0.75, 0.75].forEach((lx) => box(0.08, 0.45, 0.4, benchDark, lx, 0.22, 0, g));
+    wissenG.add(g);
+  });
+  const geranium = [F("#e8263c"), F("#ff5c7a"), F("#ffffff")];
+  [1.31, 1.69].forEach((k) => {
+    const a = k * Math.PI, g = new THREE.Group();
+    g.position.set(Math.cos(a) * 7.2, 0.12, PZ + Math.sin(a) * 7.2);
+    g.rotation.y = -a - Math.PI / 2;
+    box(1.4, 0.4, 0.45, benchDark, 0, 0.2, 0, g);
+    box(1.3, 0.12, 0.4, F("#3f6b2c"), 0, 0.44, 0, g);
+    for (let f = 0; f < 9; f++) sph(0.09, geranium[f % 3], -0.6 + f * 0.15, 0.55 + (f % 2) * 0.05, rnd(-0.1, 0.1), g, 6).castShadow = false;
+    wissenG.add(g);
+  });
+  const wissenProps = [...wissenG.children]; // beim Mühlerad ausgeblendet
 
   const arenaG = new THREE.Group();
   scene.add(arenaG);
   arenaG.visible = false;
-  const lavaTex = canvasTex(1024, 1024, (x, w, h) => {
-    x.fillStyle = "#1a0b08"; x.fillRect(0, 0, w, h);
-    x.strokeStyle = "#ff6a1f"; x.lineCap = "round";
-    for (let i = 0; i < 46; i++) {
-      let px = rnd(0, w), py = rnd(0, h);
-      x.lineWidth = rnd(1.5, 5);
-      x.beginPath(); x.moveTo(px, py);
-      for (let k = 0; k < 7; k++) { px += rnd(-60, 60); py += rnd(-60, 60); x.lineTo(px, py); }
-      x.stroke();
+  /* ---------- Arena: Sägemehl-Ring wie am Schwingfest, Feuerschalen, Tribünen ---------- */
+  const AZ = -1.5, AR = 6.3; // Ringmitte & Radius
+  const sawTex = canvasTex(512, 512, (x, w, h) => {
+    x.fillStyle = "#d7b47a"; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 9000; i++) {
+      x.fillStyle = `hsl(${rnd(30, 42)}, ${rnd(35, 60)}%, ${rnd(48, 82)}%)`;
+      x.fillRect(rnd(0, w), rnd(0, h), rnd(1, 3), rnd(1, 3));
     }
+    // vom Rechen gezogene Kreise
+    x.strokeStyle = "rgba(120,80,40,0.16)";
+    for (let r = 20; r < w / 2; r += 14) { x.lineWidth = rnd(2, 4); x.beginPath(); x.arc(w / 2, h / 2, r + rnd(-2, 2), 0, TAU); x.stroke(); }
   });
-  const arenaFloor = new THREE.Mesh(new THREE.CircleGeometry(17, 72), new THREE.MeshStandardMaterial({ color: "#3a1d17", roughness: 0.9, emissive: "#ffffff", emissiveMap: lavaTex, emissiveIntensity: 0.7, map: lavaTex }));
-  arenaFloor.rotation.x = -Math.PI / 2;
-  arenaFloor.position.set(0, 0.03, -3);
-  arenaFloor.receiveShadow = true;
-  arenaG.add(arenaFloor);
-  const lava = F("#3a0d05", { emissive: "#ff3d00", emissiveIntensity: 0.6 });
-  for (let i = 0; i < 16; i++) {
-    // nur seitlich und hinten – nie zwischen Kamera und Drucker
-    const a = Math.PI * 0.92 + (i / 15) * Math.PI * 1.16;
-    const r = mesh(new THREE.DodecahedronGeometry(rnd(0.8, 2.4), 0), i % 3 ? F("#2a1210", { roughness: 0.9 }) : lava, Math.cos(a) * rnd(10, 15), rnd(0, 1.5), -6 + Math.sin(a) * rnd(7, 11), arenaG);
-    r.rotation.set(rnd(0, 3), rnd(0, 3), 0);
+  const sawdust = new THREE.Mesh(new THREE.CylinderGeometry(AR, AR, 0.06, 64), [F("#b8955e"), new THREE.MeshStandardMaterial({ map: sawTex, roughness: 1 }), F("#b8955e")]);
+  sawdust.position.set(0, 0.03, AZ);
+  sawdust.receiveShadow = true;
+  arenaG.add(sawdust);
+  // Bretter-Umrandung, vorne offen als Eingang
+  const plankM = [F("#8a5a33", { roughness: 0.85 }), F("#7a4e2c", { roughness: 0.88 })];
+  for (let k = 0; k < 40; k++) {
+    const a = (k / 40) * TAU;
+    if (angDist(a, Math.PI / 2) < 0.42) continue;
+    const b = box(0.98, 0.32, 0.12, plankM[k % 2], Math.cos(a) * (AR + 0.08), 0.16, AZ + Math.sin(a) * (AR + 0.08), arenaG);
+    b.rotation.y = -a + Math.PI / 2;
   }
-  const torches = [];
-  [[-5, -2], [5, -2], [-7, -7], [7, -7]].forEach(([x, z]) => {
-    cyl(0.15, 0.25, 2.2, F("#2a1210"), x, 1.1, z, arenaG, 6);
-    const f = glowSprite("#ff8a1f", 1.4);
-    f.position.set(x, 2.5, z);
-    arenaG.add(f);
-    const l = new THREE.PointLight("#ff6a1f", 1.6, 10);
-    l.position.set(x, 2.6, z);
-    arenaG.add(l);
-    torches.push({ f, l });
+  // Findlinge und Heuballen – nur seitlich und hinten, nie zwischen Kamera und Drucker
+  const granite = [F("#8f8b84", { roughness: 0.95 }), F("#77736d", { roughness: 0.95 })], hayM = F("#d9b45a", { roughness: 1 }), hayEnd = F("#c49a40", { roughness: 1 });
+  for (let i = 0; i < 16; i++) {
+    const a = Math.PI * 0.92 + (i / 15) * Math.PI * 1.16;
+    const x = Math.cos(a) * rnd(10, 15), z = -6 + Math.sin(a) * rnd(7, 11);
+    if (i % 3 === 0) {
+      const hb = new THREE.Group();
+      hb.position.set(x, 0.62, z);
+      hb.rotation.y = rnd(0, TAU);
+      cyl(0.62, 0.62, 1.15, [hayM, hayEnd, hayEnd], 0, 0, 0, hb, 14).rotation.z = Math.PI / 2;
+      arenaG.add(hb);
+    } else {
+      const r = mesh(new THREE.DodecahedronGeometry(rnd(0.7, 1.9), 0), granite[i % 2], x, rnd(0, 0.6), z, arenaG);
+      r.rotation.set(rnd(0, 3), rnd(0, 3), 0);
+      r.scale.y = 0.7;
+    }
+  }
+  // Holztribünen links und rechts
+  [-1, 1].forEach((s) => {
+    const g = new THREE.Group();
+    g.position.set(s * 10.5, 0, AZ - 2.5);
+    g.rotation.y = s * -Math.PI / 2 + s * 0.35;
+    for (let k = 0; k < 3; k++) {
+      box(5.5, 0.12, 0.7, plankM[0], 0, 0.5 + k * 0.5, -k * 0.75, g);
+      box(5.5, 0.5 + k * 0.5, 0.08, plankM[1], 0, (0.5 + k * 0.5) / 2, -k * 0.75 + 0.3, g);
+    }
+    arenaG.add(g);
   });
-  const arenaRing = new THREE.Mesh(new THREE.RingGeometry(3.2, 3.5, 64), new THREE.MeshBasicMaterial({ color: "#ff5a1f", transparent: true, opacity: 0.55, side: THREE.DoubleSide }));
+  // Fahnen hinter dem Ring
+  [[-3.6, flagTex.schweiz], [3.6, flagTex.luzern]].forEach(([x, tex]) => {
+    const fp = flagPole(4.6, tex, 1.2, 1.2);
+    fp.position.set(x, 0, AZ - AR - 1.6);
+    arenaG.add(fp);
+  });
+  // Feuerschalen auf Holzpfosten
+  const torches = [];
+  const bowlM = M("#2c2f36", { metalness: 0.7, roughness: 0.45 }), logM = F("#4a2e1a");
+  [[-5.2, -6.6], [5.2, -6.6], [-8.6, -3.2], [8.6, -3.2]].forEach(([x, z]) => {
+    cyl(0.12, 0.16, 1.5, plankM[1], x, 0.75, z, arenaG, 6);
+    cyl(0.5, 0.26, 0.32, bowlM, x, 1.62, z, arenaG, 10);
+    for (let k = 0; k < 3; k++) box(0.55, 0.1, 0.1, logM, x, 1.82, z, arenaG).rotation.y = (k / 3) * Math.PI;
+    const f = glowSprite("#ff9a2f", 1.4);
+    f.position.set(x, 2.15, z);
+    arenaG.add(f);
+    const l = new THREE.PointLight("#ff8a3a", 1.6, 11);
+    l.position.set(x, 2.3, z);
+    arenaG.add(l);
+    torches.push({ f, l, p: new THREE.Vector3(x, 1.95, z) });
+  });
+  // Markierung, wo die Figur steht
+  const arenaRing = new THREE.Mesh(new THREE.RingGeometry(1.0, 1.12, 48), new THREE.MeshBasicMaterial({ color: "#fff1cf", transparent: true, opacity: 0.4, side: THREE.DoubleSide, depthWrite: false }));
   arenaRing.rotation.x = -Math.PI / 2;
-  arenaRing.position.y = 0.05;
+  arenaRing.position.y = 0.065;
   arenaG.add(arenaRing);
 
   /* =====================================================================
@@ -1776,7 +1889,7 @@ window.World = (() => {
       show(arenaG, name === "arena" || name === "boss");
       show(carousel, name === "carousel");
       show(stage, name === "character");
-      wPillars.visible = wBooksG.visible = plaza.visible = plazaBase.visible = name !== "carousel";
+      wissenProps.forEach((o) => (o.visible = name !== "carousel"));
       Object.values(envs).forEach((e) => show(e, false));
       if (name !== "boss") printer.g.visible = false;
       if (arenaHero && !(name === "arena" && o.hero)) { arenaG.remove(arenaHero.obj); arenaHero = null; }
@@ -1990,16 +2103,25 @@ window.World = (() => {
       menuHeroes.forEach((h, i) => animateChar(h, t, (menuSide === "wissen" && i === 1) || (menuSide === "arena" && i === 0), dt));
     }
     // Wissen
-    if (wissenG.visible) {
-      wBooks.forEach((b, i) => { const a = b.a + t * b.s; b.b.position.set(Math.cos(a) * b.rad * 1.3, b.y + Math.sin(t * 0.7 + i) * 0.3, Math.sin(a) * b.rad * 0.6 - 8); b.b.rotation.set(Math.sin(t + i) * 0.3, -a, 0); });
-      plaza.rotation.z = t * 0.03;
-      plaza.material.opacity = 0.45 + Math.sin(t * 1.5) * 0.12;
+    if (wissenG.visible && fountain.visible) {
+      // Wimpel flattern, Laternen flackern leicht, Brunnen plätschert
+      pennants.forEach((p, i) => (p.rotation.x = Math.sin(t * 2.2 + i * 0.7) * 0.22 + Math.sin(t * 5.1 + i) * 0.06));
+      lampGlows.forEach((g, i) => g.scale.setScalar(1.4 + Math.sin(t * 9 + i * 2) * 0.04 + Math.sin(t * 2.3 + i) * 0.05));
+      for (let cnt = 40 * dt; cnt > 0; cnt--) {
+        if (Math.random() >= cnt) break;
+        const s = spouts[(Math.random() * 4) | 0];
+        emit(s.p, tmp2.copy(s.d).multiplyScalar(rnd(0.7, 1.0)).add(tmp.set(rnd(-0.05, 0.05), rnd(0, 0.2), rnd(-0.05, 0.05))), rnd(0.35, 0.45), "spray", rnd(0.1, 0.16));
+      }
     }
     // Arena
     if (arenaG.visible) {
-      torches.forEach((tc, i) => { const f = 1.2 + Math.sin(t * 13 + i) * 0.15 + Math.sin(t * 7 + i * 3) * 0.1; tc.f.scale.setScalar(f); tc.l.intensity = 1.4 + Math.sin(t * 11 + i) * 0.35; });
-      arenaRing.material.opacity = 0.4 + Math.sin(t * 3) * 0.15;
-      arenaFloor.material.emissiveIntensity = 0.55 + Math.sin(t * 1.3) * 0.15;
+      torches.forEach((tc, i) => {
+        const f = 1.2 + Math.sin(t * 13 + i) * 0.15 + Math.sin(t * 7 + i * 3) * 0.1;
+        tc.f.scale.setScalar(f);
+        tc.l.intensity = 1.4 + Math.sin(t * 11 + i) * 0.35;
+        if (Math.random() < dt * 6) emit(tc.p, tmp2.set(rnd(-0.15, 0.15), rnd(0.8, 1.5), rnd(-0.15, 0.15)), rnd(0.5, 0.9), "fire", rnd(0.18, 0.3));
+      });
+      arenaRing.material.opacity = 0.32 + Math.sin(t * 3) * 0.1;
       if (arenaHero) animateChar(arenaHero, t, true, dt);
     }
     // Mühlerad: Rad dreht, Gondeln bleiben waagrecht, Figuren stehen aufrecht
