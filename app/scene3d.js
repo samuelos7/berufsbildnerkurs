@@ -1,6 +1,7 @@
 /* 3D-Welt hinter der App – Three.js r149 (lokal in vendor/three.min.js, läuft offline).
    Alles ist prozedural gebaut: keine Modelle, keine Textur-Dateien.
    Kulisse: Vierwaldstättersee mit Kapellbrücke, Wasserturm, Altstadt, Museggmauer, Pilatus & Alpen.
+   Tiere: Giraffe im Hauptmenü und Pony der Rolle «Pferdefachmann/-frau» (Running Gags aus dem Kurs).
    API für main.js:  World.mode(name, opts) · World.rotateTo(i) · World.menuSide(side) · World.cheer()
                      World.boss* (PrintNightmare-Drucker) · Callbacks World.onScorch / onImpact / onDefeated */
 window.World = (() => {
@@ -703,7 +704,7 @@ window.World = (() => {
       // Haare schauen unter der Cap hervor
       [-1, 1].forEach((s) => box(0.05, 0.12, 0.14, hair, s * 0.27, -0.02, -0.04, head).castShadow = false);
     } else if (st === "helmet") {
-      const hm = M("#ffd23f", { metalness: 0.25, roughness: 0.35 });
+      const hm = M(L.helmet || "#ffd23f", { metalness: 0.25, roughness: 0.35 }); // gelb = Bauhelm, dunkel = Reithelm
       const g = hat(0.1, -0.26);
       const shell = new THREE.Group();
       shell.scale.y = 0.92;
@@ -884,6 +885,16 @@ window.World = (() => {
       holder.add(heart);
       holder.userData.heart = heart;
     }
+    if ((L.extra || []).includes("horse")) {
+      // Pony steht neben der Figur und schaut mit nach vorne
+      const pony = quadruped(PONY);
+      pony.root.scale.setScalar(0.74);
+      pony.root.position.set(0.4, 0, -0.1);
+      pony.root.rotation.y = -0.6;
+      a.root.position.x = -0.36;
+      holder.add(pony.root);
+      holder.userData.pet = pony;
+    }
     const s = L.scale || 1;
     holder.scale.setScalar(s);
     holder.userData.baseScale = s;
@@ -935,6 +946,137 @@ window.World = (() => {
     });
     const hrt = ch.obj.userData.heart;
     if (hrt) { hrt.position.y = 2.5 + Math.sin(t * 2) * 0.08; hrt.rotation.y = t * 1.5; }
+    if (ch.obj.userData.pet) animateAnimal(ch.obj.userData.pet, t, dt);
+  }
+
+  /* =====================================================================
+     TIERE – die Giraffe (Running Gag, steht im Hauptmenü auf der Insel) und
+     das Pony der Rolle «Pferdefachmann/-frau». Ein Bauplan für beide:
+     Rumpf, vier Beine, Hals mit Kopf, Schweif. Blick nach +z, Hufe auf y = 0.
+     ===================================================================== */
+  const giraffeTex = canvasTex(256, 256, (x, w, h) => {
+    x.fillStyle = "#f2cf86";
+    x.fillRect(0, 0, w, h);
+    x.fillStyle = x.strokeStyle = "#a5622a";
+    x.lineJoin = "round";
+    x.lineWidth = 7;
+    // unregelmässige Flecken auf einem versetzten Raster – an den Rändern nahtlos wiederholt
+    const n = 5, cs = w / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+      const cx = (i + 0.5 + rnd(-0.14, 0.14)) * cs, cy = (j + 0.5 + rnd(-0.14, 0.14)) * cs, k = 6 + ((i + j) % 2);
+      const pts = [];
+      for (let a = 0; a < k; a++) { const ang = (a / k) * TAU + rnd(-0.25, 0.25), r = cs * rnd(0.25, 0.35); pts.push([Math.cos(ang) * r, Math.sin(ang) * r]); }
+      for (let ox = -1; ox <= 1; ox++) for (let oy = -1; oy <= 1; oy++) {
+        x.beginPath();
+        pts.forEach(([px, py], q) => x[q ? "lineTo" : "moveTo"](cx + px + ox * w, cy + py + oy * h));
+        x.closePath();
+        x.fill();
+        x.stroke();
+      }
+    }
+  });
+  giraffeTex.wrapS = giraffeTex.wrapT = THREE.RepeatWrapping;
+  const spotMat = (ru, rv) => { const t = giraffeTex.clone(); t.repeat.set(ru, rv); t.needsUpdate = true; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.85 }); };
+  const GIRAFFE = { legH: 1.75, legR: 0.13, hoofH: 0.12, bodyR: 0.5, bodyL: 0.85, slope: 0.3, neckL: 2.1, neckRt: 0.17, neckRb: 0.3, neckTilt: 0.3, headR: 0.3, headDrop: 0.12, horns: true, tailL: 0.95, dark: "#8a4f22", sock: "#f3e3bd", muzzle: "#f6e9cc", coat: spotMat };
+  const PONY = { legH: 0.72, legR: 0.1, hoofH: 0.09, bodyR: 0.3, bodyL: 0.62, slope: 0.04, neckL: 0.6, neckRt: 0.14, neckRb: 0.21, neckTilt: 0.7, headR: 0.2, headDrop: 0.3, tailL: 0.62, dark: "#2a1a10", sock: "#f4f1ea", muzzle: "#4a3020", coat: () => M("#9a5a2c", { roughness: 0.85 }) };
+  function quadruped(P) {
+    const root = new THREE.Group();
+    const mats = {};
+    const coat = (ru, rv) => mats[ru + "," + rv] || (mats[ru + "," + rv] = P.coat(ru, rv));
+    const dark = M(P.dark, { roughness: 0.85 }), sock = M(P.sock, { roughness: 0.8 }), hoof = M("#33261d", { roughness: 0.5 }), muzzle = M(P.muzzle, { roughness: 0.8 });
+    // Rumpf: vorne höher als hinten (slope)
+    const by = P.legH + P.bodyR * 0.8, rise = (Math.sin(P.slope) * P.bodyL) / 2;
+    const trunk = mesh(new THREE.CapsuleGeometry(P.bodyR, P.bodyL, 8, 22), coat(3, 1.4), 0, by, 0, root);
+    trunk.rotation.x = Math.PI / 2 - P.slope;
+    trunk.scale.x = 0.86;
+    // Beine: oben Fell, unten hell, dazu Knie und Huf
+    [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sz]) => {
+      const py = by + sz * rise - P.bodyR * 0.2;
+      const g = new THREE.Group();
+      g.position.set(sx * P.bodyR * 0.5, py, sz * (P.bodyL / 2 + P.bodyR * 0.15));
+      root.add(g);
+      const up = py * 0.52, lo = py - up - P.hoofH;
+      mesh(new THREE.CylinderGeometry(P.legR, P.legR * 0.7, up, 12), coat(1, 1), 0, -up / 2, 0, g);
+      sph(P.legR * 0.78, sock, 0, -up, 0, g, 10);
+      mesh(new THREE.CylinderGeometry(P.legR * 0.62, P.legR * 0.55, lo, 12), sock, 0, -up - lo / 2, 0, g);
+      mesh(new THREE.CylinderGeometry(P.legR * 0.74, P.legR * 0.86, P.hoofH, 12), hoof, 0, -py + P.hoofH / 2, 0, g);
+    });
+    // Hals mit Mähne – als Gelenk, damit er sich wiegen kann
+    const neck = new THREE.Group();
+    neck.position.set(0, by + rise + P.bodyR * 0.35, P.bodyL / 2 + P.bodyR * 0.3);
+    neck.rotation.x = P.neckTilt;
+    root.add(neck);
+    mesh(new THREE.CylinderGeometry(P.neckRt, P.neckRb, P.neckL, 16), coat(1.5, P.neckL > 1 ? 2.2 : 1), 0, P.neckL / 2 - P.neckRb * 0.3, 0, neck);
+    const mane = box(0.06, P.neckL * 0.9, P.neckRt * 0.9, dark, 0, P.neckL / 2 - P.neckRb * 0.2, -(P.neckRt + P.neckRb) / 2 - P.neckRt * 0.15, neck);
+    mane.rotation.x = Math.atan((P.neckRb - P.neckRt) / P.neckL);
+    // Kopf: gleicht die Halsneigung aus, damit er geradeaus schaut
+    const hr = P.headR;
+    const head = new THREE.Group();
+    head.position.set(0, P.neckL - P.neckRb * 0.3, 0);
+    const headBase = P.headDrop - P.neckTilt;
+    head.rotation.x = headBase;
+    neck.add(head);
+    sph(hr, coat(1.5, 1), 0, hr * 0.35, hr * 0.15, head, 20).scale.set(0.88, 0.92, 1.1);
+    const snout = mesh(new THREE.CapsuleGeometry(hr * 0.5, hr * 0.7, 6, 14), muzzle, 0, hr * 0.12, hr * 1.05, head);
+    snout.rotation.x = Math.PI / 2 + 0.12;
+    snout.scale.set(1.05, 1, 0.82);
+    [-1, 1].forEach((s) => sph(hr * 0.07, darkM, s * hr * 0.2, hr * 0.32, hr * 1.7, head, 8));
+    const smile = mesh(new THREE.TorusGeometry(hr * 0.42, hr * 0.035, 6, 16, Math.PI), darkM, 0, -hr * 0.1, hr * 1.38, head);
+    smile.rotation.x = Math.PI / 2;
+    smile.castShadow = false;
+    const eyes = [-1, 1].map((s) => {
+      const e = new THREE.Group();
+      e.position.set(s * hr * 0.72, hr * 0.52, hr * 0.5);
+      head.add(e);
+      sph(hr * 0.21, darkM, 0, 0, 0, e, 12);
+      sph(hr * 0.06, shineM, s * hr * 0.1, hr * 0.09, hr * 0.14, e, 8).castShadow = false;
+      return e;
+    });
+    const ears = [-1, 1].map((s) => {
+      const e = new THREE.Group();
+      head.add(e);
+      if (P.horns) {
+        // Giraffe: Ohren stehen seitlich ab, dazwischen zwei Hörnchen mit dunklem Knauf
+        e.position.set(s * hr * 0.7, hr * 0.95, -hr * 0.25);
+        sph(hr * 0.34, coat(1, 1), s * hr * 0.42, 0, 0, e, 12).scale.set(1.5, 0.45, 0.8);
+        e.rotation.z = s * 0.35;
+        mesh(new THREE.CylinderGeometry(hr * 0.09, hr * 0.13, hr * 0.65, 8), sock, s * hr * 0.32, hr * 1.47, -hr * 0.05, head);
+        sph(hr * 0.17, dark, s * hr * 0.32, hr * 1.82, -hr * 0.05, head, 10);
+      } else {
+        // Pferd: spitze, aufrechte Ohren
+        e.position.set(s * hr * 0.42, hr * 1.1, -hr * 0.2);
+        mesh(new THREE.ConeGeometry(hr * 0.2, hr * 0.6, 8), coat(1, 1), 0, hr * 0.3, 0, e);
+        e.rotation.z = -s * 0.2;
+      }
+      return e;
+    });
+    if (!P.horns) sph(hr * 0.3, dark, 0, hr * 1.2, hr * 0.25, head, 10).scale.set(1, 0.6, 1.3); // Stirnschopf
+    // Schweif: Giraffe dünn mit Quaste, Pferd als dichter Schweif
+    const tail = new THREE.Group();
+    tail.position.set(0, by - rise + P.bodyR * 0.45, -(P.bodyL / 2 + P.bodyR * 0.8));
+    tail.rotation.x = 0.3;
+    root.add(tail);
+    if (P.horns) {
+      mesh(new THREE.CylinderGeometry(0.035, 0.03, P.tailL, 8), sock, 0, -P.tailL / 2, 0, tail);
+      sph(0.1, dark, 0, -P.tailL - 0.08, 0, tail, 10).scale.set(1, 1.8, 1);
+    } else {
+      mesh(new THREE.CapsuleGeometry(0.08, P.tailL, 6, 10), dark, 0, -P.tailL / 2 - 0.04, 0, tail);
+    }
+    return { root, neck, head, headBase, snout, eyes, ears, tail, P, phase: Math.random() * 10 };
+  }
+  // look = Blickrichtung des Kopfes (rad): die Giraffe schaut zur gewählten Menü-Seite
+  function animateAnimal(a, t, dt, look = 0) {
+    const p = t + a.phase, hr = a.P.headR;
+    a.neck.rotation.x = a.P.neckTilt + Math.sin(p * 0.8) * 0.035;
+    a.neck.rotation.z = Math.sin(p * 0.5) * 0.04;
+    a.head.rotation.y = lerp(a.head.rotation.y, look + Math.sin(p * 0.6) * 0.2, 1 - Math.exp(-dt * 3));
+    a.head.rotation.x = a.headBase + Math.sin(p * 1.1) * 0.05;
+    a.head.rotation.z = Math.sin(p * 0.9) * 0.06;
+    const blink = (p * 0.8) % 3.7 < 0.12 ? 0.12 : 1;
+    a.eyes.forEach((e) => (e.scale.y = blink));
+    a.ears.forEach((e, i) => (e.rotation.x = (p * 0.5 + i * 0.37) % 2.9 < 0.25 ? -0.45 : 0)); // Ohrenzucken
+    a.tail.rotation.z = Math.sin(p * 2.4) * 0.3;
+    a.snout.position.x = Math.sin(p * 0.4) > 0 ? Math.sin(p * 6) * hr * 0.05 : 0; // kaut gemütlich
   }
 
   /* =====================================================================
@@ -1192,6 +1334,25 @@ window.World = (() => {
         bits.forEach((b) => { const k = (t * b.sp + b.o) % 1; b.s.position.set(b.x, 0.3 + k * 4.5, b.z); b.s.material.opacity = Math.sin(k * Math.PI) * 0.75; });
       });
     },
+    reitstall(g) {
+      const wood = M("#8a5a33", { roughness: 0.9 }), woodD = M("#5e3b20", { roughness: 0.9 }), white = M("#ece6d8", { roughness: 0.8 });
+      // Stall mit Giebeldach und zwei Boxentüren (obere Hälfte offen)
+      box(5, 2, 2.4, wood, 0.6, 1, -6.5, g);
+      prism(5.5, 1.2, 2.8, F("#7a2e22"), 0.6, 2, -6.5, g);
+      [-0.6, 1.8].forEach((x) => { box(1, 1.0, 0.06, woodD, x, 0.5, -5.28, g); box(1, 0.7, 0.05, M("#1c1410"), x, 1.35, -5.29, g).castShadow = false; });
+      // Weidezaun
+      for (let i = 0; i < 8; i++) box(0.1, 0.9, 0.1, white, -4.5 + i * 1.3, 0.45, -3.4, g);
+      [0.35, 0.75].forEach((y) => box(9.2, 0.07, 0.06, white, 0.05, y, -3.4, g));
+      // Heuballen und ein rot-weisses Sprunghindernis
+      const hay = M("#d9b450", { roughness: 1 });
+      [[3.9, -4.6, 0], [4.8, -5.0, 0.5]].forEach(([x, z, r]) => { cyl(0.5, 0.5, 0.8, hay, x, 0.5, z, g, 14).rotation.set(Math.PI / 2, 0, r); });
+      [-4.3, -2.5].forEach((x) => box(0.12, 1.2, 0.12, white, x, 0.6, -4.6, g));
+      for (let i = 0; i < 4; i++) box(0.42, 0.1, 0.1, M(i % 2 ? "#f5f5f5" : "#d63031"), -4.03 + i * 0.42, 0.85, -4.6, g);
+      // Glücksbringer: Hufeisen über dem Stall
+      const shoe = mesh(new THREE.TorusGeometry(0.45, 0.09, 8, 20, Math.PI * 1.4), M("#c9ced8", { metalness: 0.8, roughness: 0.3 }), 0.6, 4.3, -6, g);
+      shoe.rotation.z = -Math.PI * 0.2;
+      tickers.push((t) => { if (!g.visible) return; shoe.position.y = 4.3 + Math.sin(t) * 0.15; shoe.rotation.y = Math.sin(t * 0.6) * 0.5; });
+    },
   };
   const envs = {};
   function getEnv(c) {
@@ -1219,6 +1380,12 @@ window.World = (() => {
   luFlag.position.set(-5.4, 0, -8);
   menuG.add(luFlag);
   island.position.y = 0.2;
+  // Die Giraffe – Running Gag aus dem Kurs: steht hinten auf der Insel und schaut den Figuren über die Schulter
+  const giraffe = quadruped(GIRAFFE);
+  giraffe.root.scale.setScalar(0.7);
+  giraffe.root.position.set(2.05, 0.34, -1.35);
+  giraffe.root.rotation.y = -0.62;
+  island.add(giraffe.root);
   // Seitenlicht statt Kristallen: die gewählte Menü-Seite färbt die Insel leicht ein
   const sideLights = { wissen: new THREE.PointLight("#4a95e8", 0, 9), arena: new THREE.PointLight("#ff7a3d", 0, 9) };
   sideLights.wissen.position.set(-3.2, 2.6, 1.2);
@@ -2101,6 +2268,7 @@ window.World = (() => {
       const kl = 1 - Math.exp(-dt * 5);
       Object.entries(sideLights).forEach(([side, l]) => { l.intensity = lerp(l.intensity, menuSide === side ? 2.6 : 0, kl); });
       menuHeroes.forEach((h, i) => animateChar(h, t, (menuSide === "wissen" && i === 1) || (menuSide === "arena" && i === 0), dt));
+      animateAnimal(giraffe, t, dt, menuSide === "wissen" ? -0.45 : menuSide === "arena" ? 0.5 : 0);
     }
     // Wissen
     if (wissenG.visible && fountain.visible) {

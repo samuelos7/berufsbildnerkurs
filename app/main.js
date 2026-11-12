@@ -239,7 +239,7 @@
         { ico: "👥", lbl: "Rollen", sub: `${D.characters.length} Charaktere · Rechte & Pflichten`, open: () => CharSelect() },
         { ico: "💻", lbl: "Beispielberuf", menuLbl: "Beispiel­beruf", sub: `${D.example.name} · BiVo, Kompetenzen, QV`, open: () => LevelDetail(D.beruf) },
         { ico: "🗺️", lbl: "Lehrzeit-Reise", sub: "Vom Lehrvertrag bis zum Abschluss", open: () => Journey() },
-        { ico: "📖", lbl: "Lexikon", sub: `${D.lexikon.length} Begriffe von ABU bis VPA`, open: () => Lexikon() },
+        { ico: "📖", lbl: "Lexikon", sub: `${D.lexikon.length} Begriffe von ABU bis ZEBI`, open: () => Lexikon() },
       ],
     },
     {
@@ -481,15 +481,15 @@
   };
 
   /* --- Charakterbogen --- */
-  const ROLE_ICON = { lernende: "🎒", informatik: "💻", betrieb: "🏭", bb: "🧑‍🏫", eltern: "👪", dbw: "🏛️", bfs: "🏫", uek: "🛠️", oda: "🤝", sbfi: "⚖️" };
-  const ROLE_ABBR = { lernende: "Lernende", informatik: "Informatik", betrieb: "Betrieb", bb: "BB", eltern: "Eltern", dbw: "DBW", bfs: "BFS", uek: "üK", oda: "OdA", sbfi: "SBFI" };
+  const ROLE_ICON = { lernende: "🎒", informatik: "💻", betrieb: "🏭", bb: "🧑‍🏫", eltern: "👪", dbw: "🏛️", bfs: "🏫", uek: "🛠️", oda: "🤝", sbfi: "⚖️", pferd: "🐴" };
+  const ROLE_ABBR = { lernende: "Lernende", informatik: "Informatik", betrieb: "Betrieb", bb: "BB", eltern: "Eltern", dbw: "DBW", bfs: "BFS", uek: "üK", oda: "OdA", sbfi: "SBFI", pferd: "Pferd" };
   /* Wo steht die Rolle im System? (von oben nach unten) */
   const SYSTEM = [
     { lbl: "Bund", sub: "Gesetze, BiVo", ids: ["sbfi"] },
     { lbl: "Kanton", sub: "Lehraufsicht", ids: ["dbw"] },
     { lbl: "Branche", sub: "Inhalte, üK", ids: ["oda"] },
     { lbl: "Lernorte", sub: "Betrieb · Schule · üK", ids: ["betrieb", "bfs", "uek"] },
-    { lbl: "Menschen", sub: "in der Lehre", ids: ["bb", "lernende", "informatik", "eltern"] },
+    { lbl: "Menschen", sub: "in der Lehre", ids: ["bb", "lernende", "informatik", "pferd", "eltern"] },
   ];
   /* Piktogramme für Listeneinträge – nach Stichwort gewählt */
   const ICONS = [
@@ -682,6 +682,8 @@
     "Handlungskompetenz": ["Handlungskompetenzen"], "LOK": ["Lernortkooperation"], "OdA": ["Organisation der Arbeitswelt", "Organisationen der Arbeitswelt"],
     "QV": ["Qualifikationsverfahren"], "SB / SB Plus": ["SB"], "üK": ["überbetriebliche Kurse", "überbetrieblichen Kurse"], "IPA": ["individuelle praktische Arbeit"],
     "Lerndokumentation": ["Lerndoku"], "Bildungsbewilligung": ["Bildungsbewilligungen"], "SBFI": ["Staatssekretariat"],
+    "Stellwerk": ["Stellwerktest", "Stellwerktests", "Stellwerk-Resultaten"], "Anforderungsprofil": ["Anforderungsprofile", "Anforderungsprofils"], "Schnupperlehre": ["Schnupperlehren", "Schnuppertage"],
+    "Beurteilungsfehler": ["Beurteilungsfehlern"], "Lernpartnerschaft": ["Lernpartnerschaften", "Lernpartner/in"], "Multicheck": ["Multichecks"], "Praxisbildner/in": ["Praxisbildner/innen"],
   };
   const reEsc = (x) => x.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
   const termRe = (k) => new RegExp(`(^|[^\\p{L}\\p{N}])(${[...k.split(" / "), ...(LEX_ALIAS[k] || [])].map(reEsc).join("|")})(?=$|[^\\p{L}\\p{N}])`, "u");

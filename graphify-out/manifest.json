@@ -54,22 +54,22 @@
     "semantic_hash": "654fae8a87df95c7eb972a759e6bd0fc"
   },
   "app/data.js": {
-    "mtime": 1794233072.072749,
-    "seen": 1794233793.2806427,
-    "ast_hash": "5f722797561c5770291d09c8667aa504",
-    "semantic_hash": ""
+    "mtime": 1794476477.816934,
+    "seen": 1794476877.3997421,
+    "ast_hash": "b4e485bee19dfe665f84a7ec40341752",
+    "semantic_hash": "b4e485bee19dfe665f84a7ec40341752"
   },
   "app/main.js": {
-    "mtime": 1794233215.632558,
-    "seen": 1794233793.2806568,
-    "ast_hash": "d5a143eb46f2536dfdb0f2151144292d",
-    "semantic_hash": ""
+    "mtime": 1794476482.3943503,
+    "seen": 1794476877.3997514,
+    "ast_hash": "560f8c82e7d44b965a401bdc186e0a4f",
+    "semantic_hash": "560f8c82e7d44b965a401bdc186e0a4f"
   },
   "app/scene3d.js": {
-    "mtime": 1794231691.3334918,
-    "seen": 1794232044.7637362,
-    "ast_hash": "c3481902e17a7c1b3ba8a8502fff880a",
-    "semantic_hash": ""
+    "mtime": 1794476255.4301147,
+    "seen": 1794476877.3997557,
+    "ast_hash": "f4f37bc361c25c752d8e3635859142da",
+    "semantic_hash": "f4f37bc361c25c752d8e3635859142da"
   },
   "app/index.html": {
     "mtime": 1794136326.8628283,
@@ -94,5 +94,47 @@
     "seen": 1794135063.524344,
     "ast_hash": "58fcf8d329030341e1b9e133590c6816",
     "semantic_hash": "58fcf8d329030341e1b9e133590c6816"
+  },
+  "material/Tag 3/Aufgabe 1/2c_Beurteilungsbogen_Schnupperlehre_Lehrbetrieb.pdf": {
+    "mtime": 1794394548.8334458,
+    "seen": 1794476877.399759,
+    "ast_hash": "8dbcdb0a130174fc8433f0a16e3e6ac9",
+    "semantic_hash": "8dbcdb0a130174fc8433f0a16e3e6ac9"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_1_Grundlagen zur Schnupperlehre.pdf": {
+    "mtime": 1794392722.570149,
+    "seen": 1794476877.3997614,
+    "ast_hash": "ba41b122163892013df93380e75803e8",
+    "semantic_hash": "ba41b122163892013df93380e75803e8"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_2a_Fallbeschreibung Schnupperlehrling Marco Gut.pdf": {
+    "mtime": 1794392726.186177,
+    "seen": 1794476877.399763,
+    "ast_hash": "4b1bb0ad92c017509b34d00e1bc72dc7",
+    "semantic_hash": "4b1bb0ad92c017509b34d00e1bc72dc7"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_2b_Bewerbungsunterlagen Marco Gut.pdf": {
+    "mtime": 1794392728.9675508,
+    "seen": 1794476877.3997653,
+    "ast_hash": "e9680d41752d882acc90e5d67fbb30ea",
+    "semantic_hash": "e9680d41752d882acc90e5d67fbb30ea"
+  },
+  "material/Tag 3/Aufgabe 2/WBZLU_BEKU_Grundlagen zum Bewerbungsgespr\u00e4ch.pdf": {
+    "mtime": 1794399514.4991477,
+    "seen": 1794476877.399768,
+    "ast_hash": "42577867bb836456f76b8924881e7e50",
+    "semantic_hash": "42577867bb836456f76b8924881e7e50"
+  },
+  "material/Tag 3/Aufgabe 3/WBZLU BEKU_Grundlagen zu h\u00e4ufigen Beurteilungsfehlern.pdf": {
+    "mtime": 1794404884.4315338,
+    "seen": 1794476877.39977,
+    "ast_hash": "176d6456b3b7e4f5ca20c0fc2f82d425",
+    "semantic_hash": "176d6456b3b7e4f5ca20c0fc2f82d425"
+  },
+  "material/Tag 3/WBZLU_BEKU_Pr\u00e4senz_PP_Tag 3.pdf": {
+    "mtime": 1794403682.051309,
+    "seen": 1794476877.3997731,
+    "ast_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a",
+    "semantic_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a"
   }
 }

@@ -1,4 +1,4 @@
-/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1, material/Tag 2).
+/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1, Tag 2, Tag 3).
    Neue Kurstage: im Array "levels" das Level ausfüllen und "placeholder" entfernen.
 
    Block-Typen für Missionen:
@@ -11,11 +11,13 @@
    note   { t:"note",  text }                          Merksatz
 
    Inhalte bleiben generisch (gelten für alle Berufe). Das Beispiel «Informatiker/in EFZ»
-   steht separat: Rolle "informatik", Listen "informatik" pro Rolle und das Modul "beruf". */
+   steht separat: Rolle "informatik", Listen "informatik" pro Rolle und das Modul "beruf".
+   Running Gags aus dem Kurs: die Mini-Rolle "pferd" (Pferdefachmann/-frau) und die Giraffe
+   auf der Insel im Hauptmenü (scene3d.js) – bewusst klein gehalten. */
 window.GAME_DATA = {
   title: "Berufsbildner",
   subtitle: "Das Spiel der Lehrzeit",
-  tagline: "Ein Kurs, fünf Level, zehn Rollen – wer macht was in der beruflichen Grundbildung?",
+  tagline: "Ein Kurs, fünf Level, zehn Rollen, ein Pferdefachmann und eine Giraffe – wer macht was in der beruflichen Grundbildung?",
   meta: "Berufsbildnerkurs · WBZ Kanton Luzern · Take-away",
   example: { name: "Informatiker/in EFZ", short: "Beispielberuf" },
 
@@ -779,7 +781,355 @@ window.GAME_DATA = {
         },
       ],
     },
-    { nr: 3, title: "Kurstag 3", placeholder: true, c1: "#1f9e7a", c2: "#0d2f2a", missions: [] },
+    {
+      nr: 3,
+      title: "Rekrutieren & Planen",
+      subtitle: "Lehrstellenmarketing · Schnupperlehre · Potenzial erkennen · Bewerbungsgespräch · Beurteilungsfehler · BiVo & BiPla · Ausbildungsplanung",
+      c1: "#1f9e7a", c2: "#0d2f2a",
+      missions: [
+        {
+          ch: "Einstieg",
+          title: "Tagesziele: Rekrutieren & Planen",
+          blocks: [
+            { t: "list", h: "Was wollen wir heute erreichen?", items: [
+              "Neue Lernende treffsicher und passend zum Betrieb rekrutieren",
+              "Handlungswissen zur inhaltlichen und organisatorischen Vorbereitung von Arbeits- und Lernumgebungen vertiefen",
+              "Zielführende Ausbildungspläne für die Lernenden im eigenen Betrieb erstellen",
+            ] },
+            { t: "cols", h: "Drei Blöcke", cols: [
+              { h: "🔎 Block 1", items: ["Lernende treffsicher rekrutieren", "Marketing, Schnupperlehre, Bewerbungsgespräch, Beurteilungsfehler"] },
+              { h: "📋 Block 2", items: ["Arbeits- und Lernumgebungen vorbereiten", "Ziele erkennen, Ausbildungsplan erstellen und umsetzen"] },
+              { h: "🚦 Block 3", items: ["Abschluss", "Persönliche Reflexion und Ampelabfrage"] },
+            ] },
+          ],
+          source: "PP Tag 3, Folien 2–3",
+        },
+        {
+          ch: "Block 1 · Rekrutieren",
+          title: "Berufsvorstellung",
+          blocks: [
+            { t: "list", h: "Leitfragen – Einzelarbeit, dann kurz im Plenum", items: [
+              "Welchen Beruf bilde ich aus?",
+              "Dauer, Berufsschule, üK und deren Dauer",
+              "Wichtigste Tätigkeiten",
+              "Rekrutierung",
+              "Wieso sollte ich genau diesen Beruf auswählen?",
+            ] },
+            { t: "table", h: "Zwei Berufe aus der Runde", head: ["", "💻 Informatiker/in EFZ", "🐴 Pferdefachmann/-frau EFZ"], rows: [
+              ["Dauer", "4 Jahre (8 Semester)", "3 Jahre"],
+              ["Berufsfachschule", "24 Module + erweiterte Grundkompetenzen", "1 Tag pro Woche"],
+              ["üK", "35 Tage in 7 Kursen", "15 Tage"],
+              ["Ausrichtung", "Plattform- oder Applikationsentwicklung", "Von Pferdepflege über Reiten bis Gespannfahren"],
+              ["Tätigkeiten", "ICT-Lösungen planen, bauen und betreiben", "Pferde pflegen, füttern, bewegen und ausbilden"],
+            ] },
+            { t: "note", text: "So verschieden die Berufe sind – der Rahmen ist derselbe: BiVo, Bildungsplan, drei Lernorte und ein Lehrvertrag. Darum bleibt dieses Spiel generisch." },
+          ],
+          source: "PP Tag 3, Folie 4 · BiVo Informatiker/in EFZ · Eckdaten Pferdefachmann/-frau EFZ: berufsberatung.ch",
+        },
+        {
+          ch: "Block 1 · Rekrutieren",
+          title: "Lehrstellenmarketing",
+          blocks: [
+            { t: "list", h: "Aktiv werden und sich von anderen Firmen abheben", items: [
+              "Attraktive Schnupperlehren bieten",
+              "Auf Schülerinnen und Schüler zugehen: Schulklassen einladen, an der ZEBI teilnehmen, Zukunftstag und Schnupperlehren anbieten",
+              "Die bevorzugten Medien der Jugendlichen nutzen: Instagram, TikTok & Co.",
+              "Videobotschaften anstelle von Inseraten",
+            ] },
+            { t: "list", h: "Job-Plattformen für Lehrstellen", items: ["Yousty", "Gateway One", "Jobeagle"] },
+          ],
+          source: "PP Tag 3, Folien 5 & 10",
+        },
+        {
+          ch: "Block 1 · Rekrutieren",
+          title: "Warum Social Media?",
+          blocks: [
+            { t: "stats", items: [{ v: "99 %", l: "der Jugendlichen besitzen ein Smartphone" }, { v: "bis 4 h", l: "verbringen sie durchschnittlich auf Social Media" }, { v: "100 %", l: "messbar – schnelle Reaktion möglich" }] },
+            { t: "list", h: "Vorteile fürs Lehrstellenmarketing", items: [
+              "Bewusstsein: Die Bekanntheit des Unternehmens steigt",
+              "Reichweite: Jugendliche mitten in der Berufswahl erreichen",
+              "Datenbasierte Kommunikation: Algorithmen kennen die Vorlieben und spielen Inhalte gezielt aus",
+              "Bindung: Auf Augenhöhe kommunizieren und Vertrauen schaffen",
+              "Optimierung: Alles ist messbar – rasch reagieren und anpassen",
+            ] },
+            { t: "table", h: "Welcher Content bringt die besten Resultate? (Umfrage Yousty)", head: ["Content", "1. Platz", "2. Platz", "Total"], rows: [
+              ["Video", "40 %", "23 %", "63 %"],
+              ["Fotos / Grafiken", "27 %", "29 %", "56 %"],
+              ["Blog Posts", "12 %", "13 %", "25 %"],
+              ["Texte / Zitate", "10 %", "13 %", "23 %"],
+              ["Infografiken", "9 %", "13 %", "22 %"],
+            ] },
+          ],
+          source: "PP Tag 3, Folien 7–9",
+        },
+        {
+          ch: "Block 1 · Rekrutieren",
+          title: "Stereotypen & Gleichstellung",
+          blocks: [
+            { t: "list", h: "Rekrutierung und Rollenbilder – Fragen an den eigenen Beruf", items: [
+              "Bilde ich einen typischen Männer- oder Frauenberuf aus? Wenn ja, weshalb?",
+              "Was zeichnet den Beruf aus – gibt es spezifische Rollenbilder?",
+              "Ist das Berufsfeld stärker oder weniger stark von Stereotypen geprägt?",
+              "Wie wirkt sich das auf die Rekrutierung aus?",
+            ] },
+            { t: "list", h: "Auftrag: Lehrstellenausschreibungen prüfen", items: [
+              "Sind meine ausgeschriebenen Lehrstellen konform mit dem Gleichstellungsgesetz?",
+              "Direkt bei den ausgeschriebenen Lehrstellen recherchieren – bei den eigenen und bei weiteren",
+            ] },
+            { t: "note", text: "Beispiel aus der Praxis: Kurse für «Dipl. Arztsekretärin», «Spitalsekretärin» und «Chefarztsekretärin» – eine stereotype Darstellung von Gesundheitsberufen. Stichwort: (un)sichtbare Vorbilder." },
+          ],
+          source: "PP Tag 3, Folien 6, 11 & 12",
+        },
+        {
+          ch: "Block 1 · Schnupperlehre",
+          title: "Die Schnupperlehre",
+          blocks: [
+            { t: "cols", h: "Sie hilft beiden Seiten bei der Entscheidung", cols: [
+              { h: "🎒 Jugendliche", items: ["Erster Kontakt mit der Berufswelt der Erwachsenen", "Durch praktisches Arbeiten die Atmosphäre im Betrieb kennenlernen", "Eigene Interessen mit den Anforderungen des Berufs vergleichen", "Herausfinden, ob der Beruf der Vorstellung entspricht"] },
+              { h: "🏭 Betrieb", items: ["Prüfen, ob sich die Person für den Ausbildungsplatz eignet", "Grundlegende Fähigkeiten werden schnell erkennbar", "Offen bleiben für Lernende, die nicht zu 100 % passen"] },
+            ] },
+            { t: "stats", items: [{ v: "3–5 Tage", l: "dauert sie in der Theorie" }, { v: "1 Tag", l: "ist es in der Praxis oft – aus Zeitmangel" }, { v: "immer", l: "werden die Jugendlichen betreut" }] },
+            { t: "steps", h: "Zum Abschluss", items: [
+              "Gespräch über die gegenseitigen Erfahrungen",
+              "Beobachtungen auf einem Beurteilungsbogen festhalten",
+              "Die Jugendlichen nehmen den Bogen mit – er unterstützt sie in ihrer weiteren Entwicklung",
+            ] },
+          ],
+          source: "Grundlagen zur Schnupperlehre (Aufgabe 1) · PP Tag 3, Folie 13",
+        },
+        {
+          ch: "Block 1 · Schnupperlehre",
+          title: "Der Beurteilungsbogen",
+          blocks: [
+            { t: "cols", h: "Wie haben Sie die/den Jugendliche/n erlebt?", cols: [
+              { h: "🛠️ Arbeitsweise", items: ["Auffassungsgabe", "Selbständigkeit", "Vorgehen, Geschicklichkeit", "Arbeitstempo", "Arbeitsqualität"] },
+              { h: "💪 Arbeitshaltung", items: ["Interesse", "Ausdauer", "Ordnung, Sauberkeit", "Einsatz", "Zuverlässigkeit, Pünktlichkeit"] },
+              { h: "🤝 Umgang & Erscheinung", items: ["Erster Eindruck", "Auftreten", "Kontaktfähigkeit, Kommunikation", "Zusammenarbeit"] },
+              { h: "🎯 Eignung für den Beruf", items: ["Charakterlich", "Körperlich", "Praktische Veranlagung", "Sprachliches Verständnis", "Schulisch"] },
+            ] },
+            { t: "list", h: "So funktioniert der Bogen", items: [
+              "Jedes Kriterium hat vier Stufen – z. B. Arbeitsqualität: sehr gut, exakt · gut, sorgfältig · brauchbar · unsorgfältig",
+              "Gesamturteil «Eignung für den Betrieb»: bestens, gut, bedingt oder nicht geeignet",
+              "Kurze Begründung schreiben und den Bogen mit der/dem Jugendlichen besprechen",
+            ] },
+          ],
+          source: "BIZ Luzern (DBW) – «Schnupperlehre: Beurteilung durch den Lehrbetrieb», Stand 08/25",
+        },
+        {
+          ch: "Block 1 · Schnupperlehre",
+          title: "Fall: Schnupperlehrling Marco Gut",
+          blocks: [
+            { t: "stats", items: [{ v: "15", l: "Jahre alt" }, { v: "1 Woche", l: "Schnupperlehre im Betrieb" }, { v: "Zimmermann", l: "Wunschberuf" }] },
+            { t: "cols", cols: [
+              { h: "👍 Das spricht für Marco", items: ["Motiviert, pünktlich, positive Arbeitseinstellung", "Handwerkliches Geschick: einfache Holzarbeiten nach Instruktion selbstständig und schnell", "Gepflegtes Erscheinungsbild, freundlich und interessiert", "Technisches Gestalten 5.5 · Praktika und Sommerjob in Schreinereien"] },
+              { h: "🤔 Das gibt zu denken", items: ["Schnupperheft verschmutzt, Seiten herausgerissen – nur eine von mehreren Aufgaben dokumentiert", "Stellt kaum Fragen, wenn er etwas nicht versteht", "Mathematik 3.5 (Niveau A), Natur und Technik 4.0", "Lehrer berichten von wenig Initiative und Eigenmotivation"] },
+            ] },
+            { t: "list", h: "Fazit der Fallbeschreibung", items: [
+              "Insgesamt ein positives Bild – aber es braucht weitere Schritte",
+              "Weitere Schnuppertage planen und das handwerkliche Können in verschiedenen Bereichen testen",
+              "Arbeitsweise und Kommunikation müssten in der Ausbildung gezielt gefördert werden",
+            ] },
+            { t: "note", text: "Aus unserem Beurteilungsbogen: «Marco hat uns sein handwerkliches Geschick bestens bewiesen. […] Im Grossen und Ganzen sind wir sehr zufrieden und würden uns sehr auf seine Bewerbung um eine Lehrstelle freuen.»" },
+          ],
+          source: "Fallbeschreibung und Bewerbungsunterlagen Marco Gut (Aufgabe 1) · ausgefüllter Beurteilungsbogen",
+        },
+        {
+          ch: "Block 1 · Potenzial erkennen",
+          title: "Anforderungsprofile",
+          blocks: [
+            { t: "list", h: "Das Wichtigste in Kürze", items: [
+              "Pro Beruf gibt es ein Anforderungsprofil mit den wichtigsten Kompetenzen",
+              "Schüler/innen der 8. und 9. Klasse absolvieren den obligatorischen Stellwerktest – er erzeugt ein persönliches Leistungsprofil",
+            ] },
+            { t: "list", h: "Wozu dient ein Anforderungsprofil?", items: [
+              "Vorzeitige Lehrvertragsauflösungen vermeiden",
+              "Minimale schulische Kompetenzanforderungen an Lernende zeigen",
+              "Grundlage für die Lehrstellenbesetzung",
+              "Mögliche Grundlage im Bewerbungsgespräch: schulische Anforderungen aufzeigen, besonders wichtige Kompetenzen nennen",
+            ] },
+            { t: "cols", h: "Aufbau – Beispiel Gärtner/in EFZ Zierpflanzen", cols: [
+              { h: "📊 Vier Fachbereiche", items: ["Mathematik", "Schulsprache", "Naturwissenschaften", "Fremdsprachen"] },
+              { h: "📈 Vier Stufen", items: ["Einfache Anforderungen", "Mittlere Anforderungen", "Hohe Anforderungen", "Sehr hohe Anforderungen"] },
+              { h: "📝 Dazu", items: ["Eine typische Arbeitssituation", "Weitere Anforderungen", "Besonderheiten des Berufs"] },
+            ] },
+            { t: "note", text: "Ziel: den Lernenden eine realistische Erwartung über die Anforderungen der Ausbildung vermitteln. Alle Profile: anforderungsprofile.ch" },
+          ],
+          source: "PP Tag 3, Folien 15 & 17–20",
+        },
+        {
+          ch: "Block 1 · Potenzial erkennen",
+          title: "Stellwerk 8 und 9",
+          blocks: [
+            { t: "list", h: "Online-basierte Standortbestimmung", items: [
+              "Im 8. und 9. Schuljahr – obligatorisch für alle Schülerinnen und Schüler",
+              "Ergibt ein persönliches Leistungsprofil und ist in den Schulzeugnissen vermerkt",
+              "Als Berufsbildner/in dürfen Sie potenzielle Lernende um die Testresultate bitten",
+              "Abgleich: Leistungsprofil ↔ Berufsanforderungen (z. B. über jobskills.ch)",
+            ] },
+            { t: "cols", h: "Fünf Fachbereiche", cols: [
+              { h: "Deutsch", items: ["Hören, Lesen, Schreiben, Sprachreflexion"] },
+              { h: "Mathematik", items: ["Zahlen, Form und Raum, Variablen, Daten"] },
+              { h: "Natur und Technik", items: ["Biologie, Physik, Chemie"] },
+              { h: "Fremdsprachen", items: ["Französisch", "Englisch"] },
+            ] },
+            { t: "note", text: "Der Vergleich zeigt auf einen Blick, wo das Leistungsprofil die Anforderungen des Berufs erfüllt – und wo eine Lücke bleibt." },
+          ],
+          source: "PP Tag 3, Folien 16 & 21–24",
+        },
+        {
+          ch: "Block 1 · Potenzial erkennen",
+          title: "Eignungstests & DBW-Kurs",
+          blocks: [
+            { t: "table", h: "Eignungsanalysen (Stand 2025)", head: ["Test", "Was wird geprüft?", "Aufwand"], rows: [
+              ["Basic Check", "Sprachkenntnisse, Mathematikfähigkeiten und basale kognitive Fähigkeiten", "CHF 100.– · ca. 2.5 bis 3.5 Stunden, je nach Modulwahl"],
+              ["Multicheck", "Neun verschiedene Multichecks für unterschiedliche Berufsgruppen – wird oft verlangt", "CHF 60 bis 100"],
+            ] },
+            { t: "list", h: "DBW-Kurs «Die Selektion als Schlüssel zum Erfolg»", items: [
+              "Vorgehensweise bei der Selektion",
+              "Optimale Nutzung des Stellwerktests 8 für die eigene Selektion",
+              "Tipps für einen erfolgreichen Lehrstart",
+              "Auskunft: betrieblichebildung.dbw@lu.ch",
+            ] },
+          ],
+          source: "PP Tag 3, Folien 25–27",
+        },
+        {
+          ch: "Block 1 · Auswählen",
+          title: "Das Bewerbungsgespräch",
+          blocks: [
+            { t: "steps", h: "Eine überlegte Struktur mit geeigneten Fragen", items: [
+              "Begrüssung und Kennenlernen – locker starten, damit eine vertraute Stimmung entsteht",
+              "Ablauf bekanntgeben: Ziel, Zeit, Aufbau",
+              "Zuerst über Firma und Bereich informieren (Organigramm, Webseite, Broschüren) – so können die Jugendlichen ankommen",
+              "Gezielte Fragen stellen, die man sich aufgrund der Bewerbung notiert hat",
+              "Ergebnisse zusammenfassen und über den weiteren Ablauf informieren",
+              "Gleich nach der Verabschiedung: persönlichen Eindruck und Beobachtungen schriftlich festhalten",
+            ] },
+            { t: "list", h: "Das will ich im Gespräch erfahren", items: [
+              "Eignung für die Ausbildung",
+              "Persönliche Motivation für Ausbildung und Arbeitsstelle",
+              "Persönliche Entwicklung: Ziele, Stärken, Schwächen",
+              "Persönliches Umfeld",
+            ] },
+            { t: "note", text: "Passt die Person ins Team, bringt sie die nötigen Sozialkompetenzen mit? Fachkompetenzen sind nicht die einzigen Kriterien." },
+          ],
+          source: "Grundlagen zum Bewerbungsgespräch (Aufgabe 2) · PP Tag 3, Folien 28–29",
+        },
+        {
+          ch: "Block 1 · Auswählen",
+          title: "Häufige Beurteilungsfehler",
+          blocks: [
+            { t: "table", h: "Wahrnehmungsfehler verzerren die Beurteilung", head: ["Fehler", "Was passiert?", "Beispiel"], rows: [
+              ["Erster und letzter Eindruck", "Aussehen, Sprechweise, Kleidung, Körperhaltung – und die eigene Stimmung – prägen ein Bild, das lange bleibt", "Einmal zu spät wegen eines Busausfalls → «nimmt den Termin nicht ernst»"],
+              ["Halo-Effekt («Heiligenschein»)", "Ein Merkmal überstrahlt alle anderen – positiv oder negativ", "Fleckiges Oberteil → «arbeitet bestimmt auch nicht sauber»"],
+              ["Sympathie / Antipathie", "Beruht auf Äusserlichkeiten und färbt, wie Unstimmigkeiten bewertet werden", "Auf Anhieb sympathisch → «passt perfekt» – Fähigkeiten trotzdem prüfen"],
+            ] },
+            { t: "list", h: "Ganz vermeiden lassen sie sich nicht – aber verringern", items: [
+              "Mögliche Beurteilungsfehler immer wieder bewusstmachen",
+              "Die eigenen Beurteilungsschwächen herausfinden",
+              "Beobachtungen aus dem Gespräch notieren",
+              "Bei einer Beurteilung systematisch vorgehen",
+              "Die Entscheidung mit anderen besprechen – nicht alleine beurteilen",
+              "Die Beurteilungssituation bewusst gestalten",
+            ] },
+            { t: "note", text: "Transferfrage aus dem Kurs: Wieso könnte Marco Gut fehlerhaft beurteilt werden? Sein gepflegtes Auftreten und sein unsauberes Schnupperheft ziehen in verschiedene Richtungen – je nachdem, welches Merkmal überstrahlt." },
+          ],
+          source: "Grundlagen zu häufigen Beurteilungsfehlern (Aufgabe 3) · PP Tag 3, Folien 30–31",
+        },
+        {
+          ch: "Block 2 · Lernumgebung vorbereiten",
+          title: "Ziele erkennen: BiVo & BiPla",
+          blocks: [
+            { t: "table", head: ["Dokument", "Was steht drin?"], rows: [
+              ["Bildungsverordnung (BiVo)", "Gesetzliche Grundstruktur der Grundbildung – einzeln für jeden Beruf, regelt die Ausbildung für alle drei Lernorte"],
+              ["Bildungsplan (BiPla)", "Ziele und Anforderungen: Handlungskompetenzen und Leistungsziele pro Lernort"],
+              ["Umsetzungsinstrumente der OdA", "Modell-Lehrgänge, Ausbildungsplan, Vorlagen für die Lerndokumentation"],
+            ] },
+            { t: "cols", h: "Drei Lernorte – drei Beiträge", cols: [
+              { h: "🏫 Berufsfachschule", items: ["Theoretisches Fachwissen"] },
+              { h: "🛠️ Überbetriebliche Kurse", items: ["Grundlegende berufliche Fähigkeiten"] },
+              { h: "🏭 Betrieb", items: ["Praktische Erfahrung und Handlungswissen"] },
+            ] },
+            { t: "list", h: "Wie verwende ich BiVo und BiPla?", items: [
+              "Zur Strukturierung der Ausbildung – als Berufsbildner/in bestimme ich die Reihenfolge, in der die Fähigkeiten erlernt werden",
+              "Lernortkooperation beachten: nach jedem üK das Gelernte gleich anschliessend im Betrieb trainieren",
+              "Bezug: SBFI-Berufsverzeichnis (bvz.admin.ch, Berufe von A–Z) und Trägervereine",
+              "Ebenfalls wichtig: «Begleitende Massnahmen der Arbeitssicherheit und des Gesundheitsschutzes»",
+            ] },
+            { t: "note", text: "Beispiel Mediamatiker/in EFZ – Handlungskompetenz «Digitale Rohdaten erstellen», Leistungsziel: «… erstellen Rohdaten mit einer Kamera gemäss Konzept.»" },
+          ],
+          source: "PP Tag 3, Folien 34–40",
+        },
+        {
+          ch: "Block 2 · Lernumgebung vorbereiten",
+          title: "Ausbildungsplanung in 7 Schritten",
+          blocks: [
+            { t: "steps", items: [
+              "Individuellen Ausbildungsplan erarbeiten",
+              "Zuständigkeiten im Team absprechen",
+              "Eigene Betreuungstätigkeit planen",
+              "Einführungsphase vorbereiten",
+              "Erste Lern- und Beurteilungsphasen planen",
+              "Lernpartnerschaften organisieren",
+              "Infrastruktur bereitstellen",
+            ] },
+            { t: "note", text: "Das Ausbildungskonzept erstellen Sie nur einmal. Bei neuen Lernenden überlegen Sie lediglich, wie Sie das Konzept bei ihnen konkret umsetzen." },
+          ],
+          source: "PP Tag 3, Folien 42–43",
+        },
+        {
+          ch: "Block 2 · Lernumgebung vorbereiten",
+          title: "Schritte 1–3: Plan, Team, Betreuung",
+          blocks: [
+            { t: "cols", cols: [
+              { h: "1 · Individueller Ausbildungsplan", items: ["Wann arbeitet die lernende Person in welcher Abteilung?", "Wann genau enden Einführungsphase und Probezeit?", "Wann ist sie in der Berufsfachschule oder im üK?"] },
+              { h: "2 · Zuständigkeiten im Team", items: ["Pro Abteilung fixe Ansprechpersonen für die Lernenden definieren", "Frühzeitig mit den Verantwortlichen sprechen und die Betreuung koordinieren", "Weitergeben: didaktische Richtlinien, Leistungsziele und Zeitrahmen, weitere Erwartungen"] },
+              { h: "3 · Eigene Betreuung", items: ["Wann in der Woche betreue ich die Lernenden persönlich?", "An welchen Daten führe ich Standort- und Zwischengespräche?", "Wer vertritt mich, wenn ich abwesend bin?"] },
+            ] },
+          ],
+          source: "PP Tag 3, Folien 44–46",
+        },
+        {
+          ch: "Block 2 · Lernumgebung vorbereiten",
+          title: "Schritte 4–7: Einführung bis Infrastruktur",
+          blocks: [
+            { t: "list", h: "4 · To-do-Liste für die Einführungsphase", items: [
+              "Material zur Übergabe zusammenstellen: individueller Ausbildungsplan, Betriebshandbücher usw.",
+              "Einweisung in die betriebsinterne Infrastruktur organisieren (IT, Maschinen)",
+              "Zusammenkunft organisieren, um die Lernenden willkommen zu heissen",
+              "Spezifische Einführungen (Projekte, Produkte, Abteilungen) durch Mitarbeitende arrangieren",
+              "Konkrete Arbeiten der Lernenden zur Einführung festlegen",
+              "Termineinladungen an alle Beteiligten versenden",
+              "Leitfaden für das Eintrittsgespräch formulieren",
+            ] },
+            { t: "cols", cols: [
+              { h: "5 · Lern- & Beurteilungsphasen", items: ["Tätigkeit für die erste Lernphase festlegen – ggf. mit Praxisbildner/in", "Termine für Zwischen- und Beurteilungsgespräche mitteilen", "Nach Lehrantritt: Inhalte der Gespräche definieren"] },
+              { h: "6 · Lernpartnerschaften", items: ["Geeignete Lernende als Lernpartner/in suchen", "Rahmenbedingungen, Sinn und Zweck erläutern", "Termine festlegen", "Das Arbeitsteam informieren"] },
+              { h: "7 · Infrastruktur", items: ["Arbeitsplatz und -geräte", "Informationsmaterialien", "Lern- und Leistungsdokumentation", "Zugänge und Zugriffsrechte (E-Mail)", "Intranet und Telefonanlage"] },
+            ] },
+          ],
+          source: "PP Tag 3, Folien 47–52",
+        },
+        {
+          ch: "Block 3 · Abschluss",
+          title: "Reflexion & Ampelabfrage",
+          blocks: [
+            { t: "list", h: "Persönliche Reflexion – zwei Themen", items: ["«Der Rekrutierungsprozess»", "«Arbeits- und Lernumgebung»"] },
+            { t: "cols", h: "Ampelabfrage: Wo stehe ich?", cols: [
+              { h: "🟢 Grün", items: ["Thema verstanden – ich fühle mich wohl in der Fallbearbeitung"] },
+              { h: "🟡 Gelb", items: ["Im Groben verstanden – noch einige Verständnisschwierigkeiten"] },
+              { h: "🔴 Rot", items: ["Noch viele Fragen – die Bearbeitung ist mir schwergefallen"] },
+            ] },
+            { t: "steps", h: "Die drei Themen des Tages", items: [
+              "Lernende rekrutieren: Stolpersteine, Gesprächsgestaltung, Potenzial erkennen",
+              "Arbeitsumgebungen vorbereiten: Ziele erkennen, Ausbildungsplan erstellen, Lernbegleitung gestalten und sicherstellen",
+              "Lehrstart vorbereiten: Lernumgebung gestalten, Lehrbeginn planen, erste Arbeitszeit inkl. erster Lernerfolge sicherstellen",
+            ] },
+          ],
+          source: "PP Tag 3, Folien 32 & 54–57",
+        },
+      ],
+    },
     { nr: 4, title: "Kurstag 4", placeholder: true, c1: "#d6812f", c2: "#3d200c", missions: [] },
     { nr: 5, title: "Kurstag 5 · Take-away", placeholder: true, c1: "#d63f5a", c2: "#3d0d18", missions: [] },
   ],
@@ -997,6 +1347,7 @@ window.GAME_DATA = {
         "Berufliches Handwerk, Sozialisation und gesellschaftliche Werte vermitteln",
         "Rolle der Beteiligten definieren, Ressourcen einplanen, Aufgabe ins Stellenprofil aufnehmen",
         "Lehrstelle ausschreiben, Schnupperlehre durchführen, Lernende auswählen",
+        "Lehrstellenmarketing betreiben: Schulklassen einladen, ZEBI, Zukunftstag, Social Media und Videobotschaften statt Inserate",
         "Lehrvertrag ausfüllen, unterschreiben und einreichen",
         "Daten im Portal Berufsbildung pflegen",
       ],
@@ -1029,7 +1380,7 @@ window.GAME_DATA = {
         "Wer nur 1 Lernende/n ausbilden darf, kann die zweite Person starten lassen, sobald die erste im letzten Lehrjahr ist",
         "Keine Ausnahme vom Verbot gefährlicher Arbeiten nötig – Informatiker/innen führen keine aus",
       ],
-      sources: "Ablaufplan · PP Tag 1 & 2 · BiVo Informatiker/in",
+      sources: "Ablaufplan · PP Tag 1, 2 & 3 · BiVo Informatiker/in",
     },
     {
       id: "bb", name: "Berufsbildner/in", short: "Coach & Fachperson",
@@ -1039,6 +1390,9 @@ window.GAME_DATA = {
       role: "Bildet im Lehrbetrieb aus (früher «Lehrmeister/in»). Coach, Fachperson, Berater/in, Begleiter/in und fachliches wie persönliches Vorbild.",
       aufgaben: [
         "Betrieblichen und individuellen Bildungsplan erstellen",
+        "Treffsicher rekrutieren: Schnupperlehre mit Beurteilungsbogen, strukturiertes Bewerbungsgespräch, Anforderungsprofil mit Stellwerk-Resultaten abgleichen",
+        "Ausbildung in 7 Schritten planen – vom individuellen Ausbildungsplan bis zur Infrastruktur",
+        "Eigene Beurteilungsfehler kennen: erster Eindruck, Halo-Effekt, Sympathie und Antipathie",
         "Voraussetzungen klären und Ziele festlegen",
         "Instruieren (Instruktionsmethode, 6-Schritte-Methode) und Rückmeldungen geben",
         "Ersten Arbeitstag und erste Woche planen und begleiten",
@@ -1077,7 +1431,7 @@ window.GAME_DATA = {
         "Arbeitssicherheit erklären: zu Beginn und während der ganzen Ausbildung, inkl. Gefahrensymbole und Piktogramme (Art. 5)",
         "Die IPA (70–90 h) im letzten Semester begleiten",
       ],
-      sources: "PP Tag 1 & 2 · Planung · BiVo Informatiker/in",
+      sources: "PP Tag 1, 2 & 3 · Planung · BiVo Informatiker/in",
     },
     {
       id: "eltern", name: "Eltern", short: "Gesetzliche Vertretung",
@@ -1124,6 +1478,7 @@ window.GAME_DATA = {
         "Rechtliche Beratung, Gespräche mit allen Vertragsparteien, Weiterleitung an Fachstellen",
         "Lehrvertragsmanagement und Portal Berufsbildung",
         "Angebote wie Lostly und Help Point",
+        "Unterstützt die Rekrutierung: Kurs «Die Selektion als Schlüssel zum Erfolg» und Beurteilungsbogen für die Schnupperlehre (BIZ)",
       ],
       rechte: [
         "Genehmigt jeden Lehrvertrag – ohne DBW kein Lehrverhältnis",
@@ -1148,7 +1503,7 @@ window.GAME_DATA = {
         "Kann Betrieben mit mehrjährigem, überdurchschnittlichem Ausbildungserfolg mehr Lernende bewilligen (Art. 11)",
         "Wird schriftlich informiert, wenn der Ausbildungserfolg gefährdet ist (Art. 13)",
       ],
-      sources: "PP Tag 2 · Ablaufplan · BiVo Informatiker/in",
+      sources: "PP Tag 2 & 3 · Ablaufplan · BiVo Informatiker/in",
     },
     {
       id: "bfs", name: "Berufsfachschule", short: "2. Lernort",
@@ -1222,6 +1577,7 @@ window.GAME_DATA = {
         "Erarbeiten den Lehrplan für die Berufsfachschulen mit",
         "Führen die überbetrieblichen Kurse durch",
         "Bieten branchenspezifische Unterlagen und Unterstützung",
+        "Liefern Umsetzungsinstrumente: Modell-Lehrgänge, Ausbildungsplan und Vorlagen für die Lerndokumentation",
       ],
       beziehungen: [
         { to: "sbfi", text: "Der Bund erlässt die BiVo und genehmigt den Bildungsplan." },
@@ -1234,7 +1590,7 @@ window.GAME_DATA = {
         "Organisiert den Unterricht in Berufsfachschule und üK über den ICT-Modulbaukasten",
         "Hat den Bildungsplan Informatiker/in EFZ (Nr. 88611) erarbeitet",
       ],
-      sources: "PP Tag 1 & 2 · Planung · Ablaufplan",
+      sources: "PP Tag 1, 2 & 3 · Planung · Ablaufplan",
     },
     {
       id: "sbfi", name: "Bund / SBFI", short: "Staatssekretariat für Bildung, Forschung und Innovation",
@@ -1259,6 +1615,27 @@ window.GAME_DATA = {
         "Bildungsplan Informatiker/in EFZ, Nr. 88611 (SBFI 2020)",
       ],
       sources: "PP Tag 1 & 2 · Planung",
+    },
+    {
+      /* Running Gag aus dem Kurs – bewusst kurz gehalten. Das Hauptbeispiel bleibt Informatiker/in EFZ. */
+      id: "pferd", name: "Pferdefachmann/-frau", short: "Bonus-Rolle · Running Gag aus dem Kurs",
+      color: "#d9a05b", env: "reitstall",
+      look: { skin: "#f1c27d", shirt: "#2f6b3a", pants: "#e6dcc4", hair: "#5a3a1e", hairStyle: "helmet", helmet: "#1d1d24", extra: ["horse"], scale: 0.96 },
+      tagline: "Der Running Gag unseres Kurses – und der Beweis, dass das Berufsbildungssystem auch im Stall gilt.",
+      role: "Pferdefachmann/-frau EFZ: dreijährige berufliche Grundbildung rund ums Pferd. Andere Branche, gleiche Spielregeln – BiVo, Bildungsplan, drei Lernorte, Lehrvertrag.",
+      aufgaben: [
+        "Pflegt, füttert und bewegt Pferde – je nach Ausrichtung von der Pferdepflege über das Reiten bis zum Gespannfahren",
+        "Lernt wie alle Lernenden an drei Lernorten: im Stall, 1 Tag pro Woche in der Berufsfachschule und 15 Tage im üK",
+        "Führt eine Lerndokumentation und bespricht jedes Semester den Bildungsbericht – auch mit Stroh an den Stiefeln",
+        "Sorgt in jeder Berufsvorstellung zuverlässig für die meisten Rückfragen",
+      ],
+      beziehungen: [
+        { to: "lernende", text: "Ist eine lernende Person wie alle anderen – nur mit mehr PS." },
+        { to: "informatik", text: "Die einen pflegen Server, die anderen Pferde – eine Lerndokumentation führen beide." },
+        { to: "bb", text: "Wird genauso begleitet, gefördert und beurteilt." },
+        { to: "oda", text: "Auch die Pferdebranche hat eine OdA, die Bildungsplan und üK verantwortet." },
+      ],
+      sources: "Berufsvorstellung am Präsenztag 3 · Eckdaten: berufsberatung.ch",
     },
   ],
 
@@ -1374,12 +1751,16 @@ window.GAME_DATA = {
      ===================================================================== */
   lexikon: [
     ["ABU", "Allgemeinbildender Unterricht an der Berufsfachschule – Grundlage ist der Rahmenlehrplan."],
+    ["Anforderungsprofil", "Zeigt die schulischen Anforderungen eines Berufs – Grundlage für die Lehrstellenbesetzung."],
     ["ArG", "Arbeitsgesetz – regelt u. a. Arbeits- und Ruhezeiten sowie den Gesundheitsschutz."],
     ["ArGV 5", "Jugendarbeitsschutzverordnung – Art. 4 regelt gefährliche Arbeiten für Jugendliche."],
+    ["Ausbildungskonzept", "Legt fest, wie der Betrieb ausbildet – wird nur einmal erstellt und pro lernende Person konkret umgesetzt."],
+    ["Basic Check", "Kostenpflichtige Eignungsanalyse: Sprache, Mathematik und basale kognitive Fähigkeiten."],
     ["BB", "Berufsbildner/in – bildet die Lernenden im Lehrbetrieb aus."],
     ["BBG", "Berufsbildungsgesetz – gestützt auf Bundesverfassung Art. 63."],
     ["BBV", "Berufsbildungsverordnung – konkretisiert das BBG."],
     ["BehiG", "Behindertengleichstellungsgesetz."],
+    ["Beurteilungsfehler", "Wahrnehmungsfehler, die eine Beurteilung verzerren – z. B. erster Eindruck, Halo-Effekt, Sympathie."],
     ["BFS", "Berufsfachschule – 2. Lernort, vermittelt die schulische Bildung."],
     ["Bildungsbericht", "Hält den Bildungsstand fest – am Ende jedes Semesters, alle unterschreiben."],
     ["Bildungsbewilligung", "Erlaubnis zum Ausbilden – beim Berufsbildungsamt des Lehrortskantons zu beantragen."],
@@ -1396,6 +1777,8 @@ window.GAME_DATA = {
     ["FH", "Fachhochschule."],
     ["FiB", "Fachkundige individuelle Begleitung für EBA-Lernende."],
     ["GAV", "Gesamtarbeitsvertrag."],
+    ["Gleichstellungsgesetz", "Gleichstellung von Frau und Mann im Erwerbsleben – Massstab auch für Lehrstellenausschreibungen."],
+    ["Halo-Effekt", "«Heiligenschein»: Ein einzelnes Merkmal überstrahlt alle anderen – positiv oder negativ."],
     ["Handlungskompetenz", "Fach-, Methoden-, Sozial- und Selbstkompetenz zum Bewältigen beruflicher Handlungssituationen."],
     ["HF", "Höhere Fachschule – Diplom HF."],
     ["HFP", "Eidg. höhere Fachprüfung – eidg. Diplom."],
@@ -1403,20 +1786,26 @@ window.GAME_DATA = {
     ["IPA", "Individuelle praktische Arbeit – Teil des Qualifikationsverfahrens."],
     ["Lehraufsicht", "Gesetzlicher Auftrag des Kantons – von der Lehrvertragsunterzeichnung bis zum QV."],
     ["Lerndokumentation", "Von den Lernenden geführt – Lernberichte mind. 1x pro Monat."],
+    ["Lernpartnerschaft", "Erfahrene Lernende begleiten neue Lernende – mit klaren Rahmenbedingungen und Terminen."],
     ["LOK", "Lernortkooperation – Zusammenarbeit von Betrieb, Berufsfachschule und üK."],
     ["Lostly", "Unterstützungsangebot der DBW für Lernende im Kanton Luzern."],
+    ["Multicheck", "Kostenpflichtige Eignungsanalyse – neun Varianten für unterschiedliche Berufsgruppen."],
     ["Nachteilsausgleich", "Ausgleich für Lernende mit Beeinträchtigung – auch im QV, rechtzeitig beantragen."],
     ["OdA", "Organisation der Arbeitswelt – Berufsverbände, verantwortlich für Inhalte und üK."],
     ["OR", "Obligationenrecht – regelt den Lehrvertrag als Einzelarbeitsvertrag."],
     ["PEX", "Prüfungsexpert/in im Qualifikationsverfahren."],
+    ["Praxisbildner/in", "Fachperson, die Lernende im Arbeitsalltag anleitet – in Absprache mit der Berufsbildnerin oder dem Berufsbildner."],
     ["QualiCarte", "Instrument zur Qualitätsprüfung im Lehrbetrieb – 1x pro Jahr."],
     ["QV", "Qualifikationsverfahren – Abschluss der beruflichen Grundbildung."],
     ["SB / SB Plus", "Schulische Begleitung für EBA-Lernende – im bzw. ausserhalb des Unterrichts."],
     ["SBFI", "Staatssekretariat für Bildung, Forschung und Innovation – Vorgaben des Bundes."],
+    ["Schnupperlehre", "Einblick in Beruf und Betrieb vor dem Lehrvertrag – in der Theorie 3 bis 5 Tage, immer betreut."],
     ["SDBB", "Schweizerisches Dienstleistungszentrum Berufsbildung – Formulare wie Bildungsbericht."],
+    ["Stellwerk", "Obligatorischer Online-Test im 8. und 9. Schuljahr – ergibt ein persönliches Leistungsprofil."],
     ["üK", "Überbetriebliche Kurse – 3. Lernort, grundlegende Fertigkeiten."],
     ["UVG", "Unfallversicherungsgesetz."],
     ["VPA", "Vorgegebene praktische Arbeit – Teil des Qualifikationsverfahrens."],
+    ["ZEBI", "Zentralschweizer Bildungsmesse – Bühne fürs Lehrstellenmarketing."],
   ],
 
   /* Ausführliche Erklärungen fürs Lexikon (Klick auf einen Begriff).
@@ -1466,6 +1855,19 @@ window.GAME_DATA = {
     "üK": "Die überbetrieblichen Kurse sind der 3. Lernort: grundlegende Fertigkeiten und Transfer zwischen Theorie und Praxis. Die OdA führt sie durch, üK-Tage sind Arbeitszeit. Informatik: 35 Tage in 7 Kursen.",
     "UVG": "Das Unfallversicherungsgesetz – Lernende sind über den Lehrbetrieb gegen Unfälle versichert. Die Versicherungen gehören in den Lehrvertrag.",
     "VPA": "Bei der vorgegebenen praktischen Arbeit lösen alle Kandidierenden dieselben Aufgaben. Je nach Beruf ist sie die Alternative zur IPA.",
+    /* --- Begriffe aus Kurstag 3 --- */
+    "Anforderungsprofil": "Für jeden Beruf gibt es ein Anforderungsprofil mit den wichtigsten Kompetenzen in Mathematik, Schulsprache, Naturwissenschaften und Fremdsprachen – eingestuft von einfachen bis sehr hohen Anforderungen. Es hilft, vorzeitige Lehrvertragsauflösungen zu vermeiden, und dient als Grundlage im Bewerbungsgespräch. Alle Profile: anforderungsprofile.ch.",
+    "Ausbildungskonzept": "Das Ausbildungskonzept beschreibt, wie der Betrieb seine Lernenden ausbildet. Es wird nur einmal erstellt. Bei jeder neuen lernenden Person überlegt man lediglich, wie man es konkret umsetzt – in sieben Schritten vom individuellen Ausbildungsplan bis zur Infrastruktur.",
+    "Basic Check": "Der Basic Check ist eine Eignungsanalyse für die Lehrstellensuche. Er erhebt Sprachkenntnisse, Mathematikfähigkeiten und basale kognitive Fähigkeiten, dauert je nach Modulwahl rund 2.5 bis 3.5 Stunden und kostet CHF 100.– (Stand 2025).",
+    "Beurteilungsfehler": "Beurteilen ist schwierig: Wahrnehmungsfehler verzerren das Bild. Häufig sind der erste und letzte Eindruck, der Halo-Effekt sowie Sympathie und Antipathie. Ganz vermeiden lassen sie sich nicht – aber verringern: bewusstmachen, Beobachtungen notieren, systematisch vorgehen und die Entscheidung mit anderen besprechen.",
+    "Gleichstellungsgesetz": "Das Gleichstellungsgesetz soll die tatsächliche Gleichstellung von Frau und Mann im Erwerbsleben fördern. Im Kurs haben wir damit unsere Lehrstellenausschreibungen geprüft: Sprechen sie alle an – oder zementieren sie Rollenbilder wie bei der «Arztsekretärin»?",
+    "Halo-Effekt": "«Halo» heisst Heiligenschein; auf Deutsch spricht man auch vom Überstrahlungseffekt. Ein einzelnes positives oder negatives Merkmal bestimmt das ganze Urteil über eine Person. Beispiel: ein fleckiges Oberteil im Bewerbungsgespräch – und schon nimmt man an, die Person arbeite auch nicht sauber.",
+    "Lernpartnerschaft": "In einer Lernpartnerschaft begleiten erfahrene Lernende die Neuen. Dafür geeignete Lernende suchen, ihnen Rahmenbedingungen, Sinn und Zweck erklären, Termine festlegen und auch ihr Arbeitsteam über die neue Aufgabe informieren.",
+    "Multicheck": "Der Multicheck ist eine Eignungsanalyse, die von Lehrbetrieben oft verlangt wird. Es gibt neun verschiedene Multichecks für unterschiedliche Berufsgruppen; er kostet zwischen CHF 60 und 100 (Stand 2025).",
+    "Praxisbildner/in": "Praxisbildner/innen sind Fachpersonen, die Lernende in ihrer Abteilung im Alltag anleiten. Die Berufsbildnerin oder der Berufsbildner legt mit ihnen die Tätigkeiten der Lernphasen fest und teilt ihnen die Termine für Zwischen- und Beurteilungsgespräche mit.",
+    "Schnupperlehre": "Die Schnupperlehre hilft beiden Seiten bei der Entscheidung: Jugendliche erleben den Beruf und die Atmosphäre im Betrieb, der Betrieb sieht rasch, ob grundlegende Fähigkeiten vorhanden sind. In der Theorie dauert sie 3 bis 5 Tage, in der Praxis oft nur einen. Am Schluss stehen ein Gespräch und ein Beurteilungsbogen, den die Jugendlichen mitnehmen.",
+    "Stellwerk": "Stellwerk 8 und 9 ist eine online-basierte Standortbestimmung in Deutsch, Mathematik, Natur und Technik, Französisch und Englisch – obligatorisch für alle im 8. und 9. Schuljahr und im Schulzeugnis vermerkt. Berufsbildner/innen dürfen um die Resultate bitten und sie mit dem Anforderungsprofil des Berufs abgleichen.",
+    "ZEBI": "Die Zentralschweizer Bildungsmesse ist ein Treffpunkt für Jugendliche in der Berufswahl. Für Lehrbetriebe ist die Teilnahme ein Weg, aktiv auf Schülerinnen und Schüler zuzugehen – neben Schulbesuchen, Zukunftstag und Schnupperlehren.",
   },
 
   /* =====================================================================
@@ -1495,6 +1897,15 @@ window.GAME_DATA = {
     { q: "Welcher Führungsstil passt laut Generationenvergleich zur Generation Z?", a: ["Kontrollieren", "Anweisen", "Befähigen", "Koordinieren"], correct: 2, why: "Generation Z: befähigen – Alpha: inspirieren." },
     { q: "Wer genehmigt in Luzern den Lehrvertrag?", a: ["Die Berufsfachschule", "Die OdA", "Die DBW", "Das SBFI"], correct: 2, why: "Die Dienststelle Berufs- und Weiterbildung – die Lehraufsicht des Kantons." },
     { q: "Wann ist das QV Informatiker/in EFZ bestanden?", a: ["Gesamtnote ≥ 4 reicht", "IPA ≥ 4, Erfahrungsnote Informatik ≥ 4 und Gesamtnote ≥ 4", "Allgemeinbildung ≥ 4", "IPA ≥ 5"], correct: 1, why: "BiVo Informatiker/in Art. 19 – drei Bedingungen." },
+    { q: "Wie lange dauert eine Schnupperlehre in der Theorie?", a: ["Einen halben Tag", "3 bis 5 Tage", "2 Wochen", "Einen Monat"], correct: 1, why: "In der Praxis ist es aus Zeitmangel oft nur ein Tag – betreut werden die Jugendlichen immer." },
+    { q: "Was beschreibt der Halo-Effekt?", a: ["Der letzte Eindruck zählt am meisten", "Ein Merkmal überstrahlt alle anderen", "Sympathische Personen werden strenger beurteilt", "Man beurteilt alle gleich"], correct: 1, why: "«Heiligenschein»: Ein einzelnes positives oder negatives Merkmal färbt das ganze Urteil." },
+    { q: "Welcher Test ist im 8. und 9. Schuljahr für alle obligatorisch?", a: ["Multicheck", "Basic Check", "Stellwerk", "IPA"], correct: 2, why: "Stellwerk 8 und 9 ergibt ein persönliches Leistungsprofil – im Schulzeugnis vermerkt." },
+    { q: "Wozu dient ein Anforderungsprofil?", a: ["Es ersetzt den Lehrvertrag", "Es zeigt die schulischen Anforderungen eines Berufs", "Es legt den Lohn fest", "Es benotet die Schnupperlehre"], correct: 1, why: "Grundlage für die Lehrstellenbesetzung – und hilft, Lehrvertragsauflösungen zu vermeiden." },
+    { q: "Was tust du gleich nach der Verabschiedung im Bewerbungsgespräch?", a: ["Den Lehrvertrag ausfüllen", "Eindruck und Beobachtungen schriftlich festhalten", "Die Eltern anrufen", "Nichts – das Bauchgefühl reicht"], correct: 1, why: "So erinnerst du dich auch später noch – und verringerst Beurteilungsfehler." },
+    { q: "Wie oft erstellst du das Ausbildungskonzept?", a: ["Für jede lernende Person neu", "Jedes Semester", "Nur einmal", "Gar nie – das macht die OdA"], correct: 2, why: "Einmal erstellen – bei neuen Lernenden nur noch überlegen, wie man es konkret umsetzt." },
+    { q: "Welcher Content bringt im Social-Media-Marketing die besten Resultate?", a: ["Blog Posts", "Infografiken", "Texte und Zitate", "Video"], correct: 3, why: "Video liegt mit 63 % vorne – darum: Videobotschaften statt Inserate." },
+    { q: "Wer bestimmt die Reihenfolge, in der die Fähigkeiten im Betrieb erlernt werden?", a: ["Das SBFI", "Die Berufsbildnerin / der Berufsbildner", "Die Berufsfachschule", "Die Lernenden"], correct: 1, why: "BiVo und BiPla geben die Ziele vor – die Reihenfolge im Betrieb planst du, abgestimmt auf Schule und üK." },
+    { q: "🐴 Wie lange dauert die Lehre als Pferdefachmann/-frau EFZ?", a: ["2 Jahre", "3 Jahre", "4 Jahre", "Bis das Pferd nickt"], correct: 1, why: "3 Jahre – und auch im Stall gelten BiVo, Bildungsplan und drei Lernorte." },
     { q: "💻 Wie viele üK-Tage haben Informatik-Lernende?", a: ["10 Tage", "20 Tage", "35 Tage in 7 Kursen", "50 Tage"], correct: 2, why: "BiVo Art. 8 – 7 Kurse à 5 Tage, im letzten Semester keine üK." },
     { q: "💻 Wie oft kontrolliert die Berufsbildnerin die Lerndokumentation einer Informatik-Lernenden mindestens?", a: ["Jede Woche", "1x pro Semester", "1x pro Lehrjahr", "Nur vor der IPA"], correct: 1, why: "BiVo Art. 12 – kontrollieren, unterzeichnen und besprechen." },
     { q: "💻 Warum enthält die BiVo Informatiker/in keine Abweichung vom Arbeitsgesetz?", a: ["Weil sie vergessen wurde", "Weil Informatiker/innen keine gefährlichen Arbeiten ausführen", "Weil Lernende über 18 sind", "Weil der Kanton das regelt"], correct: 1, why: "Es braucht keine Ausnahme vom Verbot gefährlicher Arbeiten." },
@@ -1528,7 +1939,7 @@ window.GAME_DATA = {
   /* Credits & Quellen – Titel, Herausgeber und Stand stammen aus den Kursunterlagen selbst
      (ausgelesen über den graphify-Wissensgraphen in graphify-out/). */
   credits: {
-    version: "Version 1.0 · Stand November 2026",
+    version: "Version 1.1 · Stand November 2026 · Kurstage 1–3",
     author: "", // ← hier den eigenen Namen eintragen, dann erscheint er auf dem Credits-Screen
     about: [
       "Take-away aus dem Berufsbildnerkurs am Weiterbildungszentrum (WBZ) Kanton Luzern – eine spielerische Zusammenfassung der Kursinhalte für die Präsentation am letzten Kurstag.",
@@ -1558,18 +1969,30 @@ window.GAME_DATA = {
         ],
       },
       {
+        group: "Kursunterlagen Präsenztag 3 – Rekrutieren & Planen",
+        items: [
+          ["Präsenztag 3: Lernende treffsicher rekrutieren, Lernumgebungen vorbereiten & Ausbildungspläne erstellen (Präsentation)", "WBZ Kanton Luzern"],
+          ["Grundlagen zur Schnupperlehre · Fallbeschreibung und Bewerbungsunterlagen Marco Gut (Aufgabe 1)", "WBZ Kanton Luzern"],
+          ["Schnupperlehre: Beurteilung durch den Lehrbetrieb (Beurteilungsbogen, Stand 08/25)", "BIZ · Dienststelle Berufs- und Weiterbildung"],
+          ["Grundlagen zum Bewerbungsgespräch (Aufgabe 2)", "WBZ Kanton Luzern"],
+          ["Grundlagen zu häufigen Beurteilungsfehlern (Aufgabe 3)", "WBZ Kanton Luzern"],
+        ],
+      },
+      {
         group: "In den Unterlagen zitiert",
         items: [
           ["Handbuch betriebliche Grundbildung (Knutti, Dirren & Lehmann, 2019)", "SDBB"],
           ["Hurrelmann & Quenzel (2016)", "zitiert in Präsenztag 1"],
           ["Merck Jugendbarometer 2025", "zitiert in Präsenztag 1"],
           ["Berufsbildung Luzern in Zahlen 2025", "zitiert in Präsenztag 2"],
+          ["Yousty – Umfrage «Welcher Content?» · anforderungsprofile.ch · jobskills.ch", "zitiert in Präsenztag 3"],
+          ["Eckdaten Pferdefachmann/-frau EFZ (Bonus-Rolle)", "berufsberatung.ch"],
         ],
       },
     ],
     tech: [
       ["3D-Grafik", "Three.js r149 (WebGL) · © 2010–2023 three.js authors · MIT-Lizenz"],
-      ["3D-Welt & Figuren", "komplett im Code modelliert – keine fremden Modelle oder Texturen"],
+      ["3D-Welt & Figuren", "komplett im Code modelliert – keine fremden Modelle oder Texturen (auch Giraffe und Pony)"],
       ["Sound", "live erzeugt mit der Web Audio API – keine Audiodateien"],
       ["Schriften & Icons", "Systemschriften (Segoe UI, Bahnschrift) und System-Emoji – nicht mitgeliefert"],
       ["Technik", "HTML, CSS und JavaScript ohne Framework · läuft offline im Browser"],
