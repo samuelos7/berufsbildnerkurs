@@ -1192,3 +1192,37 @@ mark { background: rgba(31, 111, 197, .55); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ============ Copyright-Zeile (Titel & Hauptmenü) ============ */
+.copyright { margin-top: 8px; text-align: center; font-size: 12px; letter-spacing: .08em; color: rgba(255, 255, 255, .78); text-shadow: 0 2px 6px #000; }
+.copyright.link { cursor: pointer; }
+
+/* ============ Leistung: keine Unschärfe hinter den Flächen ============
+   Die Panels sind zu 87–89 % deckend – die Unschärfe dahinter sah man kaum, sie musste aber
+   bei jedem 3D-Bild neu berechnet werden. Zum Zurückholen diesen Block löschen. */
+*, *::before, *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+/* ============ Präsentationsmodus: nur der Inhalt ============
+   Missionsliste, Level-Titel, Navigationsknöpfe und Namensschild sind ausgeblendet –
+   der Inhalt der Station bekommt die ganze Breite und Höhe. */
+body.demo .level-head, body.demo .mission-list, body.demo .m-nav, body.demo .stage-col, body.demo .mission-body .source { display: none !important; }
+body.demo .level-detail, body.demo .level-detail.with-stage { display: block !important; width: min(1280px, 100%); margin: 0 auto; flex: 1; min-height: 0; }
+body.demo .mission-col { height: 100%; }
+body.demo .screen-top { padding-top: 64px; padding-bottom: 14px; }
+
+/* ============ Präsentationsmodus: Inhalt und Erkenntnis in EINEM Fenster ============
+   Bei Stationen mit Kursinhalt steht die Erkenntnis im Kopf des Fensters; die Leiste unten
+   zeigt nur noch Fortschritt, Uhr und Steuerung. main.js (demoFit) skaliert den Inhalt passend. */
+body.demo.demo-slim #app { height: calc(100% - 50px); }
+@supports (height: 100dvh) { body.demo.demo-slim #app { height: calc(100dvh - 50px); } }
+#demo-bar.slim { height: 50px; padding: 6px 24px; grid-template-columns: 1fr auto; grid-template-rows: 1fr; align-items: center; gap: 0 22px; border-top-width: 1px; box-shadow: none; }
+#demo-bar.slim .db-main { display: none; }
+#demo-bar.slim .db-segs { grid-column: 1; grid-row: 1; }
+#demo-bar.slim .db-side { grid-column: 2; grid-row: 1; flex-direction: row-reverse; align-items: center; gap: 14px; }
+#demo-bar.slim .db-btn { width: 34px; height: 34px; font-size: 14px; }
+body.demo .mission-col .mission-body { overflow: hidden; }
+.demo-take { margin: 14px 0 6px; padding: 14px 20px; border-radius: 16px; border-left: 5px solid #ffcc4d; background: linear-gradient(90deg, rgba(255, 204, 77, .18), rgba(255, 204, 77, .04)); font-size: 21px; line-height: 1.4; color: #fff; text-wrap: pretty; }
+.demo-take b { display: block; margin-bottom: 3px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #ffcc4d; }
+.demo-points { list-style: none; margin: 18px 0 4px; padding: 0; display: grid; gap: 12px; }
+.demo-points li { position: relative; padding: 14px 20px 14px 54px; border-radius: 16px; background: rgba(255, 255, 255, .06); border: 1px solid var(--line); font-size: 24px; line-height: 1.35; color: var(--text); text-wrap: pretty; }
+.demo-points li::before { content: ""; position: absolute; left: 22px; top: 50%; width: 12px; height: 12px; border-radius: 3px; transform: translateY(-50%) rotate(45deg); background: #ffcc4d; }

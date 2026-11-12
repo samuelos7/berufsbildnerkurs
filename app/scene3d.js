@@ -2262,7 +2262,17 @@ window.World = (() => {
   let frames = 0, perfAcc = 0, perfN = 0;
   // Diagnose-Anzeige nur mit ?dbg in der URL
   const DBG = location.search.includes("dbg") ? document.body.appendChild(Object.assign(document.createElement("div"), { style: "position:fixed;left:8px;bottom:8px;z-index:99;font:12px monospace;color:#0f0;background:#000a;padding:4px 8px" })) : null;
-  function tick() {
+  // Bildrate auf 60 fps begrenzen: auf 120/144-Hz-Bildschirmen rechnet die Grafikkarte sonst mehr als doppelt so viel – ohne sichtbaren Gewinn
+  const FRAME_MS = 1000 / 60;
+  let lastFrame = 0;
+  function tick(now) {
+    requestAnimationFrame(tick);
+    if (document.hidden) return;
+    if (!DBG && now !== undefined) {
+      const since = now - lastFrame;
+      if (since < FRAME_MS - 1.5) return;
+      lastFrame = since > FRAME_MS * 4 ? now : now - (since % FRAME_MS);
+    }
     const dt = Math.min(clock.getDelta(), DBG ? 0.6 : 0.1);
     const t = clock.elapsedTime;
 
@@ -2309,7 +2319,7 @@ window.World = (() => {
       wp.array[i * 3 + 1] = Math.sin(x * 0.35 + t * 1.2) * 0.07 + Math.sin(z * 0.6 - t * 0.9 + x * 0.1) * 0.06;
     }
     wp.needsUpdate = true;
-    waterGeo.computeVertexNormals();
+    if (frames % 2 === 0) waterGeo.computeVertexNormals(); // Normalen nur jedes zweite Bild neu rechnen – nicht sichtbar, spart CPU
     clouds.rotation.y = t * 0.004;
     waveFlags(t);
 
@@ -2319,8 +2329,15 @@ window.World = (() => {
       island.rotation.y = Math.sin(t * 0.2) * 0.15;
       const kl = 1 - Math.exp(-dt * 5);
       Object.entries(sideLights).forEach(([side, l]) => { l.intensity = lerp(l.intensity, menuSide === side ? 2.6 : 0, kl); });
-      menuHeroes.forEach((h, i) => animateChar(h, t, (menuSide === "wissen" && i === 1) || (menuSide === "arena" && i === 0), dt));
+      menuHeroes.forEach((h, i) => animateChar(h, t, (menuSide === "wissen" && i === 0) || (menuSide === "arena" && i === 1), dt));
       animateAnimal(giraffe, t, dt, menuSide === "wissen" ? -1.0 : menuSide === "arena" ? 0.3 : -0.5);
+      // Die Giraffe tanzt ein wenig: hüpft im Takt, wiegt sich und dreht sich hin und her
+      const beat = t * 4.2;
+      giraffe.root.position.y = 0.34 + Math.abs(Math.sin(beat)) * 0.09;
+      giraffe.root.position.x = -2.25 + Math.sin(beat * 0.5) * 0.1;
+      giraffe.root.rotation.y = 0.85 + Math.sin(beat * 0.5) * 0.3;
+      giraffe.root.rotation.z = Math.sin(beat) * 0.06;
+      giraffe.neck.rotation.z += Math.sin(beat + 0.6) * 0.12;
     }
     // Wissen
     if (wissenG.visible && fountain.visible) {
@@ -2470,7 +2487,6 @@ window.World = (() => {
       }
     }
     if (DBG && frames % 5 === 0) DBG.textContent = `sim ${t.toFixed(1)}s · ${frames} frames · drucker y ${printer.g.position.y.toFixed(2)}`;
-    requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
   return api;

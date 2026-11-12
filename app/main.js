@@ -235,18 +235,18 @@
         luLogo("lu-logo-lg"),
         h("div", { class: "title-top" },
           h("div", { class: "logo-wrap" }, h("h1", { class: "logo" }, D.title), h("div", { class: "logo-sub" }, D.subtitle)),
-          h("div", { class: "tagline" }, D.tagline),
         ),
         h("div", { class: "title-bottom" },
           h("div", { class: "press-start", onclick: start }, TOUCH ? "Tippen zum Starten" : "Enter drücken"),
-          h("div", { class: "demo-start", onclick: () => demoStart() }, "▶ Demo-Modus", h("small", {}, `Automatische Tour · ca. ${Math.round(demoTotal() / 60)} Min.`), h("kbd", {}, "D")),
+          h("div", { class: "demo-start", onclick: () => demoStart() }, "▶ Präsentation", h("small", {}, `Mein Take-away · ${DEMO.length} Stationen`), h("kbd", {}, "P")),
           h("div", { class: "title-meta" }, D.meta),
+          D.credits.author ? h("div", { class: "copyright" }, D.credits.copyright) : null,
           h("div", { class: "title-credits link", onclick: () => { sfx.ok(); go(MainMenu()); go(Credits()); } }, h("kbd", {}, "C"), "Credits & Quellen"),
         ),
       ),
     key: (e) => {
       if (e.key === "Enter" || e.key === " ") start();
-      if (e.key === "d" || e.key === "D") demoStart();
+      if ("dDpP".includes(e.key)) demoStart();
       if (e.key === "c" || e.key === "C") { sfx.ok(); go(MainMenu()); go(Credits()); }
     },
   });
@@ -338,8 +338,9 @@
             h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Auswahl"),
             h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Wissen / Arena"),
             h("span", {}, h("kbd", {}, "1–8"), " Direktwahl"),
-            h("span", { class: "link", onclick: () => demoStart() }, h("kbd", {}, "D"), " Demo"),
+            h("span", { class: "link", onclick: () => demoStart() }, h("kbd", {}, "P"), " Präsentation"),
             h("span", { class: "link", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits")),
+          D.credits.author ? h("div", { class: "copyright link", onclick: () => { sfx.ok(); go(Credits()); } }, D.credits.copyright) : null,
         );
       },
       key: (e) => {
@@ -355,7 +356,7 @@
         }
         if (/^[1-9]$/.test(e.key) && +e.key <= n) { s.i = +e.key - 1; W.menuSide(sideOf(s.i)); render(); open(); return true; }
         if (e.key === "Enter" || e.key === " ") { open(); return true; }
-        if (e.key === "d" || e.key === "D") { demoStart(); return true; }
+        if ("dDpP".includes(e.key)) { demoStart(); return true; }
         if (e.key === "c" || e.key === "C") { sfx.ok(); go(Credits()); return true; }
         return false;
       },
@@ -876,10 +877,14 @@
     const s = { phase: "intro", q: 0, sel: 0, answered: null, hp: HP, lives: 3, busy: false, hits: 0 };
     const q = () => pool[s.q % pool.length];
     const finish = (won) => { s.phase = won ? "won" : "lost"; if (won) sfx.win(); render(); };
+    // Nach jeder Antwort geht es von selbst weiter – Enter überspringt nur die Wartezeit
+    const AUTO_MS = 3200;
+    let alive = true;
+    const autoNext = () => { const qi = s.q; setTimeout(() => { if (alive && current.id === "boss" && s.q === qi && s.answered !== null) next(); }, AUTO_MS); };
     const answer = (i) => {
       if (s.busy) return;
       if (s.answered !== null) return next();
-      s.answered = i;
+      s.answered = i; s.at = Date.now();
       s.busy = true;
       const ok = i === q().correct;
       if (ok) {
@@ -890,6 +895,7 @@
           if (s.hp <= 0) { W.bossDie(); sfx.roar(); W.onDefeated = () => setTimeout(() => finish(true), 900); }
           s.busy = false;
           render();
+          autoNext();
         };
         W.bossHit();
         if (!W.ok) W.onImpact();
@@ -900,6 +906,7 @@
           s.lives--;
           s.busy = false;
           render();
+          autoNext();
           if (s.lives <= 0) setTimeout(() => finish(false), 1200);
         };
         setTimeout(() => sfx.roar(), 200);
@@ -918,8 +925,9 @@
     };
     return {
       id: "boss", title: "Bosskampf", zone: "arena",
+      clickNext: () => s.phase === "fight" && s.answered !== null && !s.busy && s.hp > 0 && s.lives > 0 && Date.now() - s.at > 400 && (next(), true),
       world: () => { W.mode("boss"); setTimeout(() => sfx.roar(), 300); },
-      leave: () => { W.onImpact = W.onScorch = W.onDefeated = null; },
+      leave: () => { alive = false; W.onImpact = W.onScorch = W.onDefeated = null; },
       debug: (what) => { s.phase = "fight"; render(); answer(what === "hit" ? q().correct : (q().correct + 1) % q().a.length); },
       view: () => {
         if (s.phase === "intro") {
@@ -959,7 +967,7 @@
                 h("kbd", { class: "key" }, String.fromCharCode(65 + i)), h("span", {}, a));
             })),
             h("div", { class: "explain" }, s.answered !== null
-              ? [(s.answered === qq.correct ? "⚡ Treffer! " : "📄 Daneben! ") + (qq.why || ""), s.busy ? "" : ["  ", h("kbd", {}, "Enter"), " Weiter"]]
+              ? [(s.answered === qq.correct ? "⚡ Treffer! " : "📄 Daneben! ") + (qq.why || ""), s.busy || s.hp <= 0 || s.lives <= 0 ? "" : h("span", { class: "auto-next" }, "  Weiter: klicken oder Enter – sonst automatisch …")]
               : "Wähle mit A–D oder den Pfeiltasten."),
           ),
         );
@@ -981,12 +989,12 @@
 
   /* --- ARENA: Interventions-Duell --- */
   const Duell = () => {
-    const cases = shuffle(D.duell);
+    const cases = shuffle(D.duell).slice(0, 10); // pro Runde 10 zufällige Fälle aus dem Pool
     const s = { i: 0, sel: 0, answered: null, score: 0, done: false };
     const L = D.duellLevels;
     const answer = (k) => {
       if (s.answered !== null) return next();
-      s.answered = k;
+      s.answered = k; s.at = Date.now();
       if (k === cases[s.i].level) { s.score++; sfx.right(); W.cheer(); } else sfx.wrong();
       render();
     };
@@ -996,6 +1004,7 @@
     };
     return {
       id: "duell", title: "Interventions-Duell", zone: "arena",
+      clickNext: () => !s.done && s.answered !== null && Date.now() - s.at > 400 && (next(), true),
       world: () => W.mode("arena", { hero: charById.bb }),
       view: () => {
         if (s.done) {
@@ -1017,7 +1026,7 @@
               return h("div", { class: cls, onclick: () => answer(k), onmouseenter: () => { if (s.answered === null && s.sel !== k) { s.sel = k; render(); } } },
                 h("span", { class: "dico" }, l.icon), h("b", {}, l.lbl), h("kbd", {}, k + 1));
             })),
-            h("div", { class: "explain" }, s.answered !== null ? [(s.answered === c.level ? "✅ Richtig! " : "❌ Nicht ganz. ") + c.why, "  ", h("kbd", {}, "Enter"), " Weiter"] : "Wie würdest du reagieren? Pfeiltasten oder 1–4."),
+            h("div", { class: "explain" }, s.answered !== null ? [(s.answered === c.level ? "✅ Richtig! " : "❌ Nicht ganz. ") + c.why, "  Klick oder ", h("kbd", {}, "Enter"), " Weiter"] : "Wie würdest du reagieren? Pfeiltasten oder 1–4."),
             h("div", { class: "disclaimer" }, "Übungsfälle nach dem Interventionsschema aus Tag 2"),
           ),
         );
@@ -1037,16 +1046,18 @@
   /* --- ARENA: Wer bin ich? --- */
   const Raetsel = () => {
     const ROUNDS = 6;
-    const order = shuffle(D.characters).slice(0, ROUNDS);
+    // Arena bleibt allgemein: keine berufsspezifischen Rollen (Informatik, Pferdefachmann/-frau)
+    const CHARS = D.characters.filter((c) => c.id !== "informatik" && c.id !== "pferd");
+    const order = shuffle(CHARS).slice(0, ROUNDS);
     const mk = (c) => {
       const clues = shuffle([...(c.aufgaben || []), ...(c.rechte || []), ...(c.pflichten || [])]).slice(0, 3);
-      const opts = shuffle([c, ...shuffle(D.characters.filter((o) => o.id !== c.id)).slice(0, 3)]);
+      const opts = shuffle([c, ...shuffle(CHARS.filter((o) => o.id !== c.id)).slice(0, 3)]);
       return { c, clues, opts };
     };
     const s = { r: 0, round: mk(order[0]), shown: 1, sel: 0, answered: null, score: 0, done: false };
     const answer = (k) => {
       if (s.answered !== null) return next();
-      s.answered = k;
+      s.answered = k; s.at = Date.now();
       const ok = s.round.opts[k].id === s.round.c.id;
       if (ok) { s.score += 4 - s.shown; sfx.right(); } else sfx.wrong();
       W.mode("arena", { hero: s.round.c });
@@ -1061,6 +1072,7 @@
     const hint = () => { if (s.answered === null && s.shown < s.round.clues.length) { s.shown++; sfx.move(); render(); } };
     return {
       id: "raetsel", title: "Wer bin ich?", zone: "arena",
+      clickNext: () => !s.done && s.answered !== null && Date.now() - s.at > 400 && (next(), true),
       world: () => W.mode("arena"),
       view: () => {
         if (s.done) {
@@ -1085,7 +1097,7 @@
                 h("span", { class: "dot", style: { "--c": o.color } }), h("b", {}, o.name), h("kbd", {}, k + 1));
             })),
             h("div", { class: "explain" }, s.answered !== null
-              ? [(R.opts[s.answered].id === R.c.id ? `✅ Richtig – ${R.c.name}! +${4 - s.shown} Punkte. ` : `❌ Das war: ${R.c.name}. `), "  ", h("kbd", {}, "Enter"), " Weiter"]
+              ? [(R.opts[s.answered].id === R.c.id ? `✅ Richtig – ${R.c.name}! +${4 - s.shown} Punkte. ` : `❌ Das war: ${R.c.name}. `), "  Klick oder ", h("kbd", {}, "Enter"), " Weiter"]
               : "Weniger Hinweise = mehr Punkte (3 / 2 / 1)."),
           ),
         );
@@ -1140,11 +1152,11 @@
     };
   };
 
-  /* ================= DEMO-MODUS =================
-     Führt automatisch durch das Spiel – für die Präsentation des Take-aways (5–9 Minuten).
-     Ablauf, Texte und Dauer pro Station stehen in data.js unter "demo".
-     Steuerung: Leertaste = Pause · → / ← (auch Presenter-Klicker) = weiter / zurück · + / − = Tempo · Esc = beenden */
-  const demo = { on: false, i: 0, t: 0, paused: false, speed: 1, el: null, timer: null, later: [], ended: false };
+  /* ================= PRÄSENTATIONSMODUS =================
+     Führt Station für Station durch mein Take-away (5–9 Minuten) – weiter geht es nur, wenn ich es sage.
+     Ablauf und Texte stehen in data.js unter "demo" (sec = Richtzeit, nur zur Orientierung).
+     Steuerung: → / Enter / Leertaste (auch Presenter-Klicker) = weiter · ← = zurück · ↑ ↓ = Inhalt scrollen · Esc = beenden */
+  const demo = { on: false, i: 0, t: 0, clock: 0, paused: false, speed: 1, el: null, timer: null, later: [], ended: false };
   const DEMO = D.demo || [];
   function demoScreens(show) {
     const [what, arg] = show.split(":");
@@ -1163,20 +1175,17 @@
     return [MainMenu()];
   }
   const fmt = (sec) => Math.floor(sec / 60) + ":" + String(Math.floor(sec % 60)).padStart(2, "0");
-  const demoTotal = () => DEMO.reduce((a, d) => a + d.sec, 0);
+  const demoTotal = () => DEMO.reduce((a, d) => a + (d.sec || 20), 0);
   function demoPaint() {
     const st = DEMO[demo.i], el = demo.el;
     if (!el) return;
-    const done = DEMO.slice(0, demo.i).reduce((a, d) => a + d.sec, 0) + Math.min(demo.t, st.sec);
-    el.querySelector(".db-kick").textContent = `Demo · ${demo.i + 1} / ${DEMO.length} · ${st.kicker}`;
+    el.querySelector(".db-kick").textContent = `${demo.i + 1} / ${DEMO.length} · ${st.kicker}`;
     el.querySelector(".db-title").textContent = st.title;
     el.querySelector(".db-text").textContent = st.text;
-    el.querySelector(".db-time").textContent = `${fmt(done / demo.speed)} / ${fmt(demoTotal() / demo.speed)}` + (demo.speed !== 1 ? ` · ${demo.speed.toFixed(2).replace(/0$/, "")}×` : "");
-    el.querySelector(".db-play").textContent = demo.ended ? "↺" : demo.paused ? "▶" : "⏸";
-    el.classList.toggle("paused", demo.paused);
+    el.querySelector(".db-time").textContent = `${fmt(demo.clock)} · Richtzeit ${fmt(demoTotal())}`;
     el.querySelectorAll(".db-seg").forEach((seg, i) => {
       seg.classList.toggle("on", i === demo.i);
-      seg.firstChild.style.width = (i < demo.i ? 100 : i > demo.i ? 0 : Math.min(100, (demo.t / st.sec) * 100)) + "%";
+      seg.firstChild.style.width = (i <= demo.i ? 100 : 0) + "%";
     });
   }
   function demoShow(i) {
@@ -1197,51 +1206,70 @@
       b.key({ key: "Enter" });
       [5000, 12000].forEach((ms, k) => demo.later.push(setTimeout(() => { if (demo.on && current === b && !demo.paused) { if (k) b.key({ key: "Enter" }); b.debug("hit"); } }, ms / demo.speed)));
     }
-    const sc = demoScroller();
-    if (sc) sc.scrollTop = 0;
+    demoFit();
     demoPaint();
   }
-  const demoScroller = () => app.querySelector(".mission-col .mission-body, .jr-main, .tab-body, .lx-detail, .credits");
-  function demoTick() {
-    if (!demo.on || demo.paused || demo.ended) return;
+  /* Station mit Kursinhalt: Erkenntnis und «Das nehme ich mit» stehen im Kopf des Inhaltsfensters,
+     die Leiste unten schrumpft auf Fortschritt + Steuerung, und der Inhalt wird so skaliert,
+     dass alles ohne Scrollen auf eine Seite passt. */
+  function demoFit() {
+    if (!demo.on || !demo.el) return;
     const st = DEMO[demo.i];
-    demo.t += 0.1 * demo.speed;
-    // langen Inhalt während der Station langsam durchscrollen (nach dem ersten Viertel, fertig bei 85 %)
-    const sc = demoScroller();
-    if (sc) {
-      const max = sc.scrollHeight - sc.clientHeight;
-      if (max > 8) sc.scrollTop = max * Math.max(0, Math.min(1, (demo.t / st.sec - 0.25) / 0.6));
+    const body = app.querySelector(".mission-col .mission-body");
+    document.body.classList.toggle("demo-slim", !!body);
+    demo.el.classList.toggle("slim", !!body);
+    if (!body) return;
+    const sw = body.querySelector(".swap"), goal = sw.querySelector(".goal"), h3 = sw.querySelector("h3");
+    if (!sw.querySelector(".demo-take")) {
+      goal.textContent = `${demo.i + 1} / ${DEMO.length} · ${st.kicker} · ${h3.textContent}`;
+      h3.textContent = st.title;
+      const take = h("div", { class: "demo-take" }, h("b", {}, "Das nehme ich mit"), st.text);
+      h3.after(take);
+      // Statt des ganzen Kursinhalts nur die Kernpunkte zeigen, über die ich spreche (data.js → demo[].points)
+      if (st.points && st.points.length) {
+        while (take.nextSibling) take.nextSibling.remove();
+        take.after(h("ul", { class: "demo-points" }, st.points.map((pt) => h("li", {}, pt))));
+      }
     }
-    if (demo.t >= st.sec) {
-      if (demo.i < DEMO.length - 1) return demoShow(demo.i + 1);
-      demo.ended = true;
-      sfx.win();
+    body.scrollTop = 0;
+    let lo = 0.45, hi = 1.5;
+    sw.style.zoom = hi;
+    if (body.scrollHeight > body.clientHeight + 1) {
+      for (let k = 0; k < 9; k++) {
+        const mid = (lo + hi) / 2;
+        sw.style.zoom = mid;
+        if (body.scrollHeight <= body.clientHeight + 1) lo = mid; else hi = mid;
+      }
+      sw.style.zoom = lo;
     }
+  }
+  window.addEventListener("resize", () => demo.on && demoFit());
+  const demoScroller = () => app.querySelector(".mission-col .mission-body, .jr-main, .tab-body, .lx-detail, .credits");
+  // Kein automatisches Weiterschalten: Ich bestimme das Tempo. Die Uhr läuft nur als Orientierung mit.
+  function demoTick() {
+    if (!demo.on) return;
+    demo.clock += 1;
     demoPaint();
   }
+  const demoNext = () => { if (demo.i < DEMO.length - 1) demoShow(demo.i + 1); };
+  const demoScroll = (dir) => { const sc = demoScroller(); if (sc) sc.scrollBy({ top: dir * sc.clientHeight * 0.6, behavior: "smooth" }); };
   function demoStart(from = 0) {
     if (demo.on || !DEMO.length) return;
-    demo.on = true; demo.paused = false; demo.speed = 1;
+    demo.on = true; demo.paused = false; demo.speed = 1; demo.clock = 0;
     const btn = (cls, txt, title, fn) => h("button", { class: "db-btn " + cls, title, "aria-label": title, onclick: (e) => { e.currentTarget.blur(); fn(); } }, txt);
     demo.el = h("div", { id: "demo-bar" },
       h("div", { class: "db-main" }, h("div", { class: "db-kick" }), h("div", { class: "db-title" }), h("div", { class: "db-text" })),
       h("div", { class: "db-side" },
         h("div", { class: "db-ctrl" },
           btn("", "⏮", "Zurück (←)", () => demoShow(demo.i - 1)),
-          btn("db-play", "⏸", "Pause / Weiter (Leertaste)", demoToggle),
-          btn("", "⏭", "Weiter (→)", () => demoShow(demo.i + 1)),
-          btn("db-x", "✕", "Demo beenden (Esc)", demoStop)),
+          btn("db-play", "⏭", "Weiter (→, Enter oder Leertaste)", demoNext),
+          btn("db-x", "✕", "Präsentation beenden (Esc)", demoStop)),
         h("div", { class: "db-time" })),
-      h("div", { class: "db-segs" }, DEMO.map((d, i) => h("div", { class: "db-seg", title: d.title, style: { "--w": String(d.sec) }, onclick: () => demoShow(i) }, h("i")))));
+      h("div", { class: "db-segs" }, DEMO.map((d, i) => h("div", { class: "db-seg", title: d.title, style: { "--w": String(d.sec || 20) }, onclick: () => demoShow(i) }, h("i")))));
     document.body.append(demo.el);
     document.body.classList.add("demo");
-    demo.timer = setInterval(demoTick, 100);
+    demo.timer = setInterval(demoTick, 1000);
     demoShow(from);
-  }
-  function demoToggle() {
-    if (demo.ended) return demoShow(0);
-    demo.paused = !demo.paused;
-    demoPaint();
   }
   function demoStop() {
     if (!demo.on) return;
@@ -1250,7 +1278,7 @@
     demo.later.forEach(clearTimeout);
     demo.el.remove();
     demo.el = null;
-    document.body.classList.remove("demo");
+    document.body.classList.remove("demo", "demo-slim");
     while (stack.length > 1) { const x = stack.pop(); x.leave && x.leave(); }
     menuMem.i = 0;
     stack.push(MainMenu());
@@ -1259,15 +1287,21 @@
   }
   function demoKey(e) {
     if (e.key === "Escape") demoStop();
-    else if (e.key === " " || e.key === "Enter") demoToggle();
-    else if (e.key === "ArrowRight" || e.key === "PageDown") demoShow(demo.i + 1);
+    else if (e.key === " " || e.key === "Enter" || e.key === "ArrowRight" || e.key === "PageDown") demoNext();
+    else if (e.key === "ArrowDown" || e.key === "ArrowUp") demoScroll(e.key === "ArrowDown" ? 1 : -1);
     else if (e.key === "ArrowLeft" || e.key === "PageUp") demoShow(demo.i - 1);
     else if (e.key === "Home") demoShow(0);
-    else if (e.key === "+" || e.key === "-") { demo.speed = Math.max(0.5, Math.min(2, demo.speed + (e.key === "+" ? 0.25 : -0.25))); demoPaint(); }
     else if (e.key === "m" || e.key === "M") toggleMute();
     else return;
     e.preventDefault();
   }
+
+  /* Arena: Nach einer Antwort führt ein Klick irgendwo auf dem Bildschirm zur nächsten Frage */
+  window.addEventListener("click", (e) => {
+    if (demo.on || !current || !current.clickNext) return;
+    if (e.target.closest && e.target.closest(".hud, #hud, .zone-badge, .crumb-link, #demo-bar")) return;
+    if (current.clickNext()) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
 
   /* ---------- Tastatur ---------- */
   window.addEventListener("keydown", (e) => {

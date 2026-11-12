@@ -55,21 +55,21 @@
   },
   "app/data.js": {
     "mtime": 1794493636.497338,
-    "seen": 1794494175.9736102,
+    "seen": 1794513749.0893977,
     "ast_hash": "05705b0aa0798d7a8afee55d387cd337",
-    "semantic_hash": ""
+    "semantic_hash": "05705b0aa0798d7a8afee55d387cd337"
   },
   "app/main.js": {
     "mtime": 1794493636.5309577,
-    "seen": 1794494175.9736238,
+    "seen": 1794513749.0894206,
     "ast_hash": "f4d960a121562e9a1bcda88e7eb9d170",
-    "semantic_hash": ""
+    "semantic_hash": "f4d960a121562e9a1bcda88e7eb9d170"
   },
   "app/scene3d.js": {
     "mtime": 1794493963.2687635,
-    "seen": 1794494175.97363,
+    "seen": 1794513749.0894318,
     "ast_hash": "3f1739df74dd8d90ab0e8b58aa3db01e",
-    "semantic_hash": ""
+    "semantic_hash": "3f1739df74dd8d90ab0e8b58aa3db01e"
   },
   "app/index.html": {
     "mtime": 1794136326.8628283,
@@ -136,5 +136,47 @@
     "seen": 1794476877.3997731,
     "ast_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a",
     "semantic_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a"
+  },
+  "graphify-out/converted/WBZLU_BEKU_Arbeitsauftrag_ausgefuellt_ec34e429.md": {
+    "mtime": 1794513524.5301924,
+    "seen": 1794513749.0894387,
+    "ast_hash": "3f944c014836ebdfa0458b9ac6102d60",
+    "semantic_hash": "3f944c014836ebdfa0458b9ac6102d60"
+  },
+  "graphify-out/converted/WBZLU_BEKU_zielgerichtete_Instruktion_ausgefuellt_fd6568d4.md": {
+    "mtime": 1794513525.2030528,
+    "seen": 1794513749.0894442,
+    "ast_hash": "e63b75cd83a83e38ad10a3d770e32180",
+    "semantic_hash": "e63b75cd83a83e38ad10a3d770e32180"
+  },
+  "material/Tag 4/WBZLU BEKU_Beispiele f\u00fcr R\u00fcckmeldungen.pdf": {
+    "mtime": 1794483858.2187052,
+    "seen": 1794513749.089451,
+    "ast_hash": "dc8d4a9aa45070ddd803850c00e454b5",
+    "semantic_hash": "dc8d4a9aa45070ddd803850c00e454b5"
+  },
+  "material/Tag 4/WBZLU BEKU_Fallbeispiele schwierige Gespr\u00e4che.pdf": {
+    "mtime": 1794478021.2452636,
+    "seen": 1794513749.0894563,
+    "ast_hash": "cbfea6cde9cb56eefd9c96382d210702",
+    "semantic_hash": "cbfea6cde9cb56eefd9c96382d210702"
+  },
+  "material/Tag 4/WBZLU BEKU_Theorie Lernende instruieren und anleiten.pdf": {
+    "mtime": 1794467404.5047224,
+    "seen": 1794513749.0894604,
+    "ast_hash": "8937f7a4ee9c22dc75516ae213b04a52",
+    "semantic_hash": "8937f7a4ee9c22dc75516ae213b04a52"
+  },
+  "material/Tag 4/WBZLU BEKU_Theorie R\u00fcckmeldungen.pdf": {
+    "mtime": 1794478017.9509838,
+    "seen": 1794513749.0894654,
+    "ast_hash": "1627b74cf7dc90bfeb4dbd93db07b02f",
+    "semantic_hash": "1627b74cf7dc90bfeb4dbd93db07b02f"
+  },
+  "material/Tag 4/WBZLU_BEKU_Pr\u00e4senz_PP_Tag 4.pdf": {
+    "mtime": 1793874304.367951,
+    "seen": 1794513749.0894704,
+    "ast_hash": "5eb5cfb500685b0fd88ecc69118fa3fb",
+    "semantic_hash": "5eb5cfb500685b0fd88ecc69118fa3fb"
   }
 }

@@ -1,4 +1,4 @@
-/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1, Tag 2, Tag 3).
+/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1 bis Tag 4).
    Neue Kurstage: im Array "levels" das Level ausfüllen und "placeholder" entfernen.
 
    Block-Typen für Missionen:
@@ -1130,7 +1130,401 @@ window.GAME_DATA = {
         },
       ],
     },
-    { nr: 4, title: "Kurstag 4", placeholder: true, c1: "#d6812f", c2: "#3d200c", missions: [] },
+    {
+      nr: 4,
+      title: "Instruieren & Rückmelden",
+      subtitle: "Lernende instruieren · Lernende anleiten · Rückmeldungen · Gleichstellung · Schwierige Gespräche",
+      c1: "#d6812f", c2: "#3d200c",
+      missions: [
+        {
+          ch: "Einstieg",
+          title: "Tagesziele: Instruieren, Rückmelden, Gespräche",
+          blocks: [
+            { t: "list", h: "Was wollen wir heute erreichen?", items: [
+              "Verschiedene Handlungen zielgerichtet instruieren",
+              "Lernende wirkungsvoll anleiten",
+              "Konstruktive Rückmeldungen erteilen, die Lernende in ihrem Lern- und Entwicklungsprozess weiterbringen",
+              "Mit schwierigen Gesprächen umgehen können",
+            ] },
+            { t: "cols", h: "Vier Blöcke", cols: [
+              { h: "🛠️ Block 1", items: ["Lernende instruieren", "Lernende anleiten"] },
+              { h: "💬 Block 2", items: ["Mit Rückmelden steuern"] },
+              { h: "⚖️ Block 3", items: ["Sensibilisierung Gleichstellung"] },
+              { h: "🗣️ Block 4", items: ["Schwierige Gespräche", "Abschluss"] },
+            ] },
+          ],
+          source: "PP Tag 4, Folien 2–3",
+        },
+        {
+          ch: "Block 1 · Instruieren",
+          title: "Instruieren und Anleiten",
+          blocks: [
+            { t: "cols", h: "Zwei Werkzeuge – eines geplant, eines täglich", cols: [
+              { h: "🎬 Instruieren", items: ["Ich zeige eine Handlung vor und erläutere, was ich mache, wie ich es mache und warum", "Erfolgt geplant – nie spontan", "Die Lernenden machen nach, wenden in neuen Situationen an und reflektieren"] },
+              { h: "📋 Anleiten", items: ["Ich wähle eine passende Aufgabe – je nach Ausbildungsstand", "Ich erteile einen vollständigen und klaren Arbeitsauftrag", "Die Lernenden erledigen die Aufgabe selbstständig"] },
+            ] },
+            { t: "list", h: "Vorteile von Instruktionen", items: [
+              "Berufsbildner/innen geben ihre eigene berufliche Erfahrung weiter – in konkreten Situationen gelingt das am einfachsten",
+              "Lernende bauen eigene berufliche Erfahrungen auf und wenden das Wissen aus der Berufsfachschule praktisch an",
+            ] },
+            { t: "cols", h: "Komfortzonen-Matrix: Gelernt wird in der Lernzone", cols: [
+              { h: "😌 Komfortzone", items: ["Sicherheit hoch", "Motivation und Verantwortungsübernahme gering"] },
+              { h: "🚀 Lernzone", items: ["Sicherheit hoch", "Motivation und Verantwortungsübernahme hoch"] },
+              { h: "😶 Apathiezone", items: ["Sicherheit gering", "Motivation und Verantwortungsübernahme gering"] },
+              { h: "😱 Panikzone", items: ["Sicherheit gering", "Motivation und Verantwortungsübernahme hoch"] },
+            ] },
+          ],
+          source: "PP Tag 4, Folien 4 & 8 · Theorie «Lernende instruieren und anleiten», Kap. 1",
+        },
+        {
+          ch: "Block 1 · Instruieren",
+          title: "Die kognitive Meisterlehre",
+          blocks: [
+            { t: "steps", h: "Ein Handwerk näherbringen – und die Technik bei jedem Schritt erklären", items: [
+              "Modelling («Vormachen»): Ich zeige ein Vorgehen vor und sage dazu, was ich gerade überlege",
+              "Scaffolding («Unterstützung»): Die Lernenden führen das Vorgezeigte selbst durch – ich unterstütze noch",
+              "Fading («Rückzug»): Je mehr die Lernenden verstanden haben, desto mehr ziehe ich mich zurück",
+              "Coaching («Betreuung»): Mit Rückmeldungen und Standortbestimmungen unterstütze ich den Lernzuwachs weiter",
+            ] },
+            { t: "note", text: "Beim Fading helfe ich erst, wenn die Lernenden wirklich nicht mehr weiterkommen. Selbstreflexion bringt sie dazu, ihr Vorgehen zu hinterfragen und Erfolgsfaktoren herauszuarbeiten." },
+          ],
+          source: "Theorie «Lernende instruieren und anleiten», Kap. 2",
+        },
+        {
+          ch: "Block 1 · Instruieren",
+          title: "Instruieren in 7 Schritten",
+          blocks: [
+            { t: "cols", h: "Drei Phasen", cols: [
+              { h: "1️⃣ Vorbereitung", items: ["Schritt 1: Die zu instruierende Handlung auswählen", "Schritt 2: Die Modellierung vorbereiten"] },
+              { h: "2️⃣ Instruktion", items: ["Schritt 3: In die Instruktion einführen", "Schritt 4: Die Handlung modellieren", "Schritt 5: Zum Nachmachen auffordern"] },
+              { h: "3️⃣ Erweiterung & Reflexion", items: ["Schritt 6: Neu erlernte Fähigkeiten anwenden lassen", "Schritt 7: Die Reflexion fördern"] },
+            ] },
+            { t: "list", h: "Das Wichtigste in Kürze", items: [
+              "Eine Instruktion sollte geplant und nicht spontan erfolgen",
+              "Die Modellierung einer Handlung ist herausfordernd!",
+              "Denken Sie bei der Modellierung laut mit",
+            ] },
+          ],
+          source: "PP Tag 4, Folien 9–10",
+        },
+        {
+          ch: "Block 1 · Instruieren",
+          title: "Vorbereiten & Modellieren",
+          blocks: [
+            { t: "list", h: "Schritt 1 · Welche Handlung eignet sich?", items: [
+              "Vollständigkeit: planende, ausführende und kontrollierende Elemente",
+              "Komplexität: eine Standardsituation wählen – vom Einfachen zum Komplexen",
+              "Individuelle Fähigkeiten der Lernenden: herausfordern, aber nicht überfordern",
+            ] },
+            { t: "cols", h: "Schritt 2 · Laut denken – drei Fragen pro Teilschritt", cols: [
+              { h: "❓ Was", items: ["Was mache ich genau?"] },
+              { h: "💡 Warum", items: ["Warum mache ich das so und nicht anders?"] },
+              { h: "👀 Worauf", items: ["Worauf achte ich besonders?"] },
+            ] },
+            { t: "steps", h: "Schritte 3–5 · Die Instruktion", items: [
+              "Einführen: Gesamtüberblick geben, Interesse wecken (z. B. mit eigenen Erfahrungen), auf den Ablauf hinweisen",
+              "Modellieren: Handlung Schritt für Schritt vorzeigen und die Gedanken laut äussern – Fragen notieren die Lernenden und stellen sie am Schluss",
+              "Nachmachen: Standardsituation wählen und einen vollständigen Arbeitsauftrag erteilen – sehr ähnlich wie die Modellierung",
+            ] },
+            { t: "note", text: "Damit beim Vorzeigen nichts Wichtiges vergessen geht, lohnt es sich, die Modellierung vorher schriftlich vorzubereiten." },
+          ],
+          source: "PP Tag 4, Folien 11–13 · Theorie «Lernende instruieren und anleiten», Kap. 3",
+        },
+        {
+          ch: "Block 1 · Instruieren",
+          title: "Anwenden & Reflektieren",
+          blocks: [
+            { t: "list", h: "Schritt 6 · Neu erlernte Fähigkeiten anwenden lassen", items: [
+              "Genügend Gelegenheiten geben, um das Erlernte anzuwenden und Erfahrungen zu sammeln",
+              "Die Handlung auf andere, ähnliche Situationen übertragen",
+              "Nur eingreifen, wenn die Lernenden selbst nicht weiterkommen",
+            ] },
+            { t: "list", h: "Schritt 7 · Die Reflexion fördern – drei Fragen", items: [
+              "«Mit welchen Schritten bei der Umsetzung bist du zufrieden? Weshalb?»",
+              "«Wo bist du noch unsicher? Woran liegt dies?»",
+              "«Wie kannst du sicherstellen, dass du diesen Arbeitsschritt das nächste Mal fehlerfrei durchführst?»",
+            ] },
+            { t: "note", text: "Tipp aus den Folien: die Lernenden zu einer Werkschau auffordern. Im Kurs haben wir eine eigene Instruktion vorbereitet, in Dreiergruppen vorgestellt und als Rollenspiel vorgespielt." },
+          ],
+          source: "PP Tag 4, Folien 14–15 · Theorie «Lernende instruieren und anleiten», Kap. 3.3",
+        },
+        {
+          ch: "Block 1 · Anleiten",
+          title: "Wirkungsvoll anleiten",
+          blocks: [
+            { t: "list", h: "Das Wichtigste in Kürze", items: [
+              "Als Berufsbildner/in leiten Sie Ihre Lernenden täglich an",
+              "Mit einer zielgerichteten Anleitung fördern Sie die Handlungskompetenz",
+              "Eine gute Anleitung ist mehr, als einen Auftrag zu übergeben: vollständige Arbeitsaufträge, angepasst an den Ausbildungsstand",
+            ] },
+            { t: "cols", h: "Vier Grundlagen einer zielführenden Anleitung", cols: [
+              { h: "🧍 Eigenständiges Arbeiten", items: ["Ziele überlegen, Aufgabe beurteilen, Rückmeldung geben", "Fördert Selbstständigkeit, Kompetenz und Motivation"] },
+              { h: "🎯 Passende Aufgaben", items: ["Dem Ausbildungsstand entsprechend", "Zu einfach oder zu schwer schadet Motivation und Lernprozess"] },
+              { h: "🧭 Durchdachte Begleitung", items: ["Jede/r Lernende bringt andere Voraussetzungen mit", "Je nach Person sind Kontrollpunkte sinnvoll"] },
+              { h: "📋 Vollständige, klare Aufträge", items: ["Alle Informationen für die selbstständige Ausführung", "Sonst müssen Lernende immer nachfragen – und werden nicht selbstständig"] },
+            ] },
+            { t: "steps", h: "Der Kreislauf: Anleiten und Rückmelden steuern den Lernprozess", items: [
+              "Lernziele formulieren – unter Berücksichtigung des Entwicklungspotenzials",
+              "Arbeitsauftrag: die Anleitung einer Arbeit",
+              "Umsetzung: Lernende begleiten, Zwischengespräche führen, Kontrollpunkte setzen",
+              "Rückmeldung: die Leistung beurteilen – und daraus den nächsten Auftrag ableiten",
+            ] },
+          ],
+          source: "PP Tag 4, Folien 17–19 · Theorie «Lernende instruieren und anleiten», Kap. 4",
+        },
+        {
+          ch: "Block 1 · Anleiten",
+          title: "Der vollständige Arbeitsauftrag",
+          blocks: [
+            { t: "cols", h: "Sechs Schritte in zwei Phasen", cols: [
+              { h: "📝 Auftrag vorbereiten", items: ["1 · Passende Aufgabe auswählen", "2 · Die Begleitung der Lernenden planen"] },
+              { h: "🗣️ Auftrag erteilen", items: ["1 · Den Arbeitsauftrag einbetten", "2 · Den Arbeitsauftrag formulieren", "3 · Die Erwartungen klarstellen", "4 · Informationen zu Ressourcen und Hilfsmitteln geben"] },
+            ] },
+            { t: "table", h: "Den Auftrag erteilen – worauf es ankommt", head: ["Schritt", "Was heisst das?"], rows: [
+              ["Einbetten", "In den grösseren Zusammenhang stellen: Wie kommt es zur Aufgabe, wozu dient sie? Wer den Sinn erkennt, ist motivierter"],
+              ["Formulieren", "Klar und deutlich, in Teilschritte gegliedert – Unwichtiges weglassen. Das gibt Orientierung und Sicherheit"],
+              ["Erwartungen", "Form und Ergebnis, Zeitrahmen, Umfang, Fristen, Arbeitsweise, Detaillierungsgrad – darauf stützt sich später die Rückmeldung"],
+              ["Hilfsmittel", "Welche Hilfsmittel und Ressourcen stehen zur Verfügung? Das verhindert unnötige Frustration"],
+            ] },
+            { t: "list", h: "Die Lernbegleitung planen – Leitfragen", items: [
+              "Welche Rolle übernehme ich bei der Lernbegleitung?",
+              "Welche Ziele verfolgt die Aufgabe? Welche Vorbesprechungen und Planungsschritte braucht es?",
+              "Wann setze ich Kontrollpunkte während der Durchführung?",
+            ] },
+          ],
+          source: "PP Tag 4, Folie 20 · Theorie «Lernende instruieren und anleiten», Kap. 5",
+        },
+        {
+          ch: "Block 1 · Anleiten",
+          title: "Fünf Praxistipps",
+          blocks: [
+            { t: "steps", h: "Praxistipps für wirkungsvolles Anleiten", items: [
+              "Wirkungsvolles Anleiten steht nie allein! Auftrag → Umsetzung mit Begleitung → Rückmeldung – immer ein Gesamtprozess",
+              "Bleiben Sie entspannt: sinnvolle Aufträge aussuchen, vollständig erklären – auch im hektischen Alltag genügend Zeit nehmen",
+              "Vertrauen Sie den Lernenden: begleiten, aber genügend Raum lassen, um selbstständig zu werden",
+              "Werten Sie Fehler positiv: Lernende machen häufiger Fehler als andere Mitarbeitende – Fehler sind die grössten Lernchancen",
+              "Fordern und fördern Sie: regelmässig Aufgaben erteilen, bei denen die Lernenden über sich hinauswachsen können",
+            ] },
+            { t: "note", text: "Reflexionsfragen aus dem Kurs: Wo sehen Sie den Nutzen, wo die Schwierigkeiten von gutem Anleiten? Was versteht man unter einem vollständigen Arbeitsauftrag?" },
+          ],
+          source: "PP Tag 4, Folien 21–24 · Theorie «Lernende instruieren und anleiten», Kap. 6",
+        },
+        {
+          ch: "Block 2 · Rückmelden",
+          title: "Warum Rückmeldungen?",
+          blocks: [
+            { t: "list", h: "Das wichtigste Gespräch ist das Rückmeldegespräch", items: [
+              "Mit guten Rückmeldungen fördern Sie die Handlungskompetenz Ihrer Lernenden",
+              "Sie beeinflussen damit die Leistungen der Lernenden, ihr Leistungspotenzial sowie ihre Motivation und ihr Commitment",
+              "Rückmeldungen zeigen den Standard für gute Arbeit auf – Lernende machen vieles zum ersten Mal und lernen erst so, was als «gut erfüllt» gilt",
+            ] },
+            { t: "cols", h: "Vorteile von regelmässigen Rückmeldungen", cols: [
+              { h: "🎒 Für die Lernenden", items: ["Ihre Arbeit wird wahrgenommen", "Leistungseinschätzung und Ideen zur Weiterentwicklung", "Individuelles Kompetenzmanagement"] },
+              { h: "🧑‍🏫 Für mich als Berufsbildner/in", items: ["Transparenz bei den Arbeitsanforderungen", "Proaktive Kommunikation der Lernenden anregen"] },
+              { h: "⚠️ Wenn Rückmeldungen fehlen", items: ["Keine Informationen zur eigenen Arbeitsleistung", "Die Lernenden erleben keine Kompetenz", "Sie ziehen selbst Schlüsse – das führt zu Missverständnissen"] },
+            ] },
+            { t: "note", text: "In der Praxis gehen konstruktive Rückmeldungen häufig vergessen – dabei sollte man sich gerade dafür genügend Zeit nehmen." },
+          ],
+          source: "PP Tag 4, Folien 27 & 34–35 · Theorie «Rückmeldungen», Kap. 1",
+        },
+        {
+          ch: "Block 2 · Rückmelden",
+          title: "Feedback-Modelle",
+          blocks: [
+            { t: "cols", h: "Johari-Fenster – Feedback verkleinert den blinden Fleck", cols: [
+              { h: "🪟 Öffentliche Person", items: ["Mir bekannt – anderen bekannt"] },
+              { h: "🙈 Blinder Fleck", items: ["Mir unbekannt – anderen bekannt", "«Andere teilen mir mit»"] },
+              { h: "🤫 Mein Geheimnis", items: ["Mir bekannt – anderen unbekannt", "«Ich gebe preis»"] },
+              { h: "❔ Unbekanntes", items: ["Mir unbekannt – anderen unbekannt"] },
+            ] },
+            { t: "steps", h: "WWW-Feedback", items: [
+              "Wahrnehmung – «Ich habe gesehen, dass du …»",
+              "Wirkung – «Das hat mich daran zweifeln lassen, dass du …»",
+              "Wunsch – «Ich fände es hilfreich, wenn du …»",
+            ] },
+            { t: "table", h: "Fünf-Finger-Feedback", head: ["Finger", "Steht für"], rows: [
+              ["👍 Daumen", "Lob"],
+              ["☝️ Zeigefinger", "Bemerkenswert"],
+              ["🖕 Mittelfinger", "Kritik"],
+              ["💍 Ringfinger", "Befindlichkeit"],
+              ["🤙 Kleiner Finger", "Zu kurz gekommen"],
+            ] },
+          ],
+          source: "PP Tag 4, Folien 28, 30 & 31",
+        },
+        {
+          ch: "Block 2 · Rückmelden",
+          title: "Feedback-Regeln",
+          blocks: [
+            { t: "cols", cols: [
+              { h: "📣 Feedback geben", items: ["Respektvoll", "In der Ich-Form", "Ehrlich", "Nicht öffentlich", "Zeitnah", "Ohne Druck"] },
+              { h: "👂 Feedback nehmen", items: ["Nicht rechtfertigen", "Annehmen", "Prüfen", "Vielleicht ändern"] },
+            ] },
+            { t: "list", h: "Grenzen – hier wird eine Rückmeldung schwierig oder unmöglich", items: [
+              "Nicht Beobachtbares",
+              "Komplexe Tätigkeiten",
+              "Arbeitsaufträge, die über eine sehr lange Zeit andauern",
+              "Informationen, die man nur von anderen Mitarbeitenden oder Dritten erhalten hat",
+            ] },
+          ],
+          source: "PP Tag 4, Folie 29 (Bildungsbibel.de) · Theorie «Rückmeldungen», Kap. 3",
+        },
+        {
+          ch: "Block 2 · Rückmelden",
+          title: "Eine gute Rückmeldung in 4 Schritten",
+          blocks: [
+            { t: "list", h: "Vorbereiten – eine Rückmeldung knüpft immer an einen Arbeitsauftrag", items: [
+              "Den Arbeitsauftrag in Erinnerung rufen",
+              "Die gestellten Anforderungskriterien reflektieren: gut, mittelmässig oder schlecht erfüllt?",
+              "Stichworte notieren – so bleibt die Rückmeldung kriterienbasiert",
+            ] },
+            { t: "steps", h: "Die Rückmeldung erteilen", items: [
+              "Gesamteindruck vermitteln – die Lernenden wissen sofort, woran sie sind, und können sich auf das Gespräch einlassen",
+              "Detailliert begründen – immer wieder Bezug auf die Kriterien nehmen und klar strukturieren",
+              "Handlungsanweisung geben – mit konkreten Beispielen zeigen, wie es besser geht, und weiterhin Vertrauen zeigen",
+              "Umsetzung sicherstellen – Hilfestellungen aufzeigen und nach einer Weile gemeinsam prüfen, ob die Ziele erreicht sind",
+            ] },
+            { t: "note", text: "Reflexionsfrage aus dem Kurs: Wo liegen in der Praxis die Herausforderungen von regelmässigen und guten Rückmeldungen?" },
+          ],
+          source: "PP Tag 4, Folien 36–38 · Theorie «Rückmeldungen», Kap. 2",
+        },
+        {
+          ch: "Block 2 · Rückmelden",
+          title: "Drei Übungsfälle für Rückmeldungen",
+          blocks: [
+            { t: "table", head: ["Wer?", "Auftrag", "Was ist passiert?"], rows: [
+              ["Viola, Kauffrau – Berufsbildner Stefan", "Weihnachtsgeschenke für die Kunden adressieren und versandfertig einpacken", "183 Geschenke per Serienbrief korrekt beschriftet, kein Fehler – und die Etiketten kreativ mit Schneeflocken hinterlegt"],
+              ["Patrick, Informatiker – Berufsbildner Fabio", "Zugeteilte Tickets vermehrt selbstständig lösen", "Geht die Tickets selbstständiger an – sichert sich aber mitten im Arbeitsprozess oft bei Fabio ab"],
+              ["Isabel, Detailhandelsfachfrau – Berufsbildnerin Valbona", "Die Augen nach nicht aufgeräumten Schuhschachteln offen halten", "Erledigt es nur auf Hinweis – am Abend gleicht der Laden einem Schlachtfeld, und Valbona räumt selbst auf"],
+            ] },
+            { t: "note", text: "Aufgabe im Tandem: zu jedem Fall eine Rückmeldung in vier Schritten formulieren – auch das Lob für Viola wird begründet, nicht nur die Kritik. Übrigens: Lernende dürfen nicht länger als neun Stunden arbeiten." },
+          ],
+          source: "Beispiele für Rückmeldungen (Aufgabe «Rückmeldung erteilen») · PP Tag 4, Folie 33",
+        },
+        {
+          ch: "Block 3 · Gleichstellung",
+          title: "Gleichberechtigung, Stereotype & Rollenbilder",
+          blocks: [
+            { t: "cols", h: "Das Bild vom Gartenzaun", cols: [
+              { h: "📦 Gleichberechtigung", items: ["Alle drei Kinder erhalten dieselbe Kiste", "Das kleinste sieht trotzdem nicht über den Zaun"] },
+              { h: "📦📦 Gleichstellung", items: ["Die Kisten sind so verteilt, dass alle über den Zaun sehen", "Wer mehr braucht, erhält mehr"] },
+            ] },
+            { t: "cols", cols: [
+              { h: "🏷️ Stereotype", items: ["Vereinfachte, verallgemeinernde Vorstellung gegenüber Personen und Gruppen", "Basieren auf Gruppenzugehörigkeit, nicht auf individuellen Eigenschaften", "Können positiv oder negativ sein"] },
+              { h: "⛔ Vorurteile", items: ["Entstehen durch stereotype Denkmuster", "Voreingenommene, negative Einstellungen"] },
+              { h: "🎭 Rollenbilder", items: ["Gesellschaftlich geprägte Erwartungen an Geschlechterrollen", "Bestimmen, wie sich Menschen «typischerweise» verhalten sollen", "Kritische Reflexion fördert Gleichstellung und soziale Gerechtigkeit"] },
+            ] },
+            { t: "list", h: "Diskussion im Kurs", items: [
+              "Wo begegnen mir Stereotype und Rollenbilder im (Berufs-)Alltag – und wie begegne ich ihnen?",
+              "Ist mein Berufsfeld eher stärker oder weniger stark davon geprägt?",
+            ] },
+          ],
+          source: "PP Tag 4, Folien 41–45",
+        },
+        {
+          ch: "Block 3 · Gleichstellung",
+          title: "Fünf Fallbeispiele zu Stereotypen",
+          blocks: [
+            { t: "table", head: ["Fall", "Was passiert?", "Fallfrage"], rows: [
+              ["1 · Frauen auf der Baustelle", "Eine Elektriker-Lernende wird bei körperlich anspruchsvollen Aufgaben systematisch geschont: «Lass das die Jungs machen.»", "Ist das Fürsorge oder Diskriminierung?"],
+              ["2 · «Mathe ist nichts für Mädchen!»", "Eine 15-Jährige mit guten Mathe-Noten entscheidet sich gegen die Informatik-Lehre: «Das ist etwas für Jungs.»", "Welche Signale kann der Betrieb setzen?"],
+              ["3 · Lehre oder Uni?", "Ein Schüler mit Interesse am Holzbau hört ständig: «Wieso machst du keine Matura?»", "Welche Botschaften senden wir unbewusst?"],
+              ["4 · Ein Name entscheidet", "Identische Bewerbungen: «Mohammed El-Said» erhält 50 % weniger Rückmeldungen als «Jonas Müller»", "Was bedeutet das für einen fairen Auswahlprozess?"],
+              ["5 · Ein Junge als MPA", "Lukas ist der einzige Mann im Lehrjahr; eine Patientin will sich von ihm kein Blut abnehmen lassen", "Wie stärkt der Betrieb Personen in «untypischen» Berufen?"],
+            ] },
+            { t: "list", h: "Leitfragen für jede Gruppe", items: [
+              "Was passiert hier – und wo steckt ein Stereotyp?",
+              "Was bedeutet das für mich als Berufsbildner/in?",
+              "Wie kann ich als Berufsbildner/in reagieren?",
+            ] },
+          ],
+          source: "PP Tag 4, Folien 46–52 (mit den dort zitierten Studien und Berichten)",
+        },
+        {
+          ch: "Block 4 · Schwierige Gespräche",
+          title: "Sprechen Sie es an!",
+          blocks: [
+            { t: "list", h: "Was unterscheidet ein schwieriges von einem «normalen» Gespräch?", items: [
+              "Inhalt: kritisches Verhalten über einen längeren Zeitraum – z. B. Unpünktlichkeit, ungenügende Arbeitsleistung, Motivation, Hygiene, Diebstahl",
+              "Ziel 1: die Lernenden auf das Verhalten ansprechen",
+              "Ziel 2: die Gründe für das Verhalten erfahren",
+              "Ziel 3: gemeinsam Lösungen erarbeiten",
+            ] },
+            { t: "table", h: "Welche Situation erfordert welche Gesprächstechnik?", head: ["Gesprächsanlass", "Gesprächstechnik"], rows: [
+              ["Schlechte Arbeitsleistung", "Kriterienorientierte Rückmeldung"],
+              ["Kritisches Verhalten", "Schwieriges Gespräch"],
+              ["Konflikt", "Konfliktgespräch"],
+            ] },
+            { t: "note", text: "Schwierige Gespräche gehören zum Alltag als Berufsbildner/in. Unterschiedliche Ansichten, Interessen und Einstellungen sind normal – Mut zur Kommunikation!" },
+          ],
+          source: "PP Tag 4, Folien 54–57",
+        },
+        {
+          ch: "Block 4 · Schwierige Gespräche",
+          title: "Ein schwieriges Gespräch führen",
+          blocks: [
+            { t: "cols", h: "Vorher – währenddessen – nachher", cols: [
+              { h: "📝 Vorbereitung", items: ["1 · Situation analysieren: Ist überhaupt ein schwieriges Gespräch erforderlich?", "2 · Inhaltlich: In welchen konkreten Situationen zeigte sich das Verhalten? Was schliesse ich daraus?", "3 · Organisatorisch: Wann und wo führe ich das Gespräch? Wann und wie lade ich ein?"] },
+              { h: "🗣️ Gesprächsführung", items: ["1 · Gesamteindruck: Worum geht es?", "2 · Detaillierte Begründung: konkrete Verhaltensweisen, Sicht des Gegenübers, Gefahren, erwartetes Verhalten", "3 · Verbesserungsmöglichkeiten: mögliche weitere Vorgehensweisen", "4 · Umsetzung sicherstellen: nächste Schritte, Termine, meine Unterstützung, Überprüfung"] },
+              { h: "📒 Nachbereitung", items: ["1 · Protokollieren: Sind alle Vereinbarungen schriftlich festgehalten, alle Pendenzen vermerkt?", "2 · Reflexion: Wie ist das Gespräch verlaufen? Hat sich die Situation beruhigt oder verschärft?"] },
+            ] },
+            { t: "note", text: "Die Gesprächsführung folgt denselben vier Schritten wie eine gute Rückmeldung: Gesamteindruck → Begründung → Verbesserung → Umsetzung sicherstellen." },
+          ],
+          source: "PP Tag 4, Folien 60–62 & 69",
+        },
+        {
+          ch: "Block 4 · Schwierige Gespräche",
+          title: "Kommunikationstechniken & Vier-Ohren-Modell",
+          blocks: [
+            { t: "cols", cols: [
+              { h: "🧰 Fünf Techniken", items: ["Echt sein", "Ich-Botschaften", "Gesprächspausen", "Fragetechniken", "Aktiv zuhören"] },
+              { h: "📏 Drei Regeln", items: ["Das Verhalten kritisieren – nicht die Person", "Keine Du-Botschaften oder Killerphrasen", "Zum richtigen Zeitpunkt deeskalieren: zurück auf die Sachebene"] },
+            ] },
+            { t: "table", h: "Vier-Ohren-Modell – Beispiel: «Die Ampel ist grün.»", head: ["Ebene", "Sender («vier Schnäbel»)", "Empfänger («vier Ohren»)"], rows: [
+              ["Sachinhalt", "Die Ampel ist grün.", "Danke."],
+              ["Selbstoffenbarung", "Ich habe es eilig!", "Du hast es wohl eilig!"],
+              ["Beziehung", "Du brauchst meine Hilfe.", "Wer fährt eigentlich? Du oder ich?"],
+              ["Appell", "Gib Gas!", "Ich werde mich beeilen."],
+            ] },
+            { t: "note", text: "Jede Äusserung hat vier Seiten. Welche ankommt, entscheidet das Ohr des Empfängers – gerade in schwierigen Gesprächen lohnt es sich nachzufragen." },
+          ],
+          source: "PP Tag 4, Folien 64–66 & 68",
+        },
+        {
+          ch: "Block 4 · Schwierige Gespräche",
+          title: "Vier Fälle zum Üben",
+          blocks: [
+            { t: "table", head: ["Fall", "Lernende/r", "Situation"], rows: [
+              ["Ständiges Zu-spät-Kommen", "Lukas Schmid, Gebäudetechniker, 2. Lehrjahr", "Regelmässig bis zu 30 Minuten zu spät – trotz mehrerer mündlicher Ermahnungen"],
+              ["Mangelnde Hygiene", "Jolanda Keller, Bäckerin, 3. Lehrjahr", "Starker Körpergeruch stört das Team – sensibel ansprechen, bevor das Arbeitsklima leidet"],
+              ["Unangebrachte Kleidung", "Svenja Maier, Drucktechnologin, 1. Lehrjahr", "Zerrissene Jeans und offene Schuhe in der Druckwerkstatt – unprofessionell und ein Sicherheitsrisiko"],
+              ["Mangelnde Motivation", "Daniel Frei, Automobil-Mechatroniker, 2. Lehrjahr", "Ungenaue Arbeit, wenig Eigeninitiative, wirkt lustlos"],
+            ] },
+            { t: "list", h: "Ideensammlung «Umgang mit schwierigen Lernenden» – die Themen der vier Gruppen", items: [
+              "Gewalt · sexuelle Übergriffe, Belästigung, Sexting · Mobbing",
+              "Todesfälle · Krankheiten, häufige Absenzen · psychische Probleme · Sucht",
+              "Unehrlichkeit · Diebstahl · Unzuverlässigkeit · Hygiene",
+            ] },
+          ],
+          source: "Fallbeispiele schwierige Gespräche · PP Tag 4, Folien 58 & 67",
+        },
+        {
+          ch: "Abschluss",
+          title: "Reflexion & «Das nehme ich mit»",
+          blocks: [
+            { t: "list", h: "Persönliche Reflexion – vier Themen", items: ["«Instruieren und Anleiten»", "«Rückmeldungen»", "«Gleichstellung»", "«Schwierige Gespräche führen»"] },
+            { t: "list", h: "Das nehme ich mit – Tandem, dann Plenum", items: [
+              "Was war heute neu für mich?",
+              "Welche Inhalte haben praktische Relevanz für meine Arbeit?",
+              "Welche Erkenntnisse nehme ich mit in meine Berufspraxis?",
+              "Was will ich in Zukunft konkret umsetzen?",
+            ] },
+            { t: "note", text: "Der rote Faden des Tages: Auftrag → Umsetzung → Rückmeldung. Wirkungsvolles Anleiten steht nie allein." },
+          ],
+          source: "PP Tag 4, Folien 70–75",
+        },
+      ],
+    },
     { nr: 5, title: "Kurstag 5 · Take-away", placeholder: true, c1: "#d63f5a", c2: "#3d0d18", missions: [] },
   ],
 
@@ -1261,6 +1655,32 @@ window.GAME_DATA = {
           { t: "note", text: "Die Werkzeuge aus Tag 3 sind für alle Berufe gleich – Anforderungsprofil, Schnupperlehre, Bewerbungsgespräch und die 7 Planungsschritte. Konkret wird es erst über BiVo und Bildungsplan des eigenen Berufs." },
         ],
         source: "PP Tag 3 · Grundlagen Schnupperlehre, Bewerbungsgespräch und Beurteilungsfehler · BiVo Informatiker/in EFZ Art. 8",
+      },
+      {
+        ch: "Instruieren & Rückmelden (Tag 4)",
+        title: "Tag 4 angewendet: Notebook bereitstellen",
+        blocks: [
+          { t: "list", h: "🎬 Meine Instruktion: ein Notebook für neue Mitarbeitende bereitstellen", items: [
+            "Warum wichtig? Neue Mitarbeitende sollen am ersten Tag ein funktionierendes, sicheres Gerät erhalten – der erste Eindruck von der IT entsteht genau hier",
+            "Aus meiner Erfahrung: Ein neuer Mitarbeiter musste am ersten Tag vier Stunden warten, weil die Checkliste nicht konsequent eingehalten wurde",
+            "Vorgehen: Ich zeige jeden Schritt vor und sage laut, was ich mir dabei überlege – danach richtet die lernende Person selbst ein Gerät ein",
+          ] },
+          { t: "table", h: "Modellierung – laut gedacht", head: ["Schritt", "Was mache ich?", "Warum so? Worauf achte ich?"], rows: [
+            ["1", "Auftrag und Hardware prüfen", "Fehlende Infos jetzt klären – nicht erst am Ende. Transportschäden sofort melden"],
+            ["2", "Gerät inventarisieren und benennen", "Die Namenskonvention macht Geräte eindeutig auffindbar. Seriennummer zweimal kontrollieren"],
+            ["3", "Firmen-Image installieren", "Image statt Handarbeit: spart Zeit und verhindert vergessene Einstellungen"],
+            ["4", "In die Domäne aufnehmen, Gruppe/OU zuweisen", "Zuerst die Gruppe korrekt setzen, dann warten – sonst wird falsche oder keine Software verteilt"],
+            ["5", "Rollenspezifische Software und Peripherie", "Über Softwareportal bzw. Gruppe verteilen – so bleibt sie verwaltet. Lizenzen vorhanden?"],
+            ["6", "Funktionstest, Dokumentation und Übergabe", "Mit Checkliste testen, Testkonto abmelden, Ticket erst nach der Übergabe schliessen"],
+          ] },
+          { t: "cols", h: "📋 Mein Arbeitsauftrag: Notebook für die Buchhaltung (Informatiker/in EFZ, 2. Lehrjahr)", cols: [
+            { h: "🎯 Passende Aufgabe", items: ["Der Instruktion sehr ähnlich – ideal zum Nachmachen", "Neu: Buchhaltungs-Software und andere OU/Gruppe", "Echter Nutzen: Der neue Mitarbeiter wartet wirklich auf das Gerät"] },
+            { h: "🧭 Begleitung & Kontrollpunkte", items: ["Rolle: Coach in der Nähe – bewusst zurückziehen (Fading)", "KP 1: nach der Planung", "KP 2: nach Domänenaufnahme und OU-/Gruppenzuweisung", "KP 3: vor der Übergabe – gemeinsamer Funktionstest"] },
+            { h: "🗣️ Auftrag erteilen", items: ["Einbetten: «Am Montag beginnt Herr Meier in der Buchhaltung.»", "Formulieren: Ticket und Checkliste, in Teilschritten", "Erwartungen: ca. 3 Stunden, fertig bis Freitag, 12:00 Uhr", "Hilfsmittel: Checkliste, Wiki, Deployment-Konsole – und ich"] },
+          ] },
+          { t: "note", text: "Zum Schluss wiederholt die lernende Person den Auftrag in eigenen Worten. Nach der Umsetzung folgen Rückmeldung und Reflexion: Womit bist du zufrieden? Wo warst du unsicher? Was machst du beim nächsten Mal anders?" },
+        ],
+        source: "Meine ausgefüllten Vorlagen «Zielgerichtete Instruktion» und «Arbeitsauftrag vorbereiten und erteilen» (Tag 4)",
       },
     ],
   },
@@ -1416,6 +1836,9 @@ window.GAME_DATA = {
         "Eigene Beurteilungsfehler kennen: erster Eindruck, Halo-Effekt, Sympathie und Antipathie",
         "Voraussetzungen klären und Ziele festlegen",
         "Instruieren (Instruktionsmethode, 6-Schritte-Methode) und Rückmeldungen geben",
+        "Zielgerichtet instruieren: Handlung vorzeigen, laut denken, nachmachen lassen, reflektieren",
+        "Täglich anleiten: vollständige Arbeitsaufträge erteilen – einbetten, formulieren, Erwartungen klären, Hilfsmittel nennen",
+        "Rückmeldungen in vier Schritten geben und schwierige Gespräche vorbereiten, führen und nachbereiten",
         "Ersten Arbeitstag und erste Woche planen und begleiten",
         "Prognostisch, summativ und formativ beurteilen",
         "Mit allen Anspruchsgruppen kommunizieren: Amt, Eltern, Mitarbeitende",
@@ -1453,8 +1876,9 @@ window.GAME_DATA = {
         "Die IPA (70–90 h) im letzten Semester begleiten",
         "Rekrutieren: Anforderungsprofil Informatiker/in EFZ mit den Stellwerk-Resultaten der Bewerbenden abgleichen",
         "Im individuellen Ausbildungsplan die Fachrichtung, die 24 Schulmodule und die 7 üK-Kurse einplanen",
+        "Instruieren am Beispiel «Notebook bereitstellen»: vorzeigen und laut denken – danach folgt der Arbeitsauftrag mit drei Kontrollpunkten",
       ],
-      sources: "PP Tag 1, 2 & 3 · Planung · BiVo Informatiker/in",
+      sources: "PP Tag 1, 2, 3 & 4 · Planung · BiVo Informatiker/in",
     },
     {
       id: "eltern", name: "Eltern", short: "Gesetzliche Vertretung",
@@ -1796,6 +2220,7 @@ window.GAME_DATA = {
   lexikon: [
     ["ABU", "Allgemeinbildender Unterricht an der Berufsfachschule – Grundlage ist der Rahmenlehrplan."],
     ["Anforderungsprofil", "Zeigt die schulischen Anforderungen eines Berufs – Grundlage für die Lehrstellenbesetzung."],
+    ["Arbeitsauftrag", "Vollständig und klar: einbetten, formulieren, Erwartungen klarstellen, Hilfsmittel nennen."],
     ["ArG", "Arbeitsgesetz – regelt u. a. Arbeits- und Ruhezeiten sowie den Gesundheitsschutz."],
     ["ArGV 5", "Jugendarbeitsschutzverordnung – Art. 4 regelt gefährliche Arbeiten für Jugendliche."],
     ["Ausbildungskonzept", "Legt fest, wie der Betrieb ausbildet – wird nur einmal erstellt und pro lernende Person konkret umgesetzt."],
@@ -1818,8 +2243,11 @@ window.GAME_DATA = {
     ["DSG", "Datenschutzgesetz."],
     ["EBA", "Eidgenössisches Berufsattest – 2-jährige Grundbildung."],
     ["EFZ", "Eidgenössisches Fähigkeitszeugnis – 3- bis 4-jährige Grundbildung."],
+    ["Fading", "«Rückzug»: Je mehr die Lernenden verstanden haben, desto mehr zieht sich die Berufsbildnerin oder der Berufsbildner zurück."],
+    ["Feedback-Regeln", "Geben: respektvoll, Ich-Form, ehrlich, nicht öffentlich, zeitnah, ohne Druck. Nehmen: nicht rechtfertigen, annehmen, prüfen."],
     ["FH", "Fachhochschule."],
     ["FiB", "Fachkundige individuelle Begleitung für EBA-Lernende."],
+    ["Fünf-Finger-Feedback", "Feedback-Modell: Lob, Bemerkenswert, Kritik, Befindlichkeit, Zu kurz gekommen."],
     ["GAV", "Gesamtarbeitsvertrag."],
     ["Gleichstellungsgesetz", "Gleichstellung von Frau und Mann im Erwerbsleben – Massstab auch für Lehrstellenausschreibungen."],
     ["Halo-Effekt", "«Heiligenschein»: Ein einzelnes Merkmal überstrahlt alle anderen – positiv oder negativ."],
@@ -1827,7 +2255,12 @@ window.GAME_DATA = {
     ["HF", "Höhere Fachschule – Diplom HF."],
     ["HFP", "Eidg. höhere Fachprüfung – eidg. Diplom."],
     ["IB", "Individuelle Begleitung – erweiterte Unterstützung für EBA-Lernende."],
+    ["Instruktion", "Geplantes Vorzeigen einer Handlung mit lautem Denken – in drei Phasen und sieben Schritten."],
     ["IPA", "Individuelle praktische Arbeit – Teil des Qualifikationsverfahrens."],
+    ["Johari-Fenster", "Feedback-Modell mit vier Feldern – Rückmeldungen verkleinern den blinden Fleck."],
+    ["Kognitive Meisterlehre", "Methode in vier Schritten: Modelling, Scaffolding, Fading, Coaching."],
+    ["Komfortzonen-Matrix", "Komfort-, Lern-, Apathie- und Panikzone – gelernt wird in der Lernzone."],
+    ["Kontrollpunkt", "Geplanter Zwischenhalt während eines Arbeitsauftrags – je nach lernender Person sinnvoll."],
     ["Lehraufsicht", "Gesetzlicher Auftrag des Kantons – von der Lehrvertragsunterzeichnung bis zum QV."],
     ["Lerndokumentation", "Von den Lernenden geführt – Lernberichte mind. 1x pro Monat."],
     ["Lernpartnerschaft", "Erfahrene Lernende begleiten neue Lernende – mit klaren Rahmenbedingungen und Terminen."],
@@ -1841,14 +2274,19 @@ window.GAME_DATA = {
     ["Praxisbildner/in", "Fachperson, die Lernende im Arbeitsalltag anleitet – in Absprache mit der Berufsbildnerin oder dem Berufsbildner."],
     ["QualiCarte", "Instrument zur Qualitätsprüfung im Lehrbetrieb – 1x pro Jahr."],
     ["QV", "Qualifikationsverfahren – Abschluss der beruflichen Grundbildung."],
+    ["Rückmeldung", "Knüpft an einen Arbeitsauftrag: Gesamteindruck, Begründung, Handlungsanweisung, Umsetzung sicherstellen."],
     ["SB / SB Plus", "Schulische Begleitung für EBA-Lernende – im bzw. ausserhalb des Unterrichts."],
     ["SBFI", "Staatssekretariat für Bildung, Forschung und Innovation – Vorgaben des Bundes."],
     ["Schnupperlehre", "Einblick in Beruf und Betrieb vor dem Lehrvertrag – in der Theorie 3 bis 5 Tage, immer betreut."],
+    ["Schwieriges Gespräch", "Spricht kritisches Verhalten über längere Zeit an – mit Vorbereitung, Gesprächsführung und Nachbereitung."],
     ["SDBB", "Schweizerisches Dienstleistungszentrum Berufsbildung – Formulare wie Bildungsbericht."],
     ["Stellwerk", "Obligatorischer Online-Test im 8. und 9. Schuljahr – ergibt ein persönliches Leistungsprofil."],
+    ["Stereotyp", "Vereinfachte, verallgemeinernde Vorstellung über Personen und Gruppen – positiv oder negativ."],
     ["üK", "Überbetriebliche Kurse – 3. Lernort, grundlegende Fertigkeiten."],
     ["UVG", "Unfallversicherungsgesetz."],
+    ["Vier-Ohren-Modell", "Jede Äusserung hat vier Seiten: Sachinhalt, Selbstoffenbarung, Beziehung und Appell."],
     ["VPA", "Vorgegebene praktische Arbeit – Teil des Qualifikationsverfahrens."],
+    ["WWW-Feedback", "Feedback in drei Schritten: Wahrnehmung, Wirkung, Wunsch."],
     ["ZEBI", "Zentralschweizer Bildungsmesse – Bühne fürs Lehrstellenmarketing."],
   ],
 
@@ -1911,6 +2349,20 @@ window.GAME_DATA = {
     "Praxisbildner/in": "Praxisbildner/innen sind Fachpersonen, die Lernende in ihrer Abteilung im Alltag anleiten. Die Berufsbildnerin oder der Berufsbildner legt mit ihnen die Tätigkeiten der Lernphasen fest und teilt ihnen die Termine für Zwischen- und Beurteilungsgespräche mit.",
     "Schnupperlehre": "Die Schnupperlehre hilft beiden Seiten bei der Entscheidung: Jugendliche erleben den Beruf und die Atmosphäre im Betrieb, der Betrieb sieht rasch, ob grundlegende Fähigkeiten vorhanden sind. In der Theorie dauert sie 3 bis 5 Tage, in der Praxis oft nur einen. Am Schluss stehen ein Gespräch und ein Beurteilungsbogen, den die Jugendlichen mitnehmen.",
     "Stellwerk": "Stellwerk 8 und 9 ist eine online-basierte Standortbestimmung in Deutsch, Mathematik, Natur und Technik, Französisch und Englisch – obligatorisch für alle im 8. und 9. Schuljahr und im Schulzeugnis vermerkt. Berufsbildner/innen dürfen um die Resultate bitten und sie mit dem Anforderungsprofil des Berufs abgleichen.",
+    "Arbeitsauftrag": "Ein vollständiger und klarer Arbeitsauftrag enthält alles, was die lernende Person zur selbstständigen Ausführung braucht. Vorbereiten: passende Aufgabe auswählen und die Begleitung planen. Erteilen: einbetten, formulieren, Erwartungen klarstellen, Hilfsmittel nennen. Fehlen Informationen, müssen Lernende ständig nachfragen – und werden nicht selbstständig.",
+    "Fading": "Fading ist der dritte Schritt der kognitiven Meisterlehre und heisst «Rückzug». Die Lernenden suchen immer häufiger selbst nach Lösungen; geholfen wird erst, wenn sie wirklich nicht mehr weiterkommen.",
+    "Feedback-Regeln": "Feedback geben: respektvoll, in der Ich-Form, ehrlich, nicht öffentlich, zeitnah und ohne Druck. Feedback nehmen: nicht rechtfertigen, annehmen, prüfen – und vielleicht etwas ändern.",
+    "Fünf-Finger-Feedback": "Jeder Finger steht für einen Teil der Rückmeldung: Daumen = Lob, Zeigefinger = Bemerkenswert, Mittelfinger = Kritik, Ringfinger = Befindlichkeit, kleiner Finger = Zu kurz gekommen.",
+    "Instruktion": "Bei einer Instruktion zeigt die Berufsbildnerin oder der Berufsbildner eine Handlung vor und denkt dabei laut mit: Was mache ich, warum so, worauf achte ich? Sie erfolgt geplant, nie spontan – in drei Phasen (Vorbereitung, Instruktion, Erweiterung und Reflexion) und sieben Schritten.",
+    "Johari-Fenster": "Das Johari-Fenster hat vier Felder: öffentliche Person, blinder Fleck, mein Geheimnis und Unbekanntes. Was andere mir mitteilen, verkleinert meinen blinden Fleck; was ich preisgebe, verkleinert mein Geheimnis. Darum sind Rückmeldungen so wertvoll.",
+    "Kognitive Meisterlehre": "Bei der kognitiven Meisterlehre bringt man Lernenden ein Handwerk näher und erklärt die Technik bei jedem Schritt. Vier Schritte: Modelling (Vormachen), Scaffolding (Unterstützung), Fading (Rückzug) und Coaching (Betreuung).",
+    "Komfortzonen-Matrix": "Die Matrix ordnet vier Zonen nach psychologischer Sicherheit und nach Motivation und Verantwortungsübernahme: Komfortzone, Lernzone, Apathiezone und Panikzone. Ziel ist die Lernzone – hohe Sicherheit und hohe Motivation.",
+    "Kontrollpunkt": "Kontrollpunkte sind geplante Zwischenhalte während eines Arbeitsauftrags. Ob und wann sie sinnvoll sind, hängt von der lernenden Person ab. In meinem Beispiel «Notebook bereitstellen» sind es drei: nach der Planung, nach der Gruppenzuweisung und vor der Übergabe.",
+    "Rückmeldung": "Rückmeldungen zeigen den Standard für gute Arbeit und beeinflussen Leistung, Motivation und Commitment. Eine gute Rückmeldung knüpft an einen Arbeitsauftrag und folgt vier Schritten: Gesamteindruck vermitteln, detailliert begründen, Handlungsanweisung geben, Umsetzung sicherstellen.",
+    "Schwieriges Gespräch": "Ein schwieriges Gespräch spricht kritisches Verhalten über einen längeren Zeitraum an – etwa Unpünktlichkeit, Hygiene oder mangelnde Motivation. Ziel: ansprechen, Gründe erfahren, gemeinsam Lösungen erarbeiten. Dazu gehören eine sorgfältige Vorbereitung und Nachbereitung. Regel: das Verhalten kritisieren, nicht die Person.",
+    "Stereotyp": "Stereotype beruhen auf Gruppenzugehörigkeit statt auf individuellen Eigenschaften und können positiv oder negativ sein. Aus stereotypen Denkmustern entstehen Vorurteile – voreingenommene, negative Einstellungen. Im Kurs haben wir dazu fünf Fallbeispiele diskutiert.",
+    "Vier-Ohren-Modell": "Der Sender spricht mit «vier Schnäbeln», der Empfänger hört mit «vier Ohren»: Sachinhalt, Selbstkundgabe, Beziehungshinweis und Appell. Beispiel «Die Ampel ist grün.» – gemeint ist vielleicht «Gib Gas!», gehört wird «Wer fährt eigentlich? Du oder ich?».",
+    "WWW-Feedback": "Wahrnehmung: «Ich habe gesehen, dass du …» – Wirkung: «Das hat mich daran zweifeln lassen, dass du …» – Wunsch: «Ich fände es hilfreich, wenn du …».",
     "ZEBI": "Die Zentralschweizer Bildungsmesse ist ein Treffpunkt für Jugendliche in der Berufswahl. Für Lehrbetriebe ist die Teilnahme ein Weg, aktiv auf Schülerinnen und Schüler zuzugehen – neben Schulbesuchen, Zukunftstag und Schnupperlehren.",
   },
 
@@ -1940,7 +2392,6 @@ window.GAME_DATA = {
     { q: "Was ist bei sexueller Belästigung massgebend?", a: ["Die Absicht der handelnden Person", "Das Empfinden der belästigten Person", "Ob es Zeugen gibt", "Die Hierarchiestufe"], correct: 1, why: "Entscheidend ist, wie es die betroffene Person empfindet." },
     { q: "Welcher Führungsstil passt laut Generationenvergleich zur Generation Z?", a: ["Kontrollieren", "Anweisen", "Befähigen", "Koordinieren"], correct: 2, why: "Generation Z: befähigen – Alpha: inspirieren." },
     { q: "Wer genehmigt in Luzern den Lehrvertrag?", a: ["Die Berufsfachschule", "Die OdA", "Die DBW", "Das SBFI"], correct: 2, why: "Die Dienststelle Berufs- und Weiterbildung – die Lehraufsicht des Kantons." },
-    { q: "Wann ist das QV Informatiker/in EFZ bestanden?", a: ["Gesamtnote ≥ 4 reicht", "IPA ≥ 4, Erfahrungsnote Informatik ≥ 4 und Gesamtnote ≥ 4", "Allgemeinbildung ≥ 4", "IPA ≥ 5"], correct: 1, why: "BiVo Informatiker/in Art. 19 – drei Bedingungen." },
     { q: "Wie lange dauert eine Schnupperlehre in der Theorie?", a: ["Einen halben Tag", "3 bis 5 Tage", "2 Wochen", "Einen Monat"], correct: 1, why: "In der Praxis ist es aus Zeitmangel oft nur ein Tag – betreut werden die Jugendlichen immer." },
     { q: "Was beschreibt der Halo-Effekt?", a: ["Der letzte Eindruck zählt am meisten", "Ein Merkmal überstrahlt alle anderen", "Sympathische Personen werden strenger beurteilt", "Man beurteilt alle gleich"], correct: 1, why: "«Heiligenschein»: Ein einzelnes positives oder negatives Merkmal färbt das ganze Urteil." },
     { q: "Welcher Test ist im 8. und 9. Schuljahr für alle obligatorisch?", a: ["Multicheck", "Basic Check", "Stellwerk", "IPA"], correct: 2, why: "Stellwerk 8 und 9 ergibt ein persönliches Leistungsprofil – im Schulzeugnis vermerkt." },
@@ -1949,12 +2400,49 @@ window.GAME_DATA = {
     { q: "Wie oft erstellst du das Ausbildungskonzept?", a: ["Für jede lernende Person neu", "Jedes Semester", "Nur einmal", "Gar nie – das macht die OdA"], correct: 2, why: "Einmal erstellen – bei neuen Lernenden nur noch überlegen, wie man es konkret umsetzt." },
     { q: "Welcher Content bringt im Social-Media-Marketing die besten Resultate?", a: ["Blog Posts", "Infografiken", "Texte und Zitate", "Video"], correct: 3, why: "Video liegt mit 63 % vorne – darum: Videobotschaften statt Inserate." },
     { q: "Wer bestimmt die Reihenfolge, in der die Fähigkeiten im Betrieb erlernt werden?", a: ["Das SBFI", "Die Berufsbildnerin / der Berufsbildner", "Die Berufsfachschule", "Die Lernenden"], correct: 1, why: "BiVo und BiPla geben die Ziele vor – die Reihenfolge im Betrieb planst du, abgestimmt auf Schule und üK." },
-    { q: "🐴 Wie lange dauert die Lehre als Pferdefachmann/-frau EFZ?", a: ["2 Jahre", "3 Jahre", "4 Jahre", "Bis das Pferd nickt"], correct: 1, why: "3 Jahre – und auch im Stall gelten BiVo, Bildungsplan und drei Lernorte." },
+    { q: "Was tust du beim Modellieren einer Handlung?", a: ["Still vorzeigen", "Vorzeigen und die eigenen Gedanken laut äussern", "Die Lernenden sofort selbst probieren lassen", "Ein Video abspielen"], correct: 1, why: "Was mache ich, warum so, worauf achte ich? Laut denken macht das Vorgehen nachvollziehbar." },
+    { q: "In welcher Reihenfolge läuft die kognitive Meisterlehre ab?", a: ["Coaching, Fading, Modelling, Scaffolding", "Modelling, Scaffolding, Fading, Coaching", "Scaffolding, Modelling, Coaching, Fading", "Fading, Coaching, Scaffolding, Modelling"], correct: 1, why: "Vormachen → Unterstützung → Rückzug → Betreuung." },
+    { q: "Wie sollte eine Instruktion erfolgen?", a: ["Spontan, wenn gerade Zeit ist", "Geplant – nie spontan", "Nur schriftlich", "Erst im letzten Lehrjahr"], correct: 1, why: "Handlung auswählen und die Modellierung vorbereiten – am besten schriftlich." },
+    { q: "Was gehört NICHT zu den vier Schritten beim Erteilen eines Arbeitsauftrags?", a: ["Den Auftrag einbetten", "Die Erwartungen klarstellen", "Hilfsmittel nennen", "Die Lösung gleich mitliefern"], correct: 3, why: "Einbetten, formulieren, Erwartungen klarstellen, Hilfsmittel nennen – die Lösung finden die Lernenden selbst." },
+    { q: "Womit beginnt eine gute Rückmeldung?", a: ["Mit der Handlungsanweisung", "Mit dem Gesamteindruck", "Mit der detaillierten Kritik", "Mit einer Gegenfrage"], correct: 1, why: "Gesamteindruck → Begründung → Handlungsanweisung → Umsetzung sicherstellen." },
+    { q: "Wofür stehen die drei W im WWW-Feedback?", a: ["Wer, Was, Wann", "Wahrnehmung, Wirkung, Wunsch", "Wissen, Wollen, Wirken", "Warnung, Weisung, Wiederholung"], correct: 1, why: "«Ich habe gesehen …» – «Das hat bei mir bewirkt …» – «Ich fände es hilfreich, wenn …»." },
+    { q: "Welche Gesprächstechnik passt zu kritischem Verhalten über längere Zeit?", a: ["Kriterienorientierte Rückmeldung", "Schwieriges Gespräch", "Konfliktgespräch", "Gar kein Gespräch"], correct: 1, why: "Schlechte Arbeitsleistung → Rückmeldung · kritisches Verhalten → schwieriges Gespräch · Konflikt → Konfliktgespräch." },
+    { q: "Welche Regel gilt im schwierigen Gespräch?", a: ["Die Person kritisieren, nicht das Verhalten", "Das Verhalten kritisieren, nicht die Person", "Möglichst viele Du-Botschaften", "Vor dem ganzen Team ansprechen"], correct: 1, why: "Dazu: keine Du-Botschaften oder Killerphrasen – und rechtzeitig zurück auf die Sachebene." },
+    { q: "Welche vier Seiten hat eine Äusserung im Vier-Ohren-Modell?", a: ["Sachinhalt, Selbstoffenbarung, Beziehung, Appell", "Lob, Kritik, Wunsch, Dank", "Fach, Methode, Sozial, Selbst", "Wahrnehmung, Wirkung, Wunsch, Wille"], correct: 0, why: "«Die Ampel ist grün.» kann als Sachinhalt gemeint sein – oder als Appell: «Gib Gas!»" },
+    { q: "Was zeigt das Gartenzaun-Bild zur Gleichstellung?", a: ["Alle erhalten genau dieselbe Kiste", "Jede Person erhält, was sie braucht, um über den Zaun zu sehen", "Der Zaun wird abgerissen", "Nur die Grössten dürfen zuschauen"], correct: 1, why: "Gleichberechtigung: gleiche Kiste für alle. Gleichstellung: Alle sehen über den Zaun." },
+    { q: "An wie vielen Lernorten findet die berufliche Grundbildung statt?", a: ["An einem", "An zwei", "An drei", "An fünf"], correct: 2, why: "Lehrbetrieb, Berufsfachschule und überbetriebliche Kurse." },
+    { q: "Wie lange dauert eine Grundbildung mit eidgenössischem Berufsattest (EBA)?", a: ["1 Jahr", "2 Jahre", "3 Jahre", "4 Jahre"], correct: 1, why: "EBA: 2 Jahre – EFZ: 3 bis 4 Jahre." },
+    { q: "Wer setzt die berufliche Grundbildung in den Kantonen um?", a: ["Das SBFI", "Die OdA", "Die kantonalen Ämter für Berufsbildung", "Die Berufsfachschulen"], correct: 2, why: "In Luzern ist das die Dienststelle Berufs- und Weiterbildung (DBW)." },
+    { q: "Was ist das Ziel der überbetrieblichen Kurse?", a: ["Allgemeinbildung vermitteln", "Transfer zwischen Theorie und Praxis", "Den Lehrbetrieb ersetzen", "Auf die Berufsmaturität vorbereiten"], correct: 1, why: "Der 3. Lernort vermittelt grundlegende Fertigkeiten und ergänzt Praxis und Schule." },
+    { q: "Was beschreibt der Bildungsplan (BiPla)?", a: ["Lohn und Ferien", "Handlungskompetenzen und Leistungsziele pro Lernort", "Die Hausordnung des Betriebs", "Den Stundenplan der Berufsfachschule"], correct: 1, why: "Die OdA erarbeitet ihn, der Bund genehmigt ihn." },
+    { q: "Wie oft wird eine Bildungsverordnung überprüft?", a: ["Jedes Jahr", "Alle 5 Jahre", "Alle 10 Jahre", "Nie"], correct: 1, why: "Die 5-Jahres-Überprüfung stellt den Handlungsbedarf fest." },
+    { q: "Von wem grenzen sich Jugendliche in der Adoleszenz bewusst ab?", a: ["Von den Gleichaltrigen", "Von der Erwachsenenwelt", "Von der Berufswelt", "Von niemandem"], correct: 1, why: "Zur Erwachsenenwelt gehören auch die Berufsbildner/innen – die Peers werden zur neuen Bezugsgruppe." },
+    { q: "Welcher Führungsstil passt laut Generationenvergleich zur Generation Alpha?", a: ["Kontrollieren", "Koordinieren", "Anleiten", "Inspirieren"], correct: 3, why: "Generation Z: befähigen – Generation Alpha: inspirieren." },
+    { q: "Was ist der grösste Stressor für Jugendliche laut Pro-Juventute-Studie?", a: ["Social Media", "Prüfungen", "Der Arbeitsweg", "Das Wetter"], correct: 1, why: "48 % der Mädchen und 36 % der Jungen nennen Prüfungen." },
+    { q: "Was bildet das Fundament der Präventions-Pyramide?", a: ["Suchthilfe", "Früherkennung", "Der gesetzliche Jugendschutz", "Die Lerndokumentation"], correct: 2, why: "Strukturelle Rahmenbedingungen wie Abgabeverbote und Mindestalter." },
+    { q: "Welche Kampagne steht für «nikotinfrei durch die Lehre»?", a: ["GameChanger", "zackstark", "Lostly", "Help Point"], correct: 1, why: "zackstark – GameChanger ist das Angebot bei Geldspielsucht." },
+    { q: "Was gehört zum ersten Arbeitstag?", a: ["Gleich die schwierigste Aufgabe", "Empfangen, vorstellen und erste Erfolge ermöglichen", "Den Bildungsbericht ausfüllen", "Die Probezeit auswerten"], correct: 1, why: "Alles ist neu – Vertrauen aufbauen und eine Patin oder einen Paten bestimmen." },
+    { q: "Welche Beurteilung zieht Bilanz am Ende einer Lernphase?", a: ["Prognostisch", "Summativ", "Formativ", "Spontan"], correct: 1, why: "Zum Beispiel ein Test, ein Qualifikationsgespräch oder die Abschlussprüfung." },
+    { q: "Was ist ein Nachteil der Instruktionsmethode (Demonstrieren – Nachvollziehen – Kontrollieren – Korrigieren)?", a: ["Sie dauert zu lange", "Lernende ahmen nur nach", "Sie braucht keine Vorbereitung", "Sie ist verboten"], correct: 1, why: "Neue Techniken werden schnell gelernt – aber Fehler gelten als Störfaktor." },
+    { q: "Was ist der gesetzliche Auftrag der DBW?", a: ["Die Lehraufsicht", "Die Durchführung der üK", "Der Erlass der BiVo", "Der Unterricht an der Berufsfachschule"], correct: 0, why: "Von der Lehrvertragsunterzeichnung bis zum QV – inklusive Bildungsbewilligungen." },
+    { q: "Wie viele Wege führen Erwachsene zu einem Berufsabschluss?", a: ["Einer", "Zwei", "Vier", "Sieben"], correct: 2, why: "Reguläre und verkürzte Grundbildung, direkte Zulassung zum QV und Validierung." },
+    { q: "Welches Gesetz regelt den Lehrvertrag als Einzelarbeitsvertrag?", a: ["Das Obligationenrecht (OR)", "Das Datenschutzgesetz", "Das Unfallversicherungsgesetz", "Das Weiterbildungsgesetz"], correct: 0, why: "Zivilrechtlich – gestützt auf BV Art. 122." },
+    { q: "Was gehört zu einem leichten Verstoss?", a: ["Schriftliche Verwarnung", "Informelles Gespräch und Aktennotiz", "Androhung der Lehrvertragsauflösung", "Gespräch mit Eltern und DBW"], correct: 1, why: "Feedback geben und Konsequenzen aufzeigen – ohne Besserung wird es ein mittlerer Verstoss." },
+    { q: "Welche Anlaufstelle an den Berufsfachschulen ist niederschwellig für Probleme aller Art?", a: ["Help Point", "Opferberatungsstelle", "SBFI", "ZEBI"], correct: 0, why: "Der Help Point triagiert bei Bedarf weiter." },
+    { q: "Wer hilft bei der ersten Berufswahl oder bei einem Berufswechsel?", a: ["Die Berufsberatung", "Die Lehraufsicht", "Die Prüfungsexpert/innen", "Die OdA"], correct: 0, why: "Die Berufsberatung – zum Beispiel im BIZ." },
+    { q: "Welche Plattform gehört NICHT zu den Job-Plattformen für Lehrstellen?", a: ["Yousty", "Gateway One", "Jobeagle", "Stellwerk"], correct: 3, why: "Stellwerk ist die Standortbestimmung im 8. und 9. Schuljahr." },
+    { q: "Was gehört zu den vier Gruppen im Beurteilungsbogen der Schnupperlehre?", a: ["Arbeitsweise", "Lohnvorstellung", "Schulweg", "Hobbys"], correct: 0, why: "Arbeitsweise, Arbeitshaltung, Umgang und Erscheinung, Eignung für den Beruf." },
+    { q: "In welcher Zone der Komfortzonen-Matrix wird gelernt?", a: ["Komfortzone", "Lernzone", "Apathiezone", "Panikzone"], correct: 1, why: "Hohe psychologische Sicherheit und hohe Motivation und Verantwortungsübernahme." },
+    { q: "Was bedeutet «Fading» in der kognitiven Meisterlehre?", a: ["Vormachen", "Unterstützen", "Sich zurückziehen", "Benoten"], correct: 2, why: "Je mehr die Lernenden verstanden haben, desto mehr zieht man sich zurück." },
+    { q: "Welche drei Fragen beantwortest du beim lauten Denken?", a: ["Wer, wann, wo?", "Was mache ich, warum so, worauf achte ich?", "Wie teuer, wie lange, wie oft?", "Gut, mittel, schlecht?"], correct: 1, why: "So wird das Vorgehen für die Lernenden plausibel und nachvollziehbar." },
+    { q: "Wie gehst du laut den Praxistipps mit Fehlern von Lernenden um?", a: ["Sofort verwarnen", "Als Lernchance werten", "Ignorieren", "Selbst korrigieren und schweigen"], correct: 1, why: "Lernende machen häufiger Fehler als andere Mitarbeitende – Fehler sind die grössten Lernchancen." },
+    { q: "Was passiert, wenn Rückmeldungen fehlen?", a: ["Die Lernenden werden selbstständiger", "Die Lernenden ziehen selbst Schlüsse – Missverständnisse entstehen", "Nichts", "Die Motivation steigt"], correct: 1, why: "Ohne Rückmeldung fehlen Informationen zur eigenen Leistung, und Kompetenz wird nicht erlebt." },
+    { q: "Welche Regel gilt beim Feedback-Geben?", a: ["Vor dem ganzen Team", "In der Ich-Form", "Erst nach einem Monat", "Mit möglichst viel Druck"], correct: 1, why: "Respektvoll, Ich-Form, ehrlich, nicht öffentlich, zeitnah und ohne Druck." },
+    { q: "Was tust du, wenn du Feedback erhältst?", a: ["Mich rechtfertigen", "Annehmen und prüfen", "Sofort widersprechen", "Zurückkritisieren"], correct: 1, why: "Nicht rechtfertigen, annehmen, prüfen – und vielleicht etwas ändern." },
+    { q: "Was ist ein Stereotyp?", a: ["Ein Vertragstyp", "Eine vereinfachte, verallgemeinernde Vorstellung über Gruppen", "Ein Feedback-Modell", "Eine Prüfungsform"], correct: 1, why: "Es beruht auf Gruppenzugehörigkeit statt auf individuellen Eigenschaften." },
+    { q: "Was gehört zur Nachbereitung eines schwierigen Gesprächs?", a: ["Protokollieren und reflektieren", "Die Lernenden einladen", "Die Situation analysieren", "Nichts"], correct: 0, why: "Vereinbarungen und Pendenzen schriftlich festhalten und den Verlauf reflektieren." },
+    { q: "Welche Gesprächstechnik passt zu schlechter Arbeitsleistung?", a: ["Konfliktgespräch", "Kriterienorientierte Rückmeldung", "Schwieriges Gespräch", "Kündigungsgespräch"], correct: 1, why: "Kritisches Verhalten → schwieriges Gespräch · Konflikt → Konfliktgespräch." },
     { q: "🦒 Was frisst die Giraffe in diesem Spiel am liebsten?", a: ["Akazienblätter", "Hausaufgaben", "Bildungsverordnungen", "Drucker"], correct: 1, why: "Hausaufgaben – die Lerndokumentation führt man deshalb besser laufend und digital." },
-    { q: "💻 Wie viele üK-Tage haben Informatik-Lernende?", a: ["10 Tage", "20 Tage", "35 Tage in 7 Kursen", "50 Tage"], correct: 2, why: "BiVo Art. 8 – 7 Kurse à 5 Tage, im letzten Semester keine üK." },
-    { q: "💻 Wie oft kontrolliert die Berufsbildnerin die Lerndokumentation einer Informatik-Lernenden mindestens?", a: ["Jede Woche", "1x pro Semester", "1x pro Lehrjahr", "Nur vor der IPA"], correct: 1, why: "BiVo Art. 12 – kontrollieren, unterzeichnen und besprechen." },
-    { q: "💻 Warum enthält die BiVo Informatiker/in keine Abweichung vom Arbeitsgesetz?", a: ["Weil sie vergessen wurde", "Weil Informatiker/innen keine gefährlichen Arbeiten ausführen", "Weil Lernende über 18 sind", "Weil der Kanton das regelt"], correct: 1, why: "Es braucht keine Ausnahme vom Verbot gefährlicher Arbeiten." },
-    { q: "💻 Wie lange dauert die IPA bei Informatiker/innen EFZ?", a: ["8–16 Stunden", "24–40 Stunden", "70–90 Stunden", "200 Stunden"], correct: 2, why: "BiVo Art. 18 – Ausführung 50 %, Doku 20 %, Präsentation & Fachgespräch 30 %." },
   ],
 
   /* =====================================================================
@@ -1972,8 +2460,19 @@ window.GAME_DATA = {
     { s: "Ein Lernender hält sich wiederholt nicht an die vereinbarten Handy-Regeln, trotz Feedbackgespräch.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss mit schriftlich definierten Massnahmen." },
     { s: "Eine Lernende wirkt seit Wochen bedrückt und erwähnt psychische Krisen.", level: 3, why: "Weiterverweisen: Fachstelle Psychologische Beratung, Help Point oder DBW." },
     { s: "Ein Lernender antwortet bei einer Instruktion einmal patzig.", level: 0, why: "Leichter Verstoss: das Gespräch suchen und Feedback geben." },
+    { s: "Lukas kommt trotz mehrerer mündlicher Ermahnungen regelmässig bis zu 30 Minuten zu spät.", level: 1, why: "Wiederholt trotz Ermahnungen → mittlerer Verstoss: Jetzt braucht es ein förmliches, gut vorbereitetes Gespräch mit schriftlichen Vereinbarungen." },
+    { s: "Eine Lernende trägt zum ersten Mal offene Schuhe in der Werkstatt.", level: 0, why: "Leichter Verstoss: sofort ansprechen, Regel und Sicherheitsrisiko erklären, Konsequenzen aufzeigen." },
+    { s: "Ein Lernender vergisst einmal, sich bei Krankheit rechtzeitig abzumelden.", level: 0, why: "Leichter Verstoss: informelles Gespräch, Aktennotiz und die Erwartungen klarmachen." },
+    { s: "Eine Lernende schaut während einer Instruktion erstmals aufs Handy.", level: 0, why: "Leichter Verstoss: Feedback geben und auf die vereinbarten Regeln hinweisen." },
+    { s: "Trotz informellem Gespräch und Aktennotiz erscheint ein Lernender weiterhin ohne Schutzausrüstung.", level: 1, why: "Keine Besserung → mittlerer Verstoss: formelles, angekündigtes Gespräch und schriftlich definierte Massnahmen." },
+    { s: "Eine Lernende fehlt wiederholt unentschuldigt, obwohl ihr schon mehrmals darüber gesprochen habt.", level: 1, why: "Wiederholt trotz Gesprächen → mittlerer Verstoss: schriftliche Massnahmen; DBW und Eltern einbeziehen wird empfohlen." },
+    { s: "Ein Lernender liefert trotz Feedback seit Wochen unsorgfältige Arbeit ab und zeigt keine Besserung.", level: 1, why: "Mittlerer Verstoss: formelles Gespräch, Massnahmen mit Fristen schriftlich festhalten." },
+    { s: "Eine Lernende wird im Betrieb handgreiflich gegenüber einem Mitarbeiter.", level: 2, why: "Schwerer Verstoss: schriftliche Verwarnung und Androhung der Auflösung – DBW und Eltern zwingend einbeziehen." },
+    { s: "Nach zwei schriftlichen Verwarnungen zeigt ein Lernender keinerlei Besserungswillen.", level: 2, why: "Mehrere Schriftlichkeiten ohne Besserungswillen → schwerer Verstoss, DBW und Eltern zwingend." },
+    { s: "Ein Lernender erzählt, dass er zu Hause Gewalt erlebt.", level: 3, why: "Weiterverweisen: Opferberatungsstelle oder DBW – nicht selbst lösen, aber ernst nehmen und begleiten." },
+    { s: "Eine Lernende merkt, dass sie den falschen Beruf gewählt hat, und will wechseln.", level: 3, why: "Weiterverweisen: Die Berufsberatung hilft bei einem Berufswechsel – und die DBW früh einbeziehen." },
+    { s: "Bei einem Lernenden kommen schulische, familiäre und gesundheitliche Probleme zusammen.", level: 3, why: "Mehrfachproblematik → Fachstelle Berufsintegration: Sie koordiniert die Beteiligten." },
     { s: "🦒 Ein Lernender erklärt zum ersten Mal, die Giraffe habe seinen Lernbericht gefressen.", level: 0, why: "Leichter Verstoss: Gespräch suchen, Feedback geben und die Erwartungen klarmachen – die Ausrede zieht genau einmal." },
-    { s: "💻 Ein Informatik-Lernender führt seine Lerndokumentation trotz Feedbackgespräch seit Monaten nicht nach.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss: formelles Gespräch und schriftliche Massnahmen mit Fristen." },
   ],
   duellLevels: [
     { icon: "🟢", lbl: "Leichter Verstoss" },
@@ -1983,42 +2482,40 @@ window.GAME_DATA = {
   ],
 
   /* =====================================================================
-     DEMO-MODUS – automatische Tour für die Präsentation (Taste D oder index.html#demo)
-     sec   = Dauer der Station in Sekunden (Summe ≈ 7 Minuten; live mit + / − schneller oder langsamer)
-     show  = was gezeigt wird: "title" · "menu" · "menu-arena" · "levels" · "level-2:Teil des Missionstitels"
+     PRÄSENTATIONSMODUS – mein Take-away, Station für Station (Taste P oder index.html#demo)
+     Weiter geht es nur auf Tastendruck (→ / Enter / Leertaste / Presenter-Klicker) – nichts läuft automatisch.
+     sec   = Richtzeit pro Station in Sekunden (nur Orientierung für die mitlaufende Uhr; Summe ≈ 7 Minuten)
+     show  = was gezeigt wird: "title" · "menu" · "levels" · "level-2:Teil des Missionstitels"
              "beruf:Teil des Titels" · "chars:rollen-id" · "sheet:rollen-id" · "journey-2" · "lexikon:Begriff" · "boss"
-     title / text = was ich dazu sage – hier die eigenen Erkenntnisse eintragen.
+     title = die Erkenntnis · text = was ich daraus mitnehme und umsetze.
+     points = die 3–4 Kernpunkte, die statt des ganzen Kursinhalts gross angezeigt werden (ohne points: ganzer Inhalt).
+     TODO nach Kurstag 5: Stationen zu Tag 5 ergänzen und die Texte mit der persönlichen Reflexion abgleichen.
      ===================================================================== */
   demo: [
-    { sec: 14, show: "title", kicker: "Einstieg", title: "Mein Take-away als Spiel", text: "Fünf Kurstage, zusammengefasst in einem Spiel: Jeder Kurstag ist ein Level, jede beteiligte Stelle eine Rolle. In ein paar Minuten zeige ich, was ich aus dem Kurs mitnehme." },
-    { sec: 16, show: "menu", kicker: "Einstieg", title: "Zwei Welten: Wissen und Arena", text: "Links wird gelernt und nachgeschlagen, rechts gespielt und geprüft. Und ja – die Giraffe hat es auch ins Spiel geschafft." },
-    { sec: 12, show: "levels", kicker: "Kurstage", title: "Jeder Kurstag ist ein Level", text: "Drei Tage sind gespielt, zwei folgen noch. Das Spiel wächst mit jedem Kurstag weiter." },
-    { sec: 24, show: "level-1:Die Rollen des Berufsbildners", kicker: "Tag 1 · Grundlagen", title: "Meine Rolle: Coach und Fachperson", text: "Als Berufsbildner bin ich nicht nur Fachperson. Ich begleite den Lernprozess und bin Vorbild – und die erste Woche ist massgebend für alles, was folgt." },
-    { sec: 20, show: "level-1:vs. Fachperson", kicker: "Tag 1 · Grundlagen", title: "Befähigen statt machen", text: "Mein wichtigster Merksatz aus Tag 1: Die Fachperson erledigt Aufgaben – der Berufsbildner entwickelt Kompetenzen und nutzt Fehler als Lernchance." },
-    { sec: 22, show: "level-1:Die drei Lernorte", kicker: "Tag 1 · Grundlagen", title: "Drei Lernorte, ein Ziel", text: "Betrieb, Berufsfachschule und überbetriebliche Kurse bilden gemeinsam aus. Meine Aufgabe ist es, die drei Lernorte im Alltag zu verbinden." },
-    { sec: 22, show: "level-1:Generationen im Vergleich", kicker: "Tag 1 · Lebenswelt", title: "Die Jugendlichen verstehen", text: "Lernende stecken mitten in grossen Entwicklungsaufgaben. Die Generation Z will befähigt werden, nicht kontrolliert." },
-    { sec: 16, show: "chars:bb", kicker: "Rollen", title: "Wer macht was?", text: "Alle Beteiligten auf einem Mühlerad – vom Bund bis zu den Eltern. Jede Rolle hat eigene Aufgaben, Rechte und Pflichten." },
-    { sec: 24, show: "sheet:bb", kicker: "Rollen", title: "Der Charakterbogen", text: "Pro Rolle sehe ich auf einen Blick: Aufgaben, Rechte, Pflichten – und mit wem sie zusammenarbeitet." },
-    { sec: 22, show: "level-2:Der Lehrvertrag", kicker: "Tag 2 · Rechtstag", title: "Der Lehrvertrag", text: "Befristet, zwingend schriftlich und von der DBW genehmigt. Der Rechtstag hat mir gezeigt: Ich muss nicht alles auswendig wissen – aber wissen, wo es steht." },
-    { sec: 24, show: "level-2:Das Interventionsschema", kicker: "Tag 2 · Rechtstag", title: "Das Interventionsschema", text: "Leicht, mittel oder schwer: Probleme früh erkennen, richtig einordnen und verhältnismässig handeln – statt wegzuschauen." },
-    { sec: 18, show: "sheet:dbw", kicker: "Tag 2 · Rechtstag", title: "Ich stehe nicht alleine da", text: "Die DBW und die Fachstellen wollen früh einbezogen werden. Private Probleme von Lernenden muss ich nicht selbst lösen." },
-    { sec: 22, show: "level-3:Die Schnupperlehre", kicker: "Tag 3 · Rekrutieren", title: "Die Schnupperlehre", text: "Sie hilft beiden Seiten bei der Entscheidung. Meine Beobachtungen halte ich auf dem Beurteilungsbogen fest und bespreche sie mit den Jugendlichen." },
-    { sec: 24, show: "level-3:Häufige Beurteilungsfehler", kicker: "Tag 3 · Rekrutieren", title: "Beurteilungsfehler kennen", text: "Erster Eindruck, Halo-Effekt, Sympathie: Ganz vermeiden kann ich sie nicht – aber ich kann systematisch vorgehen und nicht alleine entscheiden." },
-    { sec: 22, show: "level-3:Ausbildungsplanung in 7 Schritten", kicker: "Tag 3 · Planen", title: "Die Ausbildung planen, bevor sie beginnt", text: "Das Ausbildungskonzept erstelle ich nur einmal. Für jede neue lernende Person plane ich danach die konkrete Umsetzung in sieben Schritten." },
-    { sec: 24, show: "beruf:Tag 3 angewendet", kicker: "Mein Beruf", title: "Angewendet: Informatiker/in EFZ", text: "Alles Allgemeine gilt für jeden Beruf. Konkret wird es erst mit der BiVo und dem Bildungsplan meines eigenen Berufs." },
-    { sec: 10, show: "sheet:pferd", kicker: "Running Gag", title: "Und der Pferdefachmann?", text: "Auch im Stall gelten BiVo, Bildungsplan und drei Lernorte. Das System ist für alle Berufe dasselbe." },
-    { sec: 10, show: "sheet:giraffe", kicker: "Running Gag", title: "Und die Giraffe?", text: "Sie frisst Hausaufgaben. Mehr gibt es dazu nicht zu sagen." },
-    { sec: 24, show: "journey-2", kicker: "Lehrzeit-Reise", title: "Der rote Faden durch die Lehre", text: "Sieben Etappen von der Bildungsbewilligung bis zum Lehrabschluss – mit Zeitpunkt und Hilfsmittel zu jedem Schritt." },
-    { sec: 18, show: "lexikon:Halo-Effekt", kicker: "Lexikon", title: "Nachschlagen statt auswendig lernen", text: "Zu jedem Begriff sehe ich, wo er im Kurs vorkam und welche Rollen er betrifft." },
-    { sec: 22, show: "boss", kicker: "Arena", title: "Wissen prüfen im Bosskampf", text: "Gelerntes will geübt sein: Jede richtige Antwort patcht den PrintNightmare-Drucker ein Stück weiter." },
-    { sec: 30, show: "menu", kicker: "Fazit", title: "Was ich mitnehme", text: "Befähigen statt machen. Früh hinschauen und Hilfe holen. Fair und systematisch auswählen. Und die Ausbildung planen, bevor sie beginnt." },
+    { sec: 20, show: "title", kicker: "Einstieg", title: "Mein Take-away", text: "Was nehme ich aus dem Berufsbildnerkurs mit – und was setze ich im Betrieb um? Ich gehe die Kurstage der Reihe nach durch." },
+    { sec: 15, show: "levels", kicker: "Überblick", title: "Der rote Faden", text: "Meine Rolle verstehen, den rechtlichen Rahmen kennen, passend rekrutieren und planen, zielgerichtet instruieren und Rückmeldung geben." },
+    { sec: 30, show: "level-1:Die Rollen des Berufsbildners", points: ["Coach: Lernprozess und Kompetenzerwerb begleiten", "Fachperson: Expertise einbringen, Vorbild sein, Leistung beurteilen", "Dazu: Berater/in und Begleiter/in der Lernenden", "«Die erste Woche ist massgebend für die Zukunft.»"], kicker: "Tag 1 · Meine Rolle", title: "Ich bin Coach – nicht nur Fachperson", text: "Ich begleite den Lernprozess und bin fachliches wie persönliches Vorbild. Die erste Woche ist massgebend für alles, was folgt." },
+    { sec: 25, show: "level-1:vs. Fachperson", points: ["Befähigen statt selbst machen", "Kompetenzen entwickeln statt nur Aufgaben erledigen", "Fokus auf den Lernprozess, nicht nur aufs Resultat", "Fehler als Lernchance nutzen"], kicker: "Tag 1 · Meine Rolle", title: "Befähigen statt machen", text: "Die Fachperson erledigt Aufgaben – als Berufsbildner entwickle ich Kompetenzen, denke aus Sicht der Lernenden und nutze Fehler als Lernchance." },
+    { sec: 25, show: "level-1:Generationen im Vergleich", points: ["Generation Z: befähigen – Generation Alpha: inspirieren", "Jugendliche lösen sich ab und bauen ein eigenes Wertesystem auf", "Ich gehöre zur Erwachsenenwelt, von der sie sich abgrenzen", "Digital Natives: klare Regeln für digitale Medien vereinbaren"], kicker: "Tag 1 · Lebenswelt", title: "Die Jugendlichen verstehen", text: "Lernende stecken mitten in grossen Entwicklungsaufgaben. Die Generation Z will befähigt werden, nicht kontrolliert – darauf stelle ich meine Führung ein." },
+    { sec: 25, show: "level-2:Der Lehrvertrag", points: ["Lehrvertrag: befristet, schriftlich, von der DBW genehmigt", "BiVo: der gesetzliche Rahmen meines Berufs", "Bildungsplan: Handlungskompetenzen und Leistungsziele pro Lernort", "Gesetzespyramide: BV → BBG → BBV → BiVo"], kicker: "Tag 2 · Rechtlicher Rahmen", title: "Wissen, wo es steht", text: "Lehrvertrag, BiVo und Bildungsplan geben den Rahmen vor. Ich muss nicht alles auswendig wissen – aber wissen, wo ich nachschlage." },
+    { sec: 30, show: "level-2:Das Interventionsschema", points: ["Leicht: informelles Gespräch, Aktennotiz, Konsequenzen aufzeigen", "Mittel: formelles Gespräch, schriftliche Massnahmen – DBW und Eltern empfohlen", "Schwer: schriftliche Verwarnung, Auflösung androhen – DBW und Eltern zwingend", "Keine Besserung → nächste Stufe"], kicker: "Tag 2 · Interventionen", title: "Früh hinschauen, verhältnismässig handeln", text: "Leicht, mittel oder schwer: Ich ordne Probleme früh ein und reagiere abgestuft – statt wegzuschauen, bis es eskaliert." },
+    { sec: 20, show: "level-2:Sie stehen nicht alleine da", points: ["Im Zweifel lieber etwas zu früh Hilfe holen als zu spät", "Private Probleme (Sucht, Finanzen …): weiterverweisen, nicht selbst lösen", "DBW: berät, ordnet ein und führt Gespräche mit allen Vertragsparteien", "Help Point, Psychologische Beratung, Berufsberatung"], kicker: "Tag 2 · Unterstützung", title: "Ich stehe nicht alleine da", text: "Private Probleme von Lernenden löse ich nicht selbst. Ich hole früh Hilfe bei der DBW und den Fachstellen." },
+    { sec: 25, show: "level-3:Häufige Beurteilungsfehler", points: ["Erster und letzter Eindruck prägen das Bild", "Halo-Effekt: Ein Merkmal überstrahlt alle anderen", "Sympathie und Antipathie färben die Bewertung", "Dagegen: Beobachtungen notieren, systematisch vorgehen, nicht alleine entscheiden"], kicker: "Tag 3 · Rekrutieren", title: "Fair und systematisch auswählen", text: "Erster Eindruck, Halo-Effekt, Sympathie: Ich notiere Beobachtungen, gehe nach Kriterien vor und entscheide nicht alleine." },
+    { sec: 25, show: "level-3:Ausbildungsplanung in 7 Schritten", points: ["Individuellen Ausbildungsplan erarbeiten", "Zuständigkeiten im Team und eigene Betreuung klären", "Einführungsphase und erste Lernphasen vorbereiten", "Lernpartnerschaften und Infrastruktur bereitstellen"], kicker: "Tag 3 · Planen", title: "Planen, bevor die Lehre beginnt", text: "Das Ausbildungskonzept erstelle ich einmal. Für jede neue lernende Person plane ich die Umsetzung – von den Zuständigkeiten bis zum Arbeitsplatz." },
+    { sec: 30, show: "level-4:Instruieren in 7 Schritten", points: ["Vorbereiten: Handlung auswählen, Modellierung planen", "Instruieren: einführen, vorzeigen und laut denken, nachmachen lassen", "Erweitern: anwenden lassen und Reflexion fördern", "Laut denken: Was mache ich? Warum so? Worauf achte ich?"], kicker: "Tag 4 · Instruieren", title: "Vorzeigen und laut denken", text: "Eine Instruktion ist geplant, nie spontan. Ich zeige vor, sage, was ich mir überlege, lasse nachmachen – und ziehe mich Schritt für Schritt zurück." },
+    { sec: 25, show: "level-4:Der vollständige Arbeitsauftrag", points: ["Vorbereiten: passende Aufgabe wählen, Begleitung planen", "Einbetten: Wozu dient die Aufgabe?", "Klar formulieren – in Teilschritten", "Erwartungen und Hilfsmittel nennen"], kicker: "Tag 4 · Anleiten", title: "Aufträge vollständig erteilen", text: "Einbetten, klar formulieren, Erwartungen nennen, Hilfsmittel zeigen. Fehlt etwas davon, müssen Lernende nachfragen und werden nicht selbstständig." },
+    { sec: 30, show: "beruf:Tag 4 angewendet", points: ["Instruktion: Notebook-Bereitstellung in 6 Schritten vorzeigen", "Auftrag: Notebook für die Buchhaltung – 2. Lehrjahr, ca. 3 Stunden", "Drei Kontrollpunkte: nach der Planung, nach der Gruppenzuweisung, vor der Übergabe", "Zum Schluss: Rückmeldung und Reflexion"], kicker: "Tag 4 · In meinem Betrieb", title: "Mein Beispiel: Notebook bereitstellen", text: "So setze ich es um: Ich instruiere die Bereitstellung, danach erhält die lernende Person denselben Auftrag – mit drei Kontrollpunkten und einer Rückmeldung am Schluss." },
+    { sec: 30, show: "level-4:Eine gute Rückmeldung", points: ["1 · Gesamteindruck vermitteln", "2 · Detailliert begründen – anhand der Kriterien", "3 · Handlungsanweisung geben", "4 · Umsetzung sicherstellen"], kicker: "Tag 4 · Rückmelden", title: "Das wichtigste Gespräch", text: "Gesamteindruck, Begründung, Handlungsanweisung, Umsetzung sicherstellen. Auf jeden Auftrag folgt eine Rückmeldung – auch wenn es gut war." },
+    { sec: 30, show: "level-4:Ein schwieriges Gespräch führen", points: ["Vorbereiten: Situation analysieren, Inhalt und Rahmen planen", "Führen: Gesamteindruck → Begründung → Verbesserung → Umsetzung", "Nachbereiten: protokollieren und reflektieren", "Regel: das Verhalten kritisieren, nicht die Person"], kicker: "Tag 4 · Schwierige Gespräche", title: "Ansprechen statt aufschieben", text: "Ich bereite das Gespräch vor, kritisiere das Verhalten und nicht die Person, und halte die Vereinbarungen schriftlich fest." },
+    { sec: 40, show: "title", kicker: "Fazit", title: "Das setze ich um", text: "Befähigen statt machen. Früh hinschauen und Hilfe holen. Fair auswählen und vorausplanen. Vorzeigen, laut denken – und regelmässig Rückmeldung geben." },
   ],
 
   /* Credits & Quellen – Titel, Herausgeber und Stand stammen aus den Kursunterlagen selbst
      (ausgelesen über den graphify-Wissensgraphen in graphify-out/). */
   credits: {
-    version: "Version 1.1 · Stand November 2026 · Kurstage 1–3",
-    author: "", // ← hier den eigenen Namen eintragen, dann erscheint er auf dem Credits-Screen
+    version: "Version 1.2 · Stand November 2026 · Kurstage 1–4",
+    author: "Samuel Sergio da Costa",
+    copyright: "© 2026 Samuel Sergio da Costa · mit Claude (Anthropic)",
     about: [
       "Take-away aus dem Berufsbildnerkurs am Weiterbildungszentrum (WBZ) Kanton Luzern – eine spielerische Zusammenfassung der Kursinhalte für die Präsentation am letzten Kurstag.",
       "Beispielberuf: Informatiker/in EFZ. Die allgemeinen Inhalte gelten für alle Berufe.",
@@ -2057,6 +2554,16 @@ window.GAME_DATA = {
         ],
       },
       {
+        group: "Kursunterlagen Präsenztag 4 – Instruieren & Rückmelden",
+        items: [
+          ["Präsenztag 4: Zielgerichtet instruieren, mit Rückmeldungen steuern & schwierige Gespräche (Präsentation)", "WBZ Kanton Luzern"],
+          ["Theorie «Lernende instruieren und anleiten»", "WBZ Kanton Luzern"],
+          ["Theorie «Rückmeldungen» · Beispiele für Rückmeldungen", "WBZ Kanton Luzern"],
+          ["Fallbeispiele schwierige Gespräche", "WBZ Kanton Luzern"],
+          ["Vorlagen «Zielgerichtete Instruktion» und «Arbeitsauftrag vorbereiten und erteilen» – eigene Bearbeitung", "WBZ Kanton Luzern"],
+        ],
+      },
+      {
         group: "In den Unterlagen zitiert",
         items: [
           ["Handbuch betriebliche Grundbildung (Knutti, Dirren & Lehmann, 2019)", "SDBB"],
@@ -2064,6 +2571,7 @@ window.GAME_DATA = {
           ["Merck Jugendbarometer 2025", "zitiert in Präsenztag 1"],
           ["Berufsbildung Luzern in Zahlen 2025", "zitiert in Präsenztag 2"],
           ["Yousty – Umfrage «Welcher Content?» · anforderungsprofile.ch · jobskills.ch", "zitiert in Präsenztag 3"],
+          ["Feedback-Regeln (Bildungsbibel.de) · Fünf-Finger-Feedback (komfortzonen.de) · Studien und Berichte zu den Gleichstellungs-Fallbeispielen", "zitiert in Präsenztag 4"],
           ["Eckdaten Pferdefachmann/-frau EFZ (Bonus-Rolle)", "berufsberatung.ch"],
         ],
       },
@@ -2074,11 +2582,13 @@ window.GAME_DATA = {
       ["Sound", "live erzeugt mit der Web Audio API – keine Audiodateien"],
       ["Schriften & Icons", "Systemschriften (Segoe UI, Bahnschrift) und System-Emoji – nicht mitgeliefert"],
       ["Technik", "HTML, CSS und JavaScript ohne Framework · läuft offline im Browser"],
-      ["Werkzeuge", "programmiert mit Unterstützung von Claude Code (Anthropic) · Kursunterlagen als Wissensgraph mit graphify erschlossen"],
+      ["Idee, Konzept & Inhalte", "Samuel Sergio da Costa"],
+      ["Programmierung", "Samuel Sergio da Costa mit Claude (KI-Assistent von Anthropic)"],
+      ["Werkzeuge", "Claude Code (Anthropic) · Kursunterlagen als Wissensgraph mit graphify erschlossen"],
     ],
     keys: [
       [["←", "→", "↑", "↓"], "Auswahl bewegen"],
-      [["D"], "Demo-Modus: automatische Tour (Leertaste = Pause, ← → = Station, + − = Tempo)"],
+      [["P"], "Präsentation: mein Take-away, Station für Station (→ / Enter = weiter, ← = zurück, ↑ ↓ = scrollen)"],
       [["Enter"], "Öffnen / bestätigen"],
       [["Esc"], "Zurück"],
       [["1–8"], "Direktwahl im Menü"],
