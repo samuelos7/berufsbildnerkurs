@@ -517,8 +517,8 @@
   };
 
   /* --- Charakterbogen --- */
-  const ROLE_ICON = { lernende: "🎒", informatik: "💻", betrieb: "🏭", bb: "🧑‍🏫", eltern: "👪", dbw: "🏛️", bfs: "🏫", uek: "🛠️", oda: "🤝", sbfi: "⚖️", pferd: "🐴" };
-  const ROLE_ABBR = { lernende: "Lernende", informatik: "Informatik", betrieb: "Betrieb", bb: "BB", eltern: "Eltern", dbw: "DBW", bfs: "BFS", uek: "üK", oda: "OdA", sbfi: "SBFI", pferd: "Pferd" };
+  const ROLE_ICON = { lernende: "🎒", informatik: "💻", betrieb: "🏭", bb: "🧑‍🏫", eltern: "👪", dbw: "🏛️", bfs: "🏫", uek: "🛠️", oda: "🤝", sbfi: "⚖️", pferd: "🐴", giraffe: "🦒" };
+  const ROLE_ABBR = { lernende: "Lernende", informatik: "Informatik", betrieb: "Betrieb", bb: "BB", eltern: "Eltern", dbw: "DBW", bfs: "BFS", uek: "üK", oda: "OdA", sbfi: "SBFI", pferd: "Pferd", giraffe: "Giraffe" };
   /* Wo steht die Rolle im System? (von oben nach unten) */
   const SYSTEM = [
     { lbl: "Bund", sub: "Gesetze, BiVo", ids: ["sbfi"] },
@@ -526,6 +526,7 @@
     { lbl: "Branche", sub: "Inhalte, üK", ids: ["oda"] },
     { lbl: "Lernorte", sub: "Betrieb · Schule · üK", ids: ["betrieb", "bfs", "uek"] },
     { lbl: "Menschen", sub: "in der Lehre", ids: ["bb", "lernende", "informatik", "pferd", "eltern"] },
+    { lbl: "Savanne", sub: "ausser Konkurrenz", ids: ["giraffe"] },
   ];
   /* Piktogramme für Listeneinträge – nach Stichwort gewählt */
   const ICONS = [
@@ -574,7 +575,7 @@
   /* Ebene im System als gestufte Pyramide */
   const systemStack = (c) => h("div", { class: "sys" }, SYSTEM.map((row, i) => {
     const here = row.ids.includes(c.id);
-    return h("div", { class: "sys-row" + (here ? " here" : ""), style: { "--w": 46 + i * 13.5 + "%" } },
+    return h("div", { class: "sys-row" + (here ? " here" : ""), style: { "--w": 46 + (i * 54) / (SYSTEM.length - 1) + "%" } },
       h("div", { class: "sys-lbl" }, h("b", {}, row.lbl), h("span", {}, row.sub)),
       h("div", { class: "sys-chips" }, row.ids.map((id) => h("i", { class: id === c.id ? "me" : "", title: charById[id].name, onclick: () => { if (id !== c.id) { sfx.ok(); go(CharSheet(id), true); } } }, ROLE_ICON[id]))));
   }));

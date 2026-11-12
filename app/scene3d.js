@@ -863,6 +863,16 @@ window.World = (() => {
     const L = c.look || {};
     const holder = new THREE.Group();
     const rigs = [];
+    if (L.animal === "giraffe") {
+      // Die Giraffe als eigene Rolle: nur das Tier, keine Menschenfigur
+      const g = quadruped(GIRAFFE);
+      g.root.rotation.y = 0.75;
+      holder.add(g.root);
+      holder.userData.pet = g;
+      holder.scale.setScalar(L.scale || 0.5);
+      holder.userData.baseScale = L.scale || 0.5;
+      return { obj: holder, rigs, id: c.id };
+    }
     const a = person(L);
     addExtras(a, L);
     holder.add(a.root);
@@ -977,8 +987,8 @@ window.World = (() => {
   });
   giraffeTex.wrapS = giraffeTex.wrapT = THREE.RepeatWrapping;
   const spotMat = (ru, rv) => { const t = giraffeTex.clone(); t.repeat.set(ru, rv); t.needsUpdate = true; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.85 }); };
-  const GIRAFFE = { legH: 1.75, legR: 0.13, hoofH: 0.12, bodyR: 0.5, bodyL: 0.85, slope: 0.3, neckL: 2.1, neckRt: 0.17, neckRb: 0.3, neckTilt: 0.3, headR: 0.3, headDrop: 0.12, horns: true, tailL: 0.95, dark: "#8a4f22", sock: "#f3e3bd", muzzle: "#f6e9cc", coat: spotMat };
-  const PONY = { legH: 0.72, legR: 0.1, hoofH: 0.09, bodyR: 0.3, bodyL: 0.62, slope: 0.04, neckL: 0.6, neckRt: 0.14, neckRb: 0.21, neckTilt: 0.7, headR: 0.2, headDrop: 0.3, tailL: 0.62, dark: "#2a1a10", sock: "#f4f1ea", muzzle: "#4a3020", coat: () => M("#9a5a2c", { roughness: 0.85 }) };
+  const GIRAFFE = { legH: 1.75, legR: 0.13, hoofH: 0.12, bodyR: 0.5, bodyL: 0.85, slope: 0.3, neckL: 2.1, neckRt: 0.17, neckRb: 0.3, neckTilt: 0.3, headR: 0.3, headDrop: 0.12, horns: true, snack: true, tailL: 0.95, dark: "#8a4f22", sock: "#f3e3bd", muzzle: "#f6e9cc", plain: "#eec67c", coat: spotMat };
+  const PONY = { legH: 0.72, legR: 0.1, hoofH: 0.09, bodyR: 0.3, bodyL: 0.62, slope: 0.04, neckL: 0.6, neckRt: 0.14, neckRb: 0.21, neckTilt: 0.7, headR: 0.2, headDrop: 0.3, tailL: 0.62, dark: "#2a1a10", sock: "#f4f1ea", muzzle: "#4a3020", plain: "#9a5a2c", coat: () => M("#9a5a2c", { roughness: 0.85 }) };
   function quadruped(P) {
     const root = new THREE.Group();
     const mats = {};
@@ -986,9 +996,15 @@ window.World = (() => {
     const dark = M(P.dark, { roughness: 0.85 }), sock = M(P.sock, { roughness: 0.8 }), hoof = M("#33261d", { roughness: 0.5 }), muzzle = M(P.muzzle, { roughness: 0.8 });
     // Rumpf: vorne höher als hinten (slope)
     const by = P.legH + P.bodyR * 0.8, rise = (Math.sin(P.slope) * P.bodyL) / 2;
-    const trunk = mesh(new THREE.CapsuleGeometry(P.bodyR, P.bodyL, 8, 22), coat(3, 1.4), 0, by, 0, root);
+    // Walze mit Fellmuster, die runden Enden einfarbig (das Muster würde sich dort verziehen)
+    const trunk = new THREE.Group();
+    trunk.position.y = by;
     trunk.rotation.x = Math.PI / 2 - P.slope;
     trunk.scale.x = 0.86;
+    root.add(trunk);
+    mesh(new THREE.CylinderGeometry(P.bodyR, P.bodyR, P.bodyL, 22, 1, true), coat(3, 1), 0, 0, 0, trunk);
+    const plain = M(P.plain, { roughness: 0.85 });
+    [-1, 1].forEach((e) => sph(P.bodyR, plain, 0, (e * P.bodyL) / 2, 0, trunk, 22));
     // Beine: oben Fell, unten hell, dazu Knie und Huf
     [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sz]) => {
       const py = by + sz * rise - P.bodyR * 0.2;
@@ -1051,6 +1067,19 @@ window.World = (() => {
       return e;
     });
     if (!P.horns) sph(hr * 0.3, dark, 0, hr * 1.2, hr * 0.25, head, 10).scale.set(1, 0.6, 1.3); // Stirnschopf
+    if (P.snack) {
+      // Running Gag: die Giraffe frisst Hausaufgaben – ein angeknabbertes Blatt hängt aus dem Maul
+      const sheet = new THREE.Group();
+      sheet.position.set(0, -hr * 0.2, hr * 1.72);
+      sheet.rotation.set(0.25, 0.3, 0.12);
+      head.add(sheet);
+      const pm = M("#fbfbf4", { roughness: 0.9, emissive: "#ffffff", emissiveIntensity: 0.12 });
+      box(hr * 1.5, hr * 1.9, 0.02, pm, 0, -hr * 0.9, 0, sheet);
+      box(hr * 0.7, hr * 0.14, 0.025, M("#d63031"), -hr * 0.3, -hr * 0.3, 0, sheet).castShadow = false;
+      for (let i = 0; i < 5; i++) box(hr * (1.1 - (i % 2) * 0.3), hr * 0.07, 0.025, M("#9aa3b5"), -hr * (i % 2) * 0.15, -hr * (0.62 + i * 0.24), 0, sheet).castShadow = false;
+      // Biss-Ecke: drei Kügelchen in Fellfarbe verdecken die obere Ecke
+      [[0.75, -0.02], [0.55, 0.06], [0.72, -0.24]].forEach(([x, y]) => sph(hr * 0.2, muzzle, hr * x, hr * y, 0, sheet, 8));
+    }
     // Schweif: Giraffe dünn mit Quaste, Pferd als dichter Schweif
     const tail = new THREE.Group();
     tail.position.set(0, by - rise + P.bodyR * 0.45, -(P.bodyL / 2 + P.bodyR * 0.8));
@@ -1334,6 +1363,22 @@ window.World = (() => {
         bits.forEach((b) => { const k = (t * b.sp + b.o) % 1; b.s.position.set(b.x, 0.3 + k * 4.5, b.z); b.s.material.opacity = Math.sin(k * Math.PI) * 0.75; });
       });
     },
+    savanne(g) {
+      // Akazie, hohes Gras – und ein Stapel Hausaufgaben, von dem Blätter davonfliegen
+      const trunk = M("#6b4a2b", { roughness: 0.9 }), leaf = F("#7fae3f"), paper = M("#fbfbf4", { emissive: "#ffffff", emissiveIntensity: 0.15, side: THREE.DoubleSide });
+      [[3.2, -6, 1], [-4.4, -7.5, 0.8]].forEach(([x, z, k]) => {
+        cyl(0.16 * k, 0.26 * k, 3.4 * k, trunk, x, 1.7 * k, z, g, 8);
+        [[0, 3.6, 0, 2.2], [-1.2, 3.3, 0.2, 1.4], [1.3, 3.25, -0.2, 1.5]].forEach(([dx, y, dz, r]) => mesh(new THREE.IcosahedronGeometry(r * k, 1), leaf, x + dx * k, y * k, z + dz, g).scale.y = 0.3);
+      });
+      for (let i = 0; i < 26; i++) mesh(new THREE.ConeGeometry(0.07, rnd(0.4, 0.9), 4), F("#c9b458"), rnd(-6, 6), 0.3, rnd(-7.5, -3.2), g);
+      for (let i = 0; i < 7; i++) box(0.62, 0.035, 0.46, paper, 0.9 + rnd(-0.03, 0.03), 0.03 + i * 0.04, -3.6 + rnd(-0.03, 0.03), g).rotation.y = rnd(-0.2, 0.2);
+      const fly = [];
+      for (let i = 0; i < 6; i++) fly.push(box(0.5, 0.66, 0.012, paper, 0, 0, 0, g));
+      tickers.push((t) => {
+        if (!g.visible) return;
+        fly.forEach((p, i) => { const k = (t * 0.16 + i / fly.length) % 1, a = i * 2.1 + k * 4; p.position.set(0.9 + Math.sin(a) * (0.5 + k * 3), 0.5 + k * 4.2, -3.6 + Math.cos(a) * (0.4 + k * 1.6)); p.rotation.set(a, a * 0.7, Math.sin(a) * 0.8); p.scale.setScalar(Math.sin(k * Math.PI) * 0.9 + 0.1); });
+      });
+    },
     reitstall(g) {
       const wood = M("#8a5a33", { roughness: 0.9 }), woodD = M("#5e3b20", { roughness: 0.9 }), white = M("#ece6d8", { roughness: 0.8 });
       // Stall mit Giebeldach und zwei Boxentüren (obere Hälfte offen)
@@ -1382,9 +1427,9 @@ window.World = (() => {
   island.position.y = 0.2;
   // Die Giraffe – Running Gag aus dem Kurs: steht hinten auf der Insel und schaut den Figuren über die Schulter
   const giraffe = quadruped(GIRAFFE);
-  giraffe.root.scale.setScalar(0.7);
-  giraffe.root.position.set(2.05, 0.34, -1.35);
-  giraffe.root.rotation.y = -0.62;
+  giraffe.root.scale.setScalar(0.68);
+  giraffe.root.position.set(-2.25, 0.34, 0.75); // vorne links, gut sichtbar – nicht mehr versteckt hinter den Figuren
+  giraffe.root.rotation.y = 0.85;
   island.add(giraffe.root);
   // Seitenlicht statt Kristallen: die gewählte Menü-Seite färbt die Insel leicht ein
   const sideLights = { wissen: new THREE.PointLight("#4a95e8", 0, 9), arena: new THREE.PointLight("#ff7a3d", 0, 9) };
@@ -1612,10 +1657,14 @@ window.World = (() => {
   carousel.visible = false;
   let carChars = [];
   let carIndex = 0, carTurn = 0, carAngle = 0, carPrev = 0;
-  const WR = 4.2, WCY = 0.4, WZ = 1.3, WLVL = 0.2; // Radius, Achshöhe, Gondeln vor dem Rad, Wasserspiegel
-  const WTOP = WCY + WR;
+  // Das Mühlerad liegt flach auf dem Wasser und dreht wie ein Karussell: niemand taucht mehr unter.
+  // WR = Radius · WZ = vorderster Platz (gewählte Rolle) · WLVL = Wasserspiegel · WCZ = Radmitte · WTOP = Höhe der Gondeln
+  const WR = 4.2, WZ = 1.3, WLVL = 0.2;
+  const WCY = WLVL + 0.3, WCZ = WZ - WR;
+  const WTOP = WLVL + 1.2;
   const wheel = new THREE.Group();
-  wheel.position.y = WCY;
+  wheel.position.set(0, WCY, WCZ);
+  wheel.rotation.x = Math.PI / 2; // flach hinlegen; gedreht wird weiter um die eigene Achse (rotation.z)
   carousel.add(wheel);
   const woodM = F("#8a5a33", { roughness: 0.85 }), woodDM = F("#5c3a22", { roughness: 0.9 }), ironM = M("#2c2f36", { metalness: 0.7, roughness: 0.4 });
   const lanterns = [];
@@ -1641,10 +1690,12 @@ window.World = (() => {
     // Nabe mit Bolzen
     cyl(0.6, 0.6, 1.5, ironM, 0, 0, 0, wheel, 16).rotation.x = Math.PI / 2;
     for (let k = 0; k < 6; k++) { const a = (k / 6) * TAU; sph(0.07, M("#c9a227", { metalness: 0.8, roughness: 0.3 }), Math.sin(a) * 0.42, Math.cos(a) * 0.42, 0.77, wheel, 8); }
-    // Achse läuft nach hinten in einen Steinpfeiler (dreht nicht mit)
-    cyl(0.22, 0.22, 2.4, ironM, 0, WCY, -1.7, carousel, 10).rotation.x = Math.PI / 2;
-    box(1.6, WCY + 1.6, 1.2, F("#8d8272", { roughness: 0.95 }), 0, (WCY + 1.6) / 2 - 0.6, -3.2, carousel);
-    box(1.8, 0.25, 1.4, F("#a0947f", { roughness: 0.95 }), 0, WCY + 1.05, -3.2, carousel);
+    // Steinsockel in der Radmitte (dreht nicht mit) mit Luzerner Fahne
+    cyl(0.95, 1.1, 1.3, F("#8d8272", { roughness: 0.95 }), 0, WLVL + 0.5, WCZ, carousel, 8);
+    cyl(1.05, 1.05, 0.16, F("#a0947f", { roughness: 0.95 }), 0, WLVL + 1.2, WCZ, carousel, 8);
+    const wFlag = flagPole(2.6, flagTex.luzern, 1.0, 1.0);
+    wFlag.position.set(0, WLVL + 1.28, WCZ);
+    carousel.add(wFlag);
   }
   // Mühlebach mit gemauertem Ufer
   const brookTex = canvasTex(256, 256, (x, w, h) => {
@@ -1653,13 +1704,13 @@ window.World = (() => {
     for (let i = 0; i < 40; i++) { const px = rnd(0, w), py = rnd(0, h), l = rnd(14, 46); x.lineWidth = rnd(1.5, 3.5); x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + l / 2, py - 4, px + l, py); x.stroke(); }
   });
   brookTex.wrapS = brookTex.wrapT = THREE.RepeatWrapping;
-  brookTex.repeat.set(4, 2);
-  const brook = new THREE.Mesh(new THREE.PlaneGeometry(22, 6), new THREE.MeshStandardMaterial({ map: brookTex, roughness: 0.15, metalness: 0.1, emissive: "#0a3a5a", emissiveIntensity: 0.5, transparent: true, opacity: 0.92 }));
+  brookTex.repeat.set(4, 4);
+  const brook = new THREE.Mesh(new THREE.PlaneGeometry(22, 12.4), new THREE.MeshStandardMaterial({ map: brookTex, roughness: 0.15, metalness: 0.1, emissive: "#0a3a5a", emissiveIntensity: 0.5, transparent: true, opacity: 0.92 }));
   brook.rotation.x = -Math.PI / 2;
-  brook.position.set(0, WLVL, 0.4);
+  brook.position.set(0, WLVL, -2.8);
   carousel.add(brook);
   const wallM = F("#9a8e7c", { roughness: 0.95 });
-  [-2.65, 3.45].forEach((z) => box(22.4, 0.6, 0.5, wallM, 0, WLVL - 0.12, z, carousel));
+  [-9.05, 3.45].forEach((z) => box(22.4, 0.6, 0.5, wallM, 0, WLVL - 0.12, z, carousel));
   // Gondeln: Holzbrett mit leuchtendem Sockel in der Rollenfarbe
   const gondolas = [];
   // Lichtkegel, Ring und Funken markieren den Platz oben am Rad
@@ -1692,7 +1743,7 @@ window.World = (() => {
       // Laterne auf der Felge zwischen zwei Gondeln
       const a = ((i + 0.5) / n) * TAU;
       const lg = new THREE.Group();
-      lg.position.set(Math.sin(a) * WR, Math.cos(a) * WR, 0.68);
+      lg.position.set(Math.sin(a) * WR, Math.cos(a) * WR, -0.68); // Rad liegt flach: -z zeigt nach oben
       sph(0.09, M("#ffd27a", { emissive: "#ffb340", emissiveIntensity: 2 }), 0, 0, 0, lg, 10);
       const gl = glowSprite("#ffb340", 0.9, 0.7);
       lg.add(gl);
@@ -2100,8 +2151,9 @@ window.World = (() => {
       } else if (name === "carousel") {
         buildCarousel(o.chars);
         api.rotateTo(o.index || 0, true);
-        camTgtPos.set(0, WTOP + 1.9, WZ + 11);
-        camTgtLook.set(0, WTOP - 0.25, WZ);
+        // von schräg oben: gewählte Rolle vorne in der Bildmitte, die anderen im Halbkreis dahinter
+        camTgtPos.set(0, 5.4, 11.8);
+        camTgtLook.set(0, 1.1, 0);
         spot.intensity = 2.2;
         spot.position.set(0, WTOP + 7, WZ + 3);
         spot.target.position.set(0, WTOP, WZ);
@@ -2268,7 +2320,7 @@ window.World = (() => {
       const kl = 1 - Math.exp(-dt * 5);
       Object.entries(sideLights).forEach(([side, l]) => { l.intensity = lerp(l.intensity, menuSide === side ? 2.6 : 0, kl); });
       menuHeroes.forEach((h, i) => animateChar(h, t, (menuSide === "wissen" && i === 1) || (menuSide === "arena" && i === 0), dt));
-      animateAnimal(giraffe, t, dt, menuSide === "wissen" ? -0.45 : menuSide === "arena" ? 0.5 : 0);
+      animateAnimal(giraffe, t, dt, menuSide === "wissen" ? -1.0 : menuSide === "arena" ? 0.3 : -0.5);
     }
     // Wissen
     if (wissenG.visible && fountain.visible) {
@@ -2292,7 +2344,7 @@ window.World = (() => {
       arenaRing.material.opacity = 0.32 + Math.sin(t * 3) * 0.1;
       if (arenaHero) animateChar(arenaHero, t, true, dt);
     }
-    // Mühlerad: Rad dreht, Gondeln bleiben waagrecht, Figuren stehen aufrecht
+    // Mühlerad liegt auf dem Wasser und dreht als Karussell, die Figuren stehen aufrecht darauf
     if (carousel.visible && carChars.length) {
       const n = carChars.length;
       carAngle = lerp(carAngle, -carTurn * (TAU / n), Math.min(1, dt * 4));
@@ -2302,13 +2354,12 @@ window.World = (() => {
       carChars.forEach((ch, i) => {
         const act = i === carIndex;
         const phi = (i / n) * TAU + carAngle;
-        const x = Math.sin(phi) * WR, y = WCY + Math.cos(phi) * WR;
+        // Plätze rund um das liegende Rad: der gewählte steht vorne (phi = 0), alle bleiben über Wasser
+        const x = Math.sin(phi) * WR, z = WCZ + Math.cos(phi) * WR;
         const gd = gondolas[i];
-        gd.position.set(x, y, WZ);
-        const above = y > WLVL + 0.15;
-        gd.visible = above;
-        ch.obj.visible = above;
-        ch.obj.position.set(x, y + 0.08, WZ);
+        gd.position.set(x, WTOP, z);
+        gd.rotation.y = phi;
+        ch.obj.position.set(x, WTOP + 0.08, z);
         ch.obj.rotation.y = -Math.sin(phi) * 0.35;
         const bs = ch.obj.userData.baseScale;
         const s = lerp(ch.obj.scale.x, bs * (act ? 1.12 : 0.9), 1 - Math.exp(-dt * 6));
@@ -2327,14 +2378,13 @@ window.World = (() => {
       });
       // Wasser fliesst, spritzt wo das Rad eintaucht – beim Drehen stärker
       brookTex.offset.x = (t * 0.06) % 1;
-      const wx = Math.sqrt(WR * WR - (WLVL - WCY) ** 2);
-      const rate = 6 + Math.min(80, Math.abs(spin) * 120);
+      const rate = 8 + Math.min(90, Math.abs(spin) * 140);
       for (let cnt = rate * dt; cnt > 0; cnt--) {
         if (Math.random() >= cnt) break;
-        [-1, 1].forEach((side) => {
-          tmp.set(side * wx + rnd(-0.2, 0.2), WLVL + 0.05, rnd(-0.5, 0.5));
-          emit(tmp, tmp2.set(side * rnd(0.2, 1.2), rnd(1.6, 3.2), rnd(-0.3, 0.4)), rnd(0.5, 0.9), "spray", rnd(0.25, 0.45));
-        });
+        // Gischt rund um die Felge
+        const a = rnd(0, TAU);
+        tmp.set(Math.sin(a) * (WR + 0.2), WLVL + 0.05, WCZ + Math.cos(a) * (WR + 0.2));
+        emit(tmp, tmp2.set(Math.sin(a) * rnd(0.2, 1), rnd(1.2, 2.4), Math.cos(a) * rnd(0.2, 1)), rnd(0.4, 0.8), "spray", rnd(0.2, 0.4));
       }
     }
     // Bühne

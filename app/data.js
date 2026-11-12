@@ -1660,6 +1660,27 @@ window.GAME_DATA = {
       ],
       sources: "Berufsvorstellung am Präsenztag 3 · Eckdaten: berufsberatung.ch",
     },
+    {
+      /* Running Gag aus dem Kurs: die Giraffe, die Hausaufgaben frisst. Reiner Spass – kein Kursinhalt. */
+      id: "giraffe", name: "Die Giraffe", short: "Running Gag · frisst Hausaufgaben",
+      color: "#f2b84b", env: "savanne",
+      look: { animal: "giraffe", scale: 0.5 },
+      tagline: "Frisst Hausaufgaben. Seit Kurstag 1 die beliebteste Ausrede der Berufsbildung.",
+      role: "Offiziell nirgends vorgesehen, inoffiziell überall dabei: Die Giraffe frisst Hausaufgaben – und behält dank langem Hals trotzdem den Überblick.",
+      aufgaben: [
+        "Frisst Hausaufgaben – am liebsten Lernberichte kurz vor dem Abgabetermin",
+        "Dient als Ausrede Nummer 1, wenn die Lerndokumentation fehlt",
+        "Behält mit ihrem langen Hals alle drei Lernorte gleichzeitig im Blick",
+        "Schaut im Hauptmenü allen über die Schulter und kaut dabei gemütlich weiter",
+      ],
+      beziehungen: [
+        { to: "lernende", text: "Liefert die Hausaufgaben – meistens unfreiwillig." },
+        { to: "bb", text: "Glaubt die Giraffen-Ausrede genau einmal. Danach gilt das Interventionsschema." },
+        { to: "bfs", text: "Hat dort Hausverbot, seit ein ganzer Stapel Prüfungen verschwunden ist." },
+        { to: "pferd", text: "Der andere Running Gag des Kurses – man versteht sich." },
+      ],
+      sources: "Running Gag aus dem Kurs – frei erfunden, in keiner Bildungsverordnung zu finden",
+    },
   ],
 
   /* =====================================================================
@@ -1929,6 +1950,7 @@ window.GAME_DATA = {
     { q: "Welcher Content bringt im Social-Media-Marketing die besten Resultate?", a: ["Blog Posts", "Infografiken", "Texte und Zitate", "Video"], correct: 3, why: "Video liegt mit 63 % vorne – darum: Videobotschaften statt Inserate." },
     { q: "Wer bestimmt die Reihenfolge, in der die Fähigkeiten im Betrieb erlernt werden?", a: ["Das SBFI", "Die Berufsbildnerin / der Berufsbildner", "Die Berufsfachschule", "Die Lernenden"], correct: 1, why: "BiVo und BiPla geben die Ziele vor – die Reihenfolge im Betrieb planst du, abgestimmt auf Schule und üK." },
     { q: "🐴 Wie lange dauert die Lehre als Pferdefachmann/-frau EFZ?", a: ["2 Jahre", "3 Jahre", "4 Jahre", "Bis das Pferd nickt"], correct: 1, why: "3 Jahre – und auch im Stall gelten BiVo, Bildungsplan und drei Lernorte." },
+    { q: "🦒 Was frisst die Giraffe in diesem Spiel am liebsten?", a: ["Akazienblätter", "Hausaufgaben", "Bildungsverordnungen", "Drucker"], correct: 1, why: "Hausaufgaben – die Lerndokumentation führt man deshalb besser laufend und digital." },
     { q: "💻 Wie viele üK-Tage haben Informatik-Lernende?", a: ["10 Tage", "20 Tage", "35 Tage in 7 Kursen", "50 Tage"], correct: 2, why: "BiVo Art. 8 – 7 Kurse à 5 Tage, im letzten Semester keine üK." },
     { q: "💻 Wie oft kontrolliert die Berufsbildnerin die Lerndokumentation einer Informatik-Lernenden mindestens?", a: ["Jede Woche", "1x pro Semester", "1x pro Lehrjahr", "Nur vor der IPA"], correct: 1, why: "BiVo Art. 12 – kontrollieren, unterzeichnen und besprechen." },
     { q: "💻 Warum enthält die BiVo Informatiker/in keine Abweichung vom Arbeitsgesetz?", a: ["Weil sie vergessen wurde", "Weil Informatiker/innen keine gefährlichen Arbeiten ausführen", "Weil Lernende über 18 sind", "Weil der Kanton das regelt"], correct: 1, why: "Es braucht keine Ausnahme vom Verbot gefährlicher Arbeiten." },
@@ -1950,6 +1972,7 @@ window.GAME_DATA = {
     { s: "Ein Lernender hält sich wiederholt nicht an die vereinbarten Handy-Regeln, trotz Feedbackgespräch.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss mit schriftlich definierten Massnahmen." },
     { s: "Eine Lernende wirkt seit Wochen bedrückt und erwähnt psychische Krisen.", level: 3, why: "Weiterverweisen: Fachstelle Psychologische Beratung, Help Point oder DBW." },
     { s: "Ein Lernender antwortet bei einer Instruktion einmal patzig.", level: 0, why: "Leichter Verstoss: das Gespräch suchen und Feedback geben." },
+    { s: "🦒 Ein Lernender erklärt zum ersten Mal, die Giraffe habe seinen Lernbericht gefressen.", level: 0, why: "Leichter Verstoss: Gespräch suchen, Feedback geben und die Erwartungen klarmachen – die Ausrede zieht genau einmal." },
     { s: "💻 Ein Informatik-Lernender führt seine Lerndokumentation trotz Feedbackgespräch seit Monaten nicht nach.", level: 1, why: "Wiederholt trotz Gespräch → mittlerer Verstoss: formelles Gespräch und schriftliche Massnahmen mit Fristen." },
   ],
   duellLevels: [
@@ -1984,6 +2007,7 @@ window.GAME_DATA = {
     { sec: 22, show: "level-3:Ausbildungsplanung in 7 Schritten", kicker: "Tag 3 · Planen", title: "Die Ausbildung planen, bevor sie beginnt", text: "Das Ausbildungskonzept erstelle ich nur einmal. Für jede neue lernende Person plane ich danach die konkrete Umsetzung in sieben Schritten." },
     { sec: 24, show: "beruf:Tag 3 angewendet", kicker: "Mein Beruf", title: "Angewendet: Informatiker/in EFZ", text: "Alles Allgemeine gilt für jeden Beruf. Konkret wird es erst mit der BiVo und dem Bildungsplan meines eigenen Berufs." },
     { sec: 10, show: "sheet:pferd", kicker: "Running Gag", title: "Und der Pferdefachmann?", text: "Auch im Stall gelten BiVo, Bildungsplan und drei Lernorte. Das System ist für alle Berufe dasselbe." },
+    { sec: 10, show: "sheet:giraffe", kicker: "Running Gag", title: "Und die Giraffe?", text: "Sie frisst Hausaufgaben. Mehr gibt es dazu nicht zu sagen." },
     { sec: 24, show: "journey-2", kicker: "Lehrzeit-Reise", title: "Der rote Faden durch die Lehre", text: "Sieben Etappen von der Bildungsbewilligung bis zum Lehrabschluss – mit Zeitpunkt und Hilfsmittel zu jedem Schritt." },
     { sec: 18, show: "lexikon:Halo-Effekt", kicker: "Lexikon", title: "Nachschlagen statt auswendig lernen", text: "Zu jedem Begriff sehe ich, wo er im Kurs vorkam und welche Rollen er betrifft." },
     { sec: 22, show: "boss", kicker: "Arena", title: "Wissen prüfen im Bosskampf", text: "Gelerntes will geübt sein: Jede richtige Antwort patcht den PrintNightmare-Drucker ein Stück weiter." },

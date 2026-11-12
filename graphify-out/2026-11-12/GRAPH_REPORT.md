@@ -1,13 +1,13 @@
 # Graph Report - berufsbildnerkurs  (2026-11-12)
 
 ## Corpus Check
-- 6 files · ~73,643 words
+- 6 files · ~75,616 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 3 file(s) not represented in the graph (top: (none) 1, .css 1, .pptx 1)
 
 ## Summary
-- 740 nodes · 1630 edges · 39 communities (38 shown, 1 thin omitted)
-- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 267 edges (avg confidence: 0.88)
+- 748 nodes · 1655 edges · 43 communities (41 shown, 2 thin omitted)
+- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 270 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
@@ -22,8 +22,8 @@
 - Glossar Bildungssystem
 - App: UI & Daten (main.js)
 - Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026)
-- Bildungsplan Informatik: Grundlagen
-- Handlungskompetenzbereich a: Begleiten von ICT-Projekten
+- Anhang 1: Instrumente zur Förderung der Qualität
+- Vorlage Reflexionen
 - Tag 3: Ausbildungsplanung, BiVo & BiPla
 - Tag 3: Fall Marco Gut
 - Tag 3: Bewerbungsgespräch & Beurteilungsfehler
@@ -32,6 +32,7 @@
 - Lebenswelt der Jugendlichen
 - Drei Lernorte & Lernortkooperation
 - Unterstützungsangebote & Interventionen
+- Phase: Lehre planen
 - Handlungskompetenzbereiche a–h
 - BiVo: Berufsbildner/innen & Gesamtnote
 - BiVo: üK, Schule & Organe
@@ -43,6 +44,8 @@
 - BiVo: Qualifikationsverfahren & IPA
 - Berufsabschluss für Erwachsene
 - Tag 3: Lehrstellenmarketing & Eignungstests
+- Phase: Rekrutierung
+- Berufsbildungsamt des Lehrortskantons
 - Berufsbildungssystem & Durchlässigkeit
 - Kursrahmen & Take-away
 - BiVo: Dauer & Inkrafttreten
@@ -53,7 +56,8 @@
 - Prävention & Jugendschutz
 - Interventionsschema
 - Grundlagendokumente der Ausbildung
-- Vier Kompetenzdimensionen
+- Berufsmaturität
+- Reflexion: Prävention (sexuelle Belästigung, Sucht, Grenzverletzungen)
 - Handlungskompetenzen (BiVo)
 
 ## God Nodes (most connected - your core abstractions)
@@ -73,11 +77,11 @@
   graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf
 - `DBW – Dienststelle Berufs- und Weiterbildung` --semantically_similar_to--> `Berufsbildungsamt des Lehrortskantons`  [INFERRED] [semantically similar]
   graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/Ablaufplan der Lehrzeit-Druckversion ohne Verlinkungen.pdf
-- `BM – Berufsmaturität` --semantically_similar_to--> `Berufsmaturität`  [INFERRED] [semantically similar]
-  graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/DE_Bildungssystem_cmyk_frutiger.pdf
-- `Vorbereitung der Lern- und Arbeitsumgebung` --semantically_similar_to--> `Integration in die Betriebsprozesse und Arbeitsorganisation (erster Arbeitstag)`  [INFERRED] [semantically similar]
-  graphify-out/converted/WBZLU BEKU_Tabelle meine Rolle als BB_9f57e179.md → material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf
 - `BiPla – Bildungsplan` --semantically_similar_to--> `Bildungsplan`  [INFERRED] [semantically similar]
+  graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf
+- `BiVo – Bildungsverordnung` --semantically_similar_to--> `Bildungsverordnung`  [INFERRED] [semantically similar]
+  graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf
+- `QV – Qualifikationsverfahren` --semantically_similar_to--> `Qualifikationsverfahren (QV)`  [INFERRED] [semantically similar]
   graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md → material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf
 
 ## Import Cycles
@@ -103,11 +107,11 @@
 - **Suchtprävention: Jugendschutz bis Suchthilfe** — material_tag_1_wbzlu_beku_präsenz_pp_tag_1_jugendschutz, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_gesundheitsfoerderung, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_frueherkennung, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_suchthilfe [INFERRED 0.85]
 - **Fallstudie Schnupperlehrling Marco Gut (Fallbeschreibung, Zeugnis, Bewerbung, Lebenslauf, Beurteilungsbogen)** — material_tag_3_aufgabe_1_wbzlu_beku_2a_fallbeschreibung_schnupperlehrling_marco_gut_marco_gut, material_tag_3_aufgabe_1_wbzlu_beku_2a_fallbeschreibung_schnupperlehrling_marco_gut_sekundarschul_zeugnis, material_tag_3_aufgabe_1_wbzlu_beku_2b_bewerbungsunterlagen_marco_gut_bewerbung_für_eine_schnupperlehre, material_tag_3_aufgabe_1_wbzlu_beku_2b_bewerbungsunterlagen_marco_gut_lebenslauf, material_tag_3_aufgabe_1_2c_beurteilungsbogen_schnupperlehre_lehrbetrieb_beurteilung_marco_gut, material_tag_3_aufgabe_1_wbzlu_beku_1_grundlagen_zur_schnupperlehre_schnupperlehre [INFERRED 0.95]
 
-## Communities (39 total, 1 thin omitted)
+## Communities (43 total, 2 thin omitted)
 
 ### Community 0 - "Bildungsplan: ICT-Handlungskompetenzen"
-Cohesion: 0.07
-Nodes (102): Berufsfachschule, Fachrichtung Plattformentwicklung, Handlungskompetenz, Handlungskompetenzbereich, a3: Informationen zu ICT-Lösungen und zu Innovationen recherchieren, b1: Den eigenen ICT-Arbeitsplatz einrichten, b2: Komplexe ICT-Supportanfragen entgegennehmen und bearbeiten, b3: Kundinnen und Kunden in Bezug auf Datenschutz und Datensicherheit beraten (+94 more)
+Cohesion: 0.05
+Nodes (130): Allgemeinbildung, Anforderungsniveau des Berufes, Informatikerin / Informatiker EFZ, Berufsbild, Berufsfachschule, Bildungsplan Informatikerin / Informatiker EFZ (88611), Erweiterte Grundkompetenzen (Mathematik 120 / Englisch 200 Lektionen), Erweiterte Grundkompetenz Englisch (+122 more)
 
 ### Community 1 - "App: 3D-Welt, Giraffe & Pony (scene3d.js)"
 Cohesion: 0.08
@@ -119,23 +123,23 @@ Nodes (36): BiPla – Bildungsplan, BiVo – Bildungsverordnung, PEX – Prüfun
 
 ### Community 3 - "Glossar Bildungssystem"
 Cohesion: 0.11
-Nodes (33): Glossar zum Bildungssystem der Schweiz, BFS – Berufsfachschule, BP – Berufsprüfung, EBA – Eidgenössisches Berufsattest, EFZ – Eidgenössisches Fähigkeitszeugnis, FH – Fachhochschule, HF – Höhere Fachschule, HFP – Höhere Fachprüfung (+25 more)
+Nodes (32): Glossar zum Bildungssystem der Schweiz, BFS – Berufsfachschule, BP – Berufsprüfung, EBA – Eidgenössisches Berufsattest, EFZ – Eidgenössisches Fähigkeitszeugnis, FH – Fachhochschule, HF – Höhere Fachschule, HFP – Höhere Fachprüfung (+24 more)
 
 ### Community 4 - "App: UI & Daten (main.js)"
 Cohesion: 0.09
-Nodes (14): index.html (Berufsbildner – Das Spiel), Berufsbildner – Das Spiel, DOM-Gerüst (#bg, #scene-Canvas, #vignette, #app, #flash), back(), backTo(), crumbs(), go(), listNav() (+6 more)
+Nodes (22): index.html (Berufsbildner – Das Spiel), Berufsbildner – Das Spiel, DOM-Gerüst (#bg, #scene-Canvas, #vignette, #app, #flash), back(), backTo(), crumbs(), demoKey(), demoPaint() (+14 more)
 
 ### Community 5 - "Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026)"
-Cohesion: 0.05
-Nodes (81): BM – Berufsmaturität, DBW – Dienststelle Berufs- und Weiterbildung, Meine Rolle als Berufsbildner/in (Tandem-Auftrag), Beziehungsgestaltung mit Lernenden, Entwicklung und Beurteilung/Standortbestimmung als Zentrum der Arbeit, Erwartungen an sich selbst als Berufsbildner/in, Erwartungen der Firma an Berufsbildner/in, Gleichstellung/Gleichberechtigung und Haltung des Lehrbetriebs (+73 more)
+Cohesion: 0.16
+Nodes (24): Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026), Austritt oder Anstellung planen, berufsbildung.ch/downloadcenter, Bildungsbericht ausfüllen und besprechen, Vorbereitung für Aufnahme an BM 2 klären, Erfolgreichen Abschluss feiern, Erste Arbeitswoche begleiten, IPA – Individuelle praktische Arbeit (+16 more)
 
-### Community 6 - "Bildungsplan Informatik: Grundlagen"
-Cohesion: 0.10
-Nodes (25): Allgemeinbildung, Anforderungsniveau des Berufes, Anhang 1: Instrumente zur Förderung der Qualität, Ausbildungsprogramm für die überbetrieblichen Kurse, Ausführungsbestimmungen zum Qualifikationsverfahren, Berufsbildungsgesetz (BBG), Berufsbildungsverordnung (BBV), Informatikerin / Informatiker EFZ (+17 more)
+### Community 6 - "Anhang 1: Instrumente zur Förderung der Qualität"
+Cohesion: 0.18
+Nodes (10): Anhang 1: Instrumente zur Förderung der Qualität, Ausbildungsprogramm für die überbetrieblichen Kurse, Ausführungsbestimmungen zum Qualifikationsverfahren, Berufsbildungsgesetz (BBG), Berufsbildungsverordnung (BBV), Bildungsbericht, Bildungsverordnung (BiVo) Informatiker/in EFZ, Lehrplan für die Berufsfachschulen (+2 more)
 
-### Community 7 - "Handlungskompetenzbereich a: Begleiten von ICT-Projekten"
-Cohesion: 0.38
-Nodes (9): a1: Bedürfnisse von Stakeholdern im Rahmen eines ICT-Projekts abklären und dokumentieren, a2: Vorgehensmodell für ein ICT-Projekt bestimmen, a4: ICT-Projekte und daraus entstehende Aufgaben gemäss Vorgehensmodell planen, a5: Varianten für ICT-Lösungen visualisieren und präsentieren, a6: Fortschritt von ICT-Projekten und daraus entstehenden Aufgaben gemäss Vorgehensmodell überprüfen und rapportieren, a7: ICT-Lösungen der Kundin oder dem Kunden übergeben und Projekt abschliessen, Handlungskompetenzbereich a: Begleiten von ICT-Projekten, Modul 306: Kleinprojekt im eigenen Berufsumfeld abwickeln (+1 more)
+### Community 7 - "Vorlage Reflexionen"
+Cohesion: 0.16
+Nodes (22): Meine Rolle als Berufsbildner/in (Tandem-Auftrag), Beziehungsgestaltung mit Lernenden, Entwicklung und Beurteilung/Standortbestimmung als Zentrum der Arbeit, Erwartungen an sich selbst als Berufsbildner/in, Erwartungen der Firma an Berufsbildner/in, Gleichstellung/Gleichberechtigung und Haltung des Lehrbetriebs, Kommunikation mit allen Anspruchsgruppen, Konflikte zwischen Berufsbildner/innen und Vorgesetzten (+14 more)
 
 ### Community 8 - "Tag 3: Ausbildungsplanung, BiVo & BiPla"
 Cohesion: 0.12
@@ -168,6 +172,10 @@ Nodes (14): Betriebsinternes Ausbildungskonzept, 2. Lernort: Berufsfachschule, B
 ### Community 15 - "Unterstützungsangebote & Interventionen"
 Cohesion: 0.18
 Nodes (13): Berufsberatung, Berufsfachschule (BFS), Fachstelle Berufsintegration, Eidgenössisches Berufsattest (EBA), Gängigste Herausforderungen mit Lernenden, Help Point an den BFS, IB: Individuelle Begleitung, Interventionen (+5 more)
+
+### Community 16 - "Phase: Lehre planen"
+Cohesion: 0.18
+Nodes (12): Vorbereitung der Lern- und Arbeitsumgebung, Reflexion: Arbeits- und Lernumgebung, Reflexion: Unterstützungsangebote, Arbeiten für die erste Woche definieren, Ersten Arbeitstag begleiten, Informationen zur Vorbereitung/Planung kommunizieren, Lehrstart planen, Arbeitsplatz vorbereiten, Lernende Person unterstützen (Nachteilsausgleich, Case Management, FiB für EBA, Stützkurse) (+4 more)
 
 ### Community 17 - "Handlungskompetenzbereiche a–h"
 Cohesion: 0.21
@@ -213,6 +221,14 @@ Nodes (9): Berufsbildungsverordnung (BBV), Berufsabschluss für Erwachsene – v
 Cohesion: 0.22
 Nodes (8): Basic Check (Eignungsanalyse, CHF 100, 2.5-3.5 Stunden; Sprache, Mathematik, basale kognitive Fähigkeiten), Beispiel Instagram-Post: Coop-Anzeige 'New Character Unlocked' für Lehre Systemgastronomiefachfrau/-mann EFZ, Diagramm: Welcher Content bringt die besten Resultate? (Video 63%, Fotos/Grafiken 56%, Blog Posts 25%, Texte/Zitate 23%, Infografiken 22%), Gateway One (gateway.one, Job-Plattform und Multicheck-Anbieter), Job-Plattformen für Lehrstellen, Jobeagle (Job-Plattform, Video-/Match-App), Multicheck (Eignungsanalyse, neun Varianten für Berufsgruppen, CHF 60-100), Yousty (Lehrstellen-Plattform)
 
+### Community 28 - "Phase: Rekrutierung"
+Cohesion: 0.31
+Nodes (9): Anforderungsprofil erstellen, Bewerbungen prüfen, Vorselektion und Gespräche durchführen, Lehrstelle ausschreiben, Lehrvertrag ausfüllen und unterschreiben, Lehrvertrag einreichen, Lernende auswählen, Phase: Rekrutierung, Schnupperlehre planen/durchführen (+1 more)
+
+### Community 29 - "Berufsbildungsamt des Lehrortskantons"
+Cohesion: 0.29
+Nodes (8): DBW – Dienststelle Berufs- und Weiterbildung, Antrag für Bildungsbewilligung, Bedarf Nachteilsausgleich abklären, Berufsbildungsamt des Lehrortskantons, Kurs für Berufsbildner/innen (40h), Bedarf Nachteilsausgleich für das QV abklären, Phase: Voraussetzungen, Rolle der Beteiligten klar definieren
+
 ### Community 30 - "Berufsbildungssystem & Durchlässigkeit"
 Cohesion: 0.25
 Nodes (7): Berufsbildungssystem der Schweiz, Berufsmaturität, Eidgenössisches Berufsattest (EBA), Eidgenössisches Fähigkeitszeugnis (EFZ), Berufliche Grundbildung, Lebenslanges Lernen, Schaubild Bildungssystem
@@ -253,9 +269,9 @@ Nodes (7): Aktennotiz / Verwarnung, Aufgabe Intervention (Mini-Fallbeispiele), I
 Cohesion: 0.40
 Nodes (6): Bildungsplan (BiPla), Bildungsverordnung (BiVo), Grundlagendokumente der Ausbildung, Handlungskompetenz, Leistungsziele pro Lernort, Staatssekretariat für Bildung, Forschung und Innovation (SBFI)
 
-### Community 41 - "Vier Kompetenzdimensionen"
-Cohesion: 0.40
-Nodes (4): Fachkompetenz, Methodenkompetenz, Selbstkompetenz, Sozialkompetenz
+### Community 40 - "Berufsmaturität"
+Cohesion: 0.60
+Nodes (5): BM – Berufsmaturität, Besuch BM 1 klären, BM 1 – Berufsmaturität während der Berufslehre, BM 2 – Berufsmaturität nach der Berufslehre, Berufsmaturität
 
 ## Ambiguous Edges - Review These
 - `Ausgefüllte Beurteilung Marco Gut (überwiegend Bestnoten, Ordnung 'eher unordentlich', Betrieb 'gut geeignet', Einladung zur Lehrstellenbewerbung)` → `Schwache schulische Leistungen (Mathematik, Naturwissenschaften; mangelnde Konzentration und Eigenmotivation)`  [AMBIGUOUS]
@@ -264,21 +280,21 @@ Nodes (4): Fachkompetenz, Methodenkompetenz, Selbstkompetenz, Sozialkompetenz
 ## Knowledge Gaps
 - **94 isolated node(s):** `Gesprächsabschluss: Ergebnisse zusammenfassen und über weiteren Ablauf informieren`, `Beschwerden anderer Mitarbeiter`, `Konzentrationsschwierigkeiten und Fehler bei der Arbeit`, `Gute Beziehung zu Kund/innen`, `Zu spät zur Arbeit erscheinen` (+89 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 134 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Vorlage Reflexionen` connect `Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026)` to `Reflexionen & betriebliche Planung`, `Glossar Bildungssystem`, `App: UI & Daten (main.js)`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `Vorlage Reflexionen` connect `Vorlage Reflexionen` to `Reflexionen & betriebliche Planung`, `Glossar Bildungssystem`, `App: UI & Daten (main.js)`, `Reflexion: Prävention (sexuelle Belästigung, Sucht, Grenzverletzungen)`, `Phase: Lehre planen`?**
+  _High betweenness centrality (0.062) - this node is a cross-community bridge._
 - **Are the 54 inferred relationships involving `ICT Modulbaukasten` (e.g. with `Modul 106: Datenbanken abfragen, bearbeiten und warten (üK)` and `Modul 107: ICT-Lösungen mit Blockchain Technologie umsetzen (üK, Wahlmodul)`) actually correct?**
   _`ICT Modulbaukasten` has 54 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Gesprächsabschluss: Ergebnisse zusammenfassen und über weiteren Ablauf informieren`, `Beschwerden anderer Mitarbeiter`, `Konzentrationsschwierigkeiten und Fehler bei der Arbeit` to the rest of the system?**
   _94 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bildungsplan: ICT-Handlungskompetenzen` be split into smaller, more focused modules?**
-  _Cohesion score 0.07480694980694981 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05325670498084291 - nodes in this community are weakly interconnected._
 - **Why does `index.html (Berufsbildner – Das Spiel)` connect `App: UI & Daten (main.js)` to `App: 3D-Welt, Giraffe & Pony (scene3d.js)`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **Are the 43 inferred relationships involving `Handlungskompetenz` (e.g. with `a1: Bedürfnisse von Stakeholdern im Rahmen eines ICT-Projekts abklären und dokumentieren` and `a2: Vorgehensmodell für ein ICT-Projekt bestimmen`) actually correct?**
   _`Handlungskompetenz` has 43 INFERRED edges - model-reasoned connections that need verification._
 

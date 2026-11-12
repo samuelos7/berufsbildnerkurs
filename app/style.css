@@ -970,6 +970,103 @@ body.demo .menu-foot, body.demo .hud .keys { visibility: hidden; }
 .db-seg i { display: block; width: 0; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #ffcc4d, #fff0bd); }
 .db-seg.on { box-shadow: 0 0 10px rgba(255, 204, 77, .6); }
 
+/* =====================================================================
+   v1.4 – «Luzernerisch»: Kurstage, Lehrzeit-Reise und Lexikon im Stil der Kapellbrücke
+   Jede Tafel = Schindeldach oben, Holzbalken an den Seiten, dunkles Feld, unten die
+   Luzerner Farben Blau | Weiss. Titel stehen auf Holz, Symbole in einem Giebel mit
+   bemalter Bildtafel (wie im Dachstuhl der Brücke), darunter läuft der Steg mit Geranien.
+   ===================================================================== */
+:is(.mission-list, .mission-col .mission-body, .jr-rail, .jr-main, .lx-side, .lx-detail) {
+  /* warme Akzente (Pergament/Gold) statt Hellblau – Blau bleibt für die Luzerner Farben */
+  --accent: #f0c26a; --accent-2: #f8ecc8; --line: rgba(240, 194, 106, .26); --glow: rgba(31, 111, 197, .36); --panel-solid: #141d3c;
+  --title-grad: linear-gradient(180deg, #ffffff 0%, #f8ecc8 55%, #f0c26a 100%);
+  border-style: solid; border-color: transparent; border-width: 14px 4px 7px 4px; border-radius: 8px 8px 16px 16px;
+  background:
+    linear-gradient(180deg, rgba(20, 30, 64, .97), rgba(9, 14, 34, .98)) padding-box,
+    linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%) bottom / 100% 7px no-repeat border-box,
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, .28) 0 2px, transparent 2px 15px) top / 100% 14px no-repeat border-box,
+    linear-gradient(180deg, #c0623f, #6c2f1f) top / 100% 14px no-repeat border-box,
+    linear-gradient(90deg, #3a2213, #6b4326 50%, #3a2213) border-box;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, .5), inset 0 5px 0 rgba(0, 0, 0, .28);
+}
+:is(.mission-list, .mission-col .mission-body, .jr-rail, .jr-main, .lx-side, .lx-detail)::after { display: none; }
+/* Steg mit Geranien unter den Tafeln */
+.level-detail, .jr, .lx { grid-template-rows: minmax(0, 1fr) auto; row-gap: 0; }
+:is(.level-detail, .jr, .lx)::after {
+  content: ""; grid-column: 1 / -1; height: 17px; margin: 6px -14px 0; border-radius: 3px;
+  background:
+    radial-gradient(circle at 6px 4px, #ff3b4f 0 3px, transparent 3.6px) 0 0 / 22px 8px repeat-x,
+    radial-gradient(circle at 15px 5px, #ff8fb1 0 2.4px, transparent 3px) 0 0 / 22px 8px repeat-x,
+    radial-gradient(circle at 11px 6px, #3f7a32 0 3px, transparent 3.6px) 0 0 / 11px 8px repeat-x,
+    linear-gradient(180deg, transparent 0 7px, #7a4a28 7px 11px, #4a2b16 11px 14px, #2c180b 14px);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .55));
+}
+/* Holztafeln: Kopfzeilen, Kapitel, Register */
+:is(.m-progress, .jr-rail-h, .lx-h, .chapter, .jr-hero, .lx-hero) {
+  background:
+    repeating-linear-gradient(92deg, rgba(0, 0, 0, .1) 0 3px, transparent 3px 23px),
+    linear-gradient(180deg, #7a4d2c, #4f2f19);
+  border: 0; border-bottom: 3px solid #2c180b; box-shadow: inset 0 1px 0 rgba(255, 220, 170, .25);
+  color: #f8ecc8;
+}
+.m-progress { border-radius: 0; color: #f3dfae; }
+.m-bar { background: rgba(0, 0, 0, .35); }
+.m-bar i, .lv-prog i { background: linear-gradient(90deg, #1f6fc5, #8ec5ff 70%, #ffffff); }
+.chapter { margin: 10px 2px 4px; padding: 6px 12px; border-radius: 6px; border-bottom-width: 2px; font-weight: 700; color: #f3dfae; }
+.jr-rail-h b { color: #f8ecc8; }
+.jr-rail-h small { color: #e2cfa0; }
+.lx-h { position: static; margin: 6px 0 3px; padding: 5px 12px; border-radius: 6px; border-bottom-width: 2px; color: #f3dfae; }
+.lx-side { padding-top: 12px; }
+.lx-letters i.on { background: linear-gradient(90deg, #1f6fc5 50%, #ffffff 50%); color: #06122a; box-shadow: 0 0 0 2px #0b2340, 0 0 10px rgba(31, 111, 197, .8); text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
+/* gewählter Eintrag: Luzerner Blau mit weisser Kante (wie das Wappen) */
+:is(.mission.active, .lx-row.active, .jr-stop.active) {
+  background: linear-gradient(90deg, #1f6fc5, rgba(31, 111, 197, .35)); border-color: rgba(255, 255, 255, .75);
+  box-shadow: inset 5px 0 0 #ffffff, 0 6px 16px rgba(0, 0, 0, .35); color: #fff;
+}
+.mission.active .mnum { background: #fff; color: #1f6fc5; }
+.lx-row.active b, .lx-row.active span { color: #fff; }
+.jr-stop.active .jr-num { background: #fff; color: #1f6fc5; }
+/* Titel einer Mission auf einem Holzbalken */
+.mission-col .mission-body { padding-top: 0; }
+.mission-col .mission-body .swap > .goal {
+  margin: 0 -30px; padding: 16px 30px 0; color: #f3dfae;
+  background: repeating-linear-gradient(92deg, rgba(0, 0, 0, .1) 0 3px, transparent 3px 23px), linear-gradient(180deg, #7a4d2c, #6a4125);
+  box-shadow: inset 0 1px 0 rgba(255, 220, 170, .25);
+}
+.mission-col .mission-body .swap > h3 {
+  margin: 0 -30px 6px; padding: 2px 30px 14px; color: #fff; border-bottom: 3px solid #2c180b; text-shadow: 0 2px 0 rgba(0, 0, 0, .35);
+  background: repeating-linear-gradient(92deg, rgba(0, 0, 0, .1) 0 3px, transparent 3px 23px), linear-gradient(180deg, #6a4125, #4f2f19);
+}
+/* Giebel mit Bildtafel statt Kachel-Symbol */
+.jr-hero, .lx-hero { border-radius: 0; }
+.jr-hero .goal { color: #f3dfae; }
+.jr-ico, .lx-letter {
+  position: relative; width: 112px; height: 90px; border: 0; border-radius: 0; transform: none; box-shadow: none;
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; font-size: 34px; line-height: 1; color: #3a2213;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .22) 0 2px, transparent 2px 8px), linear-gradient(180deg, #c0623f, #6c2f1f);
+}
+.jr-ico::before, .lx-letter::before {
+  content: ""; position: absolute; z-index: -1; left: 17%; right: 17%; top: 22%; bottom: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: radial-gradient(circle at 50% 80%, #fffbe6, #f3dfae 45%, #d2a35e 80%); box-shadow: 0 0 0 4px #2e1a0d;
+}
+.lx-letter { font: 700 36px var(--font-display); }
+.lx-detail .lex-term { font-size: clamp(30px, 3.2vw, 46px); filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .4)); }
+.lx-detail .lex-def { color: #f8ecc8; }
+.jr-when { background: rgba(0, 0, 0, .28); border-color: rgba(248, 236, 200, .4); color: #f8ecc8; }
+.jr-goal { border-left-color: #fff; background: linear-gradient(90deg, rgba(31, 111, 197, .5), rgba(31, 111, 197, .1)); }
+.jr-n, .jr-stop.active .jr-dot { box-shadow: 0 0 0 3px #0b2340, 0 0 0 5px rgba(255, 255, 255, .7); }
+.jr-stops::after { background: linear-gradient(180deg, #ffffff, #1f6fc5); box-shadow: 0 0 10px rgba(31, 111, 197, .9); }
+.lx-detail .lex-more p { border-left-color: #1f6fc5; box-shadow: inset 1px 0 0 #fff; }
+mark { background: rgba(31, 111, 197, .55); }
+/* Knöpfe unter den Tafeln: Holzbrett bzw. Luzerner Blau mit weissem Rand */
+.m-btn { background: repeating-linear-gradient(92deg, rgba(0, 0, 0, .1) 0 3px, transparent 3px 23px), linear-gradient(180deg, #6a4125, #452813); border: 1px solid #2c180b; box-shadow: inset 0 1px 0 rgba(255, 220, 170, .3), 0 8px 18px rgba(0, 0, 0, .4); color: #f8ecc8; backdrop-filter: none; }
+.m-btn:hover { border-color: #f0c26a; }
+.m-next { background: linear-gradient(180deg, #2a80dc, #1a5aa8); border: 0; box-shadow: 0 0 0 2px #fff inset, 0 8px 18px rgba(0, 0, 0, .4); color: #fff; }
+.m-next small { color: #dcecff; }
+
 @media (max-width: 1100px) {
   .lu-menu { gap: 0; }
   .lu-tower { width: 44px; margin: 0 8px; }
@@ -993,6 +1090,9 @@ body.demo .menu-foot, body.demo .hud .keys { visibility: hidden; }
   .m-next { flex: 1; max-width: none; }
   /* Lehrzeit-Reise: Route wird zur wischbaren Leiste */
   .jr, .lx { grid-template-columns: 1fr; }
+  .level-detail, .jr, .lx { grid-template-rows: none; row-gap: 18px; }
+  :is(.level-detail, .jr, .lx)::after { display: none; }
+  .mission-col .mission-body .swap > .goal, .mission-col .mission-body .swap > h3 { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
   .jr-rail-h, .jr-stops::before, .jr-stops::after, .jr-lbl small, .jr-num { display: none; }
   .jr-stops { flex-direction: row; overflow-x: auto; padding: 10px; }
   .jr-stop { grid-template-columns: 1fr; justify-items: center; min-width: 96px; padding: 6px; text-align: center; }
