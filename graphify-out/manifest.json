@@ -54,16 +54,16 @@
     "semantic_hash": "654fae8a87df95c7eb972a759e6bd0fc"
   },
   "app/data.js": {
-    "mtime": 1794476477.816934,
-    "seen": 1794476877.3997421,
-    "ast_hash": "b4e485bee19dfe665f84a7ec40341752",
-    "semantic_hash": "b4e485bee19dfe665f84a7ec40341752"
+    "mtime": 1794491744.362681,
+    "seen": 1794492117.845501,
+    "ast_hash": "6e918f4afe6814307aafaab9027135d6",
+    "semantic_hash": ""
   },
   "app/main.js": {
-    "mtime": 1794476482.3943503,
-    "seen": 1794476877.3997514,
-    "ast_hash": "560f8c82e7d44b965a401bdc186e0a4f",
-    "semantic_hash": "560f8c82e7d44b965a401bdc186e0a4f"
+    "mtime": 1794492099.5474687,
+    "seen": 1794492117.845516,
+    "ast_hash": "856a1bc2c8b0044362d5e69378608b97",
+    "semantic_hash": ""
   },
   "app/scene3d.js": {
     "mtime": 1794476255.4301147,

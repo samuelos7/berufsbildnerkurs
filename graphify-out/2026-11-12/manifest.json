@@ -1,0 +1,140 @@
+{
+  "material/Tag 1/Ablaufplan der Lehrzeit-Druckversion ohne Verlinkungen.pdf": {
+    "mtime": 1793880358.1606226,
+    "seen": 1794049806.2279472,
+    "ast_hash": "6c12f8078ffe9bb55e2d885187c9bccd",
+    "semantic_hash": "6c12f8078ffe9bb55e2d885187c9bccd"
+  },
+  "material/Tag 1/DE_Bildungssystem_cmyk_frutiger.pdf": {
+    "mtime": 1793884962.2251647,
+    "seen": 1794049806.2279494,
+    "ast_hash": "5c68ba63ecb90c7bfadf3f260e98674b",
+    "semantic_hash": "5c68ba63ecb90c7bfadf3f260e98674b"
+  },
+  "material/Tag 1/WBZLU BEKU_Planung und Umsetzung der betrieblichen Bildung.pdf": {
+    "mtime": 1793881158.147174,
+    "seen": 1794049806.227951,
+    "ast_hash": "9da310253911375f84ecf386bb753e22",
+    "semantic_hash": "9da310253911375f84ecf386bb753e22"
+  },
+  "material/Tag 1/WBZLU_BEKU_Pr\u00e4senz_PP_Tag 1.pdf": {
+    "mtime": 1793874304.3352957,
+    "seen": 1794049806.2279541,
+    "ast_hash": "c6a3e5ea0d0739fade7ff07a86cce7f7",
+    "semantic_hash": "c6a3e5ea0d0739fade7ff07a86cce7f7"
+  },
+  "material/Tag 2/Bildungsverordnung_Informatiker.pdf": {
+    "mtime": 1793951387.487337,
+    "seen": 1794049806.227956,
+    "ast_hash": "32065cc2c966d0abf274d7f61bf6e996",
+    "semantic_hash": "32065cc2c966d0abf274d7f61bf6e996"
+  },
+  "material/Tag 2/Bildungsverordnung_Informatiker_Antworten.pdf": {
+    "mtime": 1793953251.2898624,
+    "seen": 1794049806.2279575,
+    "ast_hash": "703c07e2033d697533b9219355a27c9e",
+    "semantic_hash": "703c07e2033d697533b9219355a27c9e"
+  },
+  "material/Tag 2/Bipla_88611_d.pdf": {
+    "mtime": 1793950752.955005,
+    "seen": 1794049806.2279594,
+    "ast_hash": "e1e317064cb904c857b6ecd0e0d34f1c",
+    "semantic_hash": "e1e317064cb904c857b6ecd0e0d34f1c"
+  },
+  "material/Tag 2/WBZLU BEKU KBB_Mini-Fallbeispiele.pdf": {
+    "mtime": 1793978880.642395,
+    "seen": 1794049806.227961,
+    "ast_hash": "1278e639aa44d5ef74882300d0543454",
+    "semantic_hash": "1278e639aa44d5ef74882300d0543454"
+  },
+  "material/Tag 2/WBZLU_KBB_BEKU_Pr\u00e4senz_PP_Tag 2.pdf": {
+    "mtime": 1793874304.8683608,
+    "seen": 1794049806.2279634,
+    "ast_hash": "654fae8a87df95c7eb972a759e6bd0fc",
+    "semantic_hash": "654fae8a87df95c7eb972a759e6bd0fc"
+  },
+  "app/data.js": {
+    "mtime": 1794489974.4039528,
+    "seen": 1794490051.9749055,
+    "ast_hash": "80b0136f90fad61dc03a2c2ba2a120e9",
+    "semantic_hash": ""
+  },
+  "app/main.js": {
+    "mtime": 1794490709.2991445,
+    "seen": 1794491124.0332313,
+    "ast_hash": "0c6c7b19e58bd95956b747cdd4fd93a9",
+    "semantic_hash": ""
+  },
+  "app/scene3d.js": {
+    "mtime": 1794476255.4301147,
+    "seen": 1794476877.3997557,
+    "ast_hash": "f4f37bc361c25c752d8e3635859142da",
+    "semantic_hash": "f4f37bc361c25c752d8e3635859142da"
+  },
+  "app/index.html": {
+    "mtime": 1794136326.8628283,
+    "seen": 1794136832.6583939,
+    "ast_hash": "dbc0b5e4d041a41b1a9c37f7b153544c",
+    "semantic_hash": "dbc0b5e4d041a41b1a9c37f7b153544c"
+  },
+  "graphify-out/converted/WBZLU BEKU_Glossar Bildungssystem Schweiz_11bffb48.md": {
+    "mtime": 1794134969.7974885,
+    "seen": 1794135063.5243394,
+    "ast_hash": "fb29beb5211733da816f622cef6f099f",
+    "semantic_hash": "fb29beb5211733da816f622cef6f099f"
+  },
+  "graphify-out/converted/WBZLU BEKU_Tabelle meine Rolle als BB_9f57e179.md": {
+    "mtime": 1794134970.6497595,
+    "seen": 1794135063.524342,
+    "ast_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5",
+    "semantic_hash": "dd3899a7d51ea5ea0e9f7ed4269cf9e5"
+  },
+  "graphify-out/converted/WBZLU BEKU_Vorlage Reflexionen_0d58df28.md": {
+    "mtime": 1794134970.7747476,
+    "seen": 1794135063.524344,
+    "ast_hash": "58fcf8d329030341e1b9e133590c6816",
+    "semantic_hash": "58fcf8d329030341e1b9e133590c6816"
+  },
+  "material/Tag 3/Aufgabe 1/2c_Beurteilungsbogen_Schnupperlehre_Lehrbetrieb.pdf": {
+    "mtime": 1794394548.8334458,
+    "seen": 1794476877.399759,
+    "ast_hash": "8dbcdb0a130174fc8433f0a16e3e6ac9",
+    "semantic_hash": "8dbcdb0a130174fc8433f0a16e3e6ac9"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_1_Grundlagen zur Schnupperlehre.pdf": {
+    "mtime": 1794392722.570149,
+    "seen": 1794476877.3997614,
+    "ast_hash": "ba41b122163892013df93380e75803e8",
+    "semantic_hash": "ba41b122163892013df93380e75803e8"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_2a_Fallbeschreibung Schnupperlehrling Marco Gut.pdf": {
+    "mtime": 1794392726.186177,
+    "seen": 1794476877.399763,
+    "ast_hash": "4b1bb0ad92c017509b34d00e1bc72dc7",
+    "semantic_hash": "4b1bb0ad92c017509b34d00e1bc72dc7"
+  },
+  "material/Tag 3/Aufgabe 1/WBZLU BEKU_2b_Bewerbungsunterlagen Marco Gut.pdf": {
+    "mtime": 1794392728.9675508,
+    "seen": 1794476877.3997653,
+    "ast_hash": "e9680d41752d882acc90e5d67fbb30ea",
+    "semantic_hash": "e9680d41752d882acc90e5d67fbb30ea"
+  },
+  "material/Tag 3/Aufgabe 2/WBZLU_BEKU_Grundlagen zum Bewerbungsgespr\u00e4ch.pdf": {
+    "mtime": 1794399514.4991477,
+    "seen": 1794476877.399768,
+    "ast_hash": "42577867bb836456f76b8924881e7e50",
+    "semantic_hash": "42577867bb836456f76b8924881e7e50"
+  },
+  "material/Tag 3/Aufgabe 3/WBZLU BEKU_Grundlagen zu h\u00e4ufigen Beurteilungsfehlern.pdf": {
+    "mtime": 1794404884.4315338,
+    "seen": 1794476877.39977,
+    "ast_hash": "176d6456b3b7e4f5ca20c0fc2f82d425",
+    "semantic_hash": "176d6456b3b7e4f5ca20c0fc2f82d425"
+  },
+  "material/Tag 3/WBZLU_BEKU_Pr\u00e4senz_PP_Tag 3.pdf": {
+    "mtime": 1794403682.051309,
+    "seen": 1794476877.3997731,
+    "ast_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a",
+    "semantic_hash": "2c8a99f22b4a62848c2ad5dce1f1a93a"
+  }
+}

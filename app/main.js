@@ -145,7 +145,9 @@
     if (current.id !== "title") {
       const zoneName = { wissen: "📘 Wissen", arena: "⚔️ Arena", menu: "🏠 Hub" }[current.zone || "menu"];
       hud = h("div", { class: "hud" },
-        h("div", { class: "crumbs" }, luLogo(), h("span", { class: "zone-badge" }, zoneName), h("span", { class: "trail" }, ...crumbs())),
+        h("div", { class: "crumbs" }, luLogo(),
+          h("span", { class: "zone-badge" + (current.id !== "menu" ? " crumb-link" : ""), title: "Zum Hauptmenü", onclick: () => { const m = stack.find((s) => s.id === "menu"); if (m) backTo(m); } }, zoneName),
+          h("span", { class: "trail" }, ...crumbs())),
         // Zurück und Ton sind echte Knöpfe (Touch/Maus), die Tastenhinweise blenden auf Touch-Geräten aus
         h("div", { class: "keys" },
           h("span", { class: "k-nav" }, h("kbd", {}, "←↑↓→"), "Navigieren"),
@@ -161,9 +163,27 @@
     else next.forEach((n, i) => (fresh && i === next.length - 1 ? old[i].replaceWith(n) : patch(old[i], n)));
     current.after && current.after(fresh);
   }
+  /* Brotkrumen sind anklickbar: springt direkt zu diesem Bildschirm zurück */
+  function backTo(scr) {
+    let moved = false;
+    while (stack.length > 1 && stack[stack.length - 1] !== scr) { const s = stack.pop(); s.leave && s.leave(); moved = true; }
+    if (moved) { sfx.back(); render(); }
+  }
   function crumbs() {
-    const parts = stack.filter((s) => s.id !== "title" && s.id !== "menu").map((s) => s.title);
-    return parts.flatMap((p, i) => (i === parts.length - 1 ? [h("i", {}, "›"), h("b", {}, p)] : [h("i", {}, "›"), h("span", {}, p)]));
+    const parts = stack.filter((s) => s.id !== "title" && s.id !== "menu");
+    return parts.flatMap((p, i) => (i === parts.length - 1
+      ? [h("i", {}, "›"), h("b", {}, p.title)]
+      : [h("i", {}, "›"), h("span", { class: "crumb-link", title: "Zurück zu «" + p.title + "»", onclick: () => backTo(p) }, p.title)]));
+  }
+  /* Fortschritt: welche Missionen wurden schon geöffnet? Bleibt im Browser gespeichert. */
+  const seen = (() => { try { return JSON.parse(localStorage.getItem("bb-seen") || "{}") || {}; } catch (_) { return {}; } })();
+  const lvKey = (lv) => (lv.char ? "beruf" : "l" + lv.nr);
+  const seenOf = (lv) => (seen[lvKey(lv)] || []).filter((i) => i < lv.missions.length);
+  function markSeen(lv, i) {
+    const a = seen[lvKey(lv)] || (seen[lvKey(lv)] = []);
+    if (a.includes(i)) return;
+    a.push(i);
+    try { localStorage.setItem("bb-seen", JSON.stringify(seen)); } catch (_) { /* privater Modus */ }
   }
   function listNav(e, state, n, onEnter, axis = "y") {
     const prev = axis === "y" ? "ArrowUp" : "ArrowLeft";
@@ -219,12 +239,14 @@
         ),
         h("div", { class: "title-bottom" },
           h("div", { class: "press-start", onclick: start }, TOUCH ? "Tippen zum Starten" : "Enter drücken"),
+          h("div", { class: "demo-start", onclick: () => demoStart() }, "▶ Demo-Modus", h("small", {}, `Automatische Tour · ca. ${Math.round(demoTotal() / 60)} Min.`), h("kbd", {}, "D")),
           h("div", { class: "title-meta" }, D.meta),
           h("div", { class: "title-credits link", onclick: () => { sfx.ok(); go(MainMenu()); go(Credits()); } }, h("kbd", {}, "C"), "Credits & Quellen"),
         ),
       ),
     key: (e) => {
       if (e.key === "Enter" || e.key === " ") start();
+      if (e.key === "d" || e.key === "D") demoStart();
       if (e.key === "c" || e.key === "C") { sfx.ok(); go(MainMenu()); go(Credits()); }
     },
   });
@@ -316,6 +338,7 @@
             h("span", {}, h("kbd", {}, "←"), h("kbd", {}, "→"), " Auswahl"),
             h("span", {}, h("kbd", {}, "↑"), h("kbd", {}, "↓"), " Wissen / Arena"),
             h("span", {}, h("kbd", {}, "1–8"), " Direktwahl"),
+            h("span", { class: "link", onclick: () => demoStart() }, h("kbd", {}, "D"), " Demo"),
             h("span", { class: "link", onclick: () => { sfx.ok(); go(Credits()); } }, h("kbd", {}, "C"), " Credits")),
         );
       },
@@ -332,6 +355,7 @@
         }
         if (/^[1-9]$/.test(e.key) && +e.key <= n) { s.i = +e.key - 1; W.menuSide(sideOf(s.i)); render(); open(); return true; }
         if (e.key === "Enter" || e.key === " ") { open(); return true; }
+        if (e.key === "d" || e.key === "D") { demoStart(); return true; }
         if (e.key === "c" || e.key === "C") { sfx.ok(); go(Credits()); return true; }
         return false;
       },
@@ -368,7 +392,10 @@
                     h("div", { class: "lv-kicker" }, `Level ${lv.nr}`),
                     h("div", { class: "lu-lbl" }, lv.title),
                     lv.subtitle ? h("div", { class: "lu-sub" }, lv.subtitle) : null,
-                    h("div", { class: "lv-state" }, lv.placeholder ? "🚧 In Arbeit …" : `${lv.missions.length} Missionen`),
+                    h("div", { class: "lv-state" }, lv.placeholder ? "🚧 In Arbeit …"
+                      : seenOf(lv).length >= lv.missions.length ? `✓ Alle ${lv.missions.length} Missionen gesehen`
+                      : seenOf(lv).length ? `${seenOf(lv).length} von ${lv.missions.length} Missionen gesehen` : `${lv.missions.length} Missionen`),
+                    lv.placeholder ? null : h("div", { class: "lv-prog" }, h("i", { style: { width: (seenOf(lv).length / lv.missions.length) * 100 + "%" } })),
                   ),
                 ),
               ),
@@ -408,14 +435,22 @@
       id: "level", title: hero ? "Beispielberuf" : `Level ${lv.nr}`, zone: "wissen",
       world: () => (hero ? W.mode("character", { char: hero, stageX: -3.35 }) : W.mode("wissen")),
       view: () => {
-        const m = lv.missions[s.i];
+        const m = lv.missions[s.i], n = lv.missions.length;
+        markSeen(lv, s.i);
+        const done = seenOf(lv);
+        const step = (d) => { s.i = wrap(s.i + d, n); sfx.move(); render(); };
         let lastCh = null;
-        const list = [];
+        const list = [h("div", { class: "m-progress" }, h("span", {}, `${done.length} von ${n} gesehen`), h("div", { class: "m-bar" }, h("i", { style: { width: (done.length / n) * 100 + "%" } })))];
         lv.missions.forEach((mm, i) => {
           if (mm.ch && mm.ch !== lastCh) { lastCh = mm.ch; list.push(h("div", { class: "chapter" }, mm.ch)); }
-          list.push(h("div", { class: "mission" + (i === s.i ? " active" : ""), onclick: () => { s.i = i; sfx.move(); render(); } },
-            h("div", { class: "mnum" }, i + 1), h("div", {}, mm.title)));
+          list.push(h("div", { class: "mission" + (i === s.i ? " active" : done.includes(i) ? " done" : ""), onclick: () => { s.i = i; sfx.move(); render(); } },
+            h("div", { class: "mnum" }, i !== s.i && done.includes(i) ? "✓" : i + 1), h("div", {}, mm.title)));
         });
+        const nx = lv.missions[s.i + 1];
+        const nav = h("div", { class: "m-nav" },
+          h("button", { class: "m-btn", disabled: s.i === 0 ? "" : false, onclick: () => step(-1) }, h("kbd", {}, "↑"), "Zurück"),
+          nx ? h("button", { class: "m-btn m-next", onclick: () => step(1) }, h("span", {}, h("small", {}, "Weiter"), nx.title), h("kbd", {}, "↓"))
+             : h("button", { class: "m-btn m-next", onclick: back }, h("span", {}, h("small", {}, "Geschafft"), hero ? "Zurück zum Menü" : "Zurück zu den Kurstagen"), h("kbd", {}, "Esc")));
         const body = h("div", { class: "mission-body panel" },
           h("div", { class: "swap", "data-k": "m" + s.i },
             h("div", { class: "goal" }, `Mission ${s.i + 1} von ${lv.missions.length}` + (m.ch ? ` · ${m.ch}` : "")),
@@ -424,11 +459,12 @@
             m.source ? h("div", { class: "source" }, "Quelle: " + m.source) : null,
           ),
         );
+        const bodyWrap = h("div", { class: "mission-col" }, body, nav);
         return h("div", { class: "screen screen-top" + (hero ? " beruf-screen" : "") },
           h("div", { class: "level-head" }, h("h2", { class: "screen-title" }, hero ? lv.title : `Level ${lv.nr} · ${lv.title}`), h("div", { class: "screen-sub" }, lv.subtitle)),
           h("div", { class: "level-detail" + (hero ? " with-stage" : "") },
             hero ? h("div", { class: "stage-col" }, h("div", { class: "nameplate", style: { "--c": hero.color } }, h("h2", {}, hero.name), h("div", { class: "cshort" }, hero.short))) : null,
-            h("div", { class: "mission-list panel" }, list), body),
+            h("div", { class: "mission-list panel" }, list), bodyWrap),
         );
       },
       after: () => {
@@ -614,17 +650,19 @@
     };
   };
 
-  /* --- Lehrzeit-Reise --- */
+  /* --- Lehrzeit-Reise: links die Route als Wegkarte, rechts die gewählte Etappe --- */
+  const J_COLORS = ["#8ec5ff", "#5fd4ff", "#5be3a0", "#ffd166", "#ff9a4d", "#ff7a8a", "#c79bff"];
   const Journey = (start = 0) => {
-    const s = { i: start, seen: new Set([start]) };
     const J = D.journey;
-    const goTo = (i) => { s.i = i; s.seen.add(i); sfx.move(); render(); };
-    const bodyEl = () => app.querySelector(".journey .mission-body");
+    const s = { i: start, seen: new Set([start]) };
+    const goTo = (i) => { s.i = wrap(i, J.length); s.seen.add(s.i); sfx.move(); render(); };
+    const bodyEl = () => app.querySelector(".jr-main");
+    const name = (j) => (j.short || j.title).replace(/­/g, "");
     let shownI = -1;
-    // ein Schritt: was der Betrieb tut, darunter Erklärung und Etiketten (wann · Hilfsmittel · lernende Person)
-    const step = (it, n) => h("li", {},
-      h("span", { class: "sn" }, n + 1),
-      h("div", { class: "js-text" },
+    // ein Schritt als Karte: was der Betrieb tut, darunter Erklärung und Etiketten (wann · Hilfsmittel · lernende Person)
+    const step = (it, n) => h("div", { class: "jr-step", style: { "--i": String(n) } },
+      h("span", { class: "jr-n" }, n + 1),
+      h("div", { class: "jr-txt" },
         h("b", {}, it.t),
         it.d ? h("p", {}, it.d) : null,
         (it.when || it.tool || it.who) ? h("div", { class: "js-tags" },
@@ -635,42 +673,60 @@
       id: "journey", title: "Lehrzeit-Reise", zone: "wissen",
       world: () => W.mode("wissen"),
       view: () => {
-        const st = J[s.i], nx = J[s.i + 1];
-        return h("div", { class: "screen journey-screen" },
+        const st = J[s.i], nx = J[s.i + 1], pv = J[s.i - 1];
+        return h("div", { class: "screen screen-top journey-screen" },
           h("h2", { class: "screen-title" }, "Lehrzeit-Reise"),
           h("div", { class: "screen-sub" }, h("span", { class: "persp" }, "👔 " + D.journeyIntro.perspective), h("span", { class: "js-intro" }, " " + D.journeyIntro.text)),
-          h("div", { class: "journey" },
-            h("div", { class: "path-wrap" }, h("div", { class: "path", style: { "--p": String(s.i / (J.length - 1)), "--n": String(J.length) } }, J.map((j, i) =>
-              h("div", { class: "stop" + (i === s.i ? " active" : "") + (s.seen.has(i) ? " visited" : ""), onclick: () => goTo(i) },
-                h("div", { class: "node" }, j.icon, h("i", {}, i + 1)), h("div", { class: "stop-lbl" }, j.short || j.title))))),
-            h("div", { class: "mission-body panel" }, h("div", { class: "swap", "data-k": "j" + s.i },
-              h("div", { class: "goal" }, `Etappe ${s.i + 1} von ${J.length} · ${st.when}`),
-              h("h3", {}, st.title),
-              h("div", { class: "js-goal" }, h("b", {}, "🎯 Ziel"), h("span", {}, st.goal)),
-              h("ol", { class: "steps js-steps" }, st.items.map(step)),
-              st.always ? h("div", { class: "js-always" },
-                h("h4", { class: "blk-h" }, st.always.title),
-                h("div", { class: "js-always-grid" }, st.always.list.map(([ico, t, d]) => h("div", { class: "js-card" }, h("span", {}, ico), h("b", {}, t), h("small", {}, d)))),
-                h("p", { class: "js-hint" }, "💡 " + st.always.note)) : null,
-              st.alt ? h("div", { class: "js-alt" }, h("b", {}, "⚠️ Plan B"), h("span", {}, st.alt)) : null,
-              h("div", { class: "js-result" },
-                h("div", {}, h("b", {}, "✔ Ergebnis"), h("span", {}, st.result)),
-                nx ? h("button", { class: "js-next", onclick: () => goTo(s.i + 1) }, "Weiter: " + (nx.short || nx.title).replace(/­/g, ""), h("kbd", {}, "→"))
-                   : h("button", { class: "js-next", onclick: () => goTo(0) }, "Zurück zum Start", h("kbd", {}, "Home"))),
-              h("div", { class: "source" }, "Quelle: " + st.source),
-            )),
+          h("div", { class: "jr", style: { "--c": J_COLORS[s.i % J_COLORS.length] } },
+            h("div", { class: "jr-rail panel" },
+              h("div", { class: "jr-rail-h" }, h("b", {}, "🧭 Die Route"), h("small", {}, `${s.seen.size} von ${J.length} besucht`)),
+              h("div", { class: "jr-stops", style: { "--p": String(s.i / (J.length - 1)) } }, J.map((j, i) =>
+                h("div", { class: "jr-stop" + (i === s.i ? " active" : "") + (s.seen.has(i) ? " visited" : ""), style: { "--c": J_COLORS[i % J_COLORS.length] }, onclick: () => goTo(i) },
+                  h("div", { class: "jr-dot" }, j.icon),
+                  h("div", { class: "jr-lbl" }, h("b", {}, name(j)), h("small", {}, j.when)),
+                  h("span", { class: "jr-num" }, i !== s.i && s.seen.has(i) ? "✓" : i + 1))))),
+            h("div", { class: "jr-col" },
+              h("div", { class: "jr-main panel" }, h("div", { class: "swap", "data-k": "j" + s.i },
+                h("div", { class: "jr-hero" },
+                  h("div", { class: "jr-ico" }, st.icon),
+                  h("div", {},
+                    h("div", { class: "goal" }, `Etappe ${s.i + 1} von ${J.length}`),
+                    h("h3", {}, st.title),
+                    h("span", { class: "jr-when" }, "⏱ " + st.when))),
+                h("div", { class: "jr-goal" }, h("b", {}, "🎯 Ziel"), h("span", {}, st.goal)),
+                h("div", { class: "jr-steps" }, st.items.map(step)),
+                st.always ? h("div", { class: "js-always" },
+                  h("h4", { class: "blk-h" }, st.always.title),
+                  h("div", { class: "js-always-grid" }, st.always.list.map(([ico, t, d]) => h("div", { class: "js-card" }, h("span", {}, ico), h("b", {}, t), h("small", {}, d)))),
+                  h("p", { class: "js-hint" }, "💡 " + st.always.note)) : null,
+                st.alt ? h("div", { class: "js-alt" }, h("b", {}, "⚠️ Plan B"), h("span", {}, st.alt)) : null,
+                h("div", { class: "jr-result" }, h("b", {}, "🏁 Ergebnis"), h("span", {}, st.result)),
+                h("div", { class: "source" }, "Quelle: " + st.source),
+              )),
+              h("div", { class: "m-nav" },
+                h("button", { class: "m-btn", disabled: pv ? false : "", onclick: () => goTo(s.i - 1) }, h("kbd", {}, "←"), pv ? name(pv) : "Start"),
+                nx ? h("button", { class: "m-btn m-next", onclick: () => goTo(s.i + 1) }, h("span", {}, h("small", {}, "Nächste Etappe"), name(nx)), h("kbd", {}, "→"))
+                   : h("button", { class: "m-btn m-next", onclick: () => goTo(0) }, h("span", {}, h("small", {}, "Geschafft"), "Die Reise beginnt von vorn"), h("kbd", {}, "Home"))),
+            ),
           ),
         );
       },
-      after: () => { if (shownI !== s.i) { shownI = s.i; const b = bodyEl(); if (b) b.scrollTop = 0; const p = app.querySelector(".journey .path-wrap"), a = p && p.querySelector(".stop.active"); if (a && p.scrollWidth > p.clientWidth) p.scrollTo({ left: a.offsetLeft - (p.clientWidth - a.offsetWidth) / 2, behavior: "smooth" }); } },
+      after: () => {
+        if (shownI === s.i) return;
+        shownI = s.i;
+        const b = bodyEl();
+        if (b) b.scrollTop = 0;
+        const a = app.querySelector(".jr-stop.active");
+        a && a.scrollIntoView({ block: "nearest", inline: "center" });
+      },
       key: (e) => {
         const b = bodyEl();
         if (e.key === "ArrowDown" || e.key === "PageDown") { b && b.scrollBy({ top: 220, behavior: "smooth" }); return true; }
         if (e.key === "ArrowUp" || e.key === "PageUp") { b && b.scrollBy({ top: -220, behavior: "smooth" }); return true; }
         if (e.key === "Home") { goTo(0); return true; }
-        const r = listNav(e, s, J.length, null, "x");
-        if (r) { s.seen.add(s.i); render(); }
-        return r;
+        if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") { goTo(s.i + 1); return true; }
+        if (e.key === "ArrowLeft") { goTo(s.i - 1); return true; }
+        return false;
       },
     };
   };
@@ -729,29 +785,36 @@
     out.push(text.slice(last));
     return out;
   };
+  /* Lexikon als Nachschlagewerk: links Suche, A–Z-Register und Begriffsliste, rechts die ganze Erklärung */
   const Lexikon = (pre = null) => {
     if (!lexIndex) buildLexIndex();
-    const s = { q: "", cur: 0, sel: pre && lexIndex[pre] ? pre : null };
+    const s = { q: "", cur: Math.max(0, D.lexikon.findIndex(([k]) => k === pre)), shown: null };
+    const letterOf = (k) => k[0].toUpperCase();
+    const LETTERS = [...new Set(D.lexikon.map(([k]) => letterOf(k)))];
     const hitsOf = () => { const q = s.q.trim().toLowerCase(); return D.lexikon.filter(([k, v]) => !q || k.toLowerCase().includes(q) || v.toLowerCase().includes(q)); };
-    const openTerm = (k) => { s.sel = k; sfx.ok(); render(); };
-    const close = () => { s.sel = null; sfx.back(); render(); };
-    const detail = (k) => {
-      const [, v] = D.lexikon.find(([kk]) => kk === k);
+    const clearSearch = () => { s.q = ""; const el = document.querySelector(".search"); if (el) el.value = ""; };
+    const select = (i) => { const n = hitsOf().length; if (!n) return; s.cur = Math.max(0, Math.min(n - 1, i)); sfx.move(); render(); };
+    const openTerm = (k) => {
+      let i = hitsOf().findIndex(([kk]) => kk === k);
+      if (i < 0) { clearSearch(); i = D.lexikon.findIndex(([kk]) => kk === k); }
+      s.cur = Math.max(0, i);
+      sfx.ok();
+      render();
+    };
+    const detail = (k, v) => {
       const ix = lexIndex[k];
-      return h("div", { class: "lex-modal", onclick: close },
-        h("div", { class: "lex-card panel swap", "data-k": "d" + k, onclick: (e) => e.stopPropagation() },
-          h("button", { class: "lex-x", onclick: close, title: "Schliessen (Esc)" }, "✕"),
-          h("div", { class: "lex-head" }, h("div", { class: "lex-term" }, k), h("div", { class: "lex-def" }, v)),
-          h("div", { class: "lex-scroll" },
-            ix.more ? h("div", { class: "lex-more" }, h("h5", {}, "📖 Was steckt dahinter?"), h("p", {}, markTerm(ix.more, ix.re))) : null,
-            ix.roles.length ? h("div", { class: "lex-sec" }, h("h5", {}, "👥 Wer hat damit zu tun?"), h("div", { class: "lex-roles" }, ix.roles.map((r) =>
-              h("div", { class: "lex-role", style: { "--c": r.c.color }, onclick: () => { sfx.ok(); go(CharSheet(r.c.id)); } }, h("span", {}, ROLE_ICON[r.c.id] || ""), h("b", {}, r.c.name), h("small", {}, r.n + "×"))))) : null,
-            ix.hits.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🎓 So kam es im Kurs vor", h("small", {}, `${ix.hits.length} Stellen`)), h("div", { class: "lex-hits" }, ix.hits.slice(0, 5).map((t) =>
-              h("div", { class: "lex-hit", onclick: () => { sfx.ok(); if (t.link.journey != null) go(Journey(t.link.journey)); else go(LevelDetail(t.link.lv, t.link.mi)); } },
-                h("p", {}, markTerm(t.text, ix.re)), h("small", {}, "↗ " + t.link.label))))) : null,
-            ix.related.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🔗 Verwandte Begriffe"), h("div", { class: "lex-rel" }, ix.related.map((k2) => h("span", { onclick: () => openTerm(k2) }, k2)))) : null,
-          ),
-        ));
+      return h("div", { class: "lx-detail panel" }, h("div", { class: "swap", "data-k": "d" + k },
+        h("div", { class: "lx-hero" },
+          h("div", { class: "lx-letter" }, letterOf(k)),
+          h("div", {}, h("div", { class: "lex-term" }, k), h("div", { class: "lex-def" }, v))),
+        ix.more ? h("div", { class: "lex-more" }, h("h5", {}, "📖 Was steckt dahinter?"), h("p", {}, markTerm(ix.more, ix.re))) : null,
+        ix.roles.length ? h("div", { class: "lex-sec" }, h("h5", {}, "👥 Wer hat damit zu tun?"), h("div", { class: "lex-roles" }, ix.roles.map((r) =>
+          h("div", { class: "lex-role", style: { "--c": r.c.color }, onclick: () => { sfx.ok(); go(CharSheet(r.c.id)); } }, h("span", {}, ROLE_ICON[r.c.id] || ""), h("b", {}, r.c.name), h("small", {}, r.n + "×"))))) : null,
+        ix.hits.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🎓 So kam es im Kurs vor", h("small", {}, `${ix.hits.length} Stellen`)), h("div", { class: "lex-hits" }, ix.hits.slice(0, 5).map((t) =>
+          h("div", { class: "lex-hit", onclick: () => { sfx.ok(); if (t.link.journey != null) go(Journey(t.link.journey)); else go(LevelDetail(t.link.lv, t.link.mi)); } },
+            h("p", {}, markTerm(t.text, ix.re)), h("small", {}, "↗ " + t.link.label))))) : null,
+        ix.related.length ? h("div", { class: "lex-sec" }, h("h5", {}, "🔗 Verwandte Begriffe"), h("div", { class: "lex-rel" }, ix.related.map((k2) => h("span", { onclick: () => openTerm(k2) }, k2)))) : null,
+      ));
     };
     return {
       id: "lexikon", title: "Lexikon", zone: "wissen",
@@ -759,38 +822,46 @@
       view: () => {
         const hits = hitsOf();
         s.cur = Math.min(s.cur, Math.max(0, hits.length - 1));
+        const sel = hits[s.cur];
+        const have = new Set(hits.map(([k]) => letterOf(k)));
         const inp = h("input", {
-          class: "search", placeholder: "🔎 Begriff suchen … z. B. BiVo, Lehraufsicht, QV", value: s.q,
+          class: "search", placeholder: "🔎 Begriff suchen …", value: s.q,
           oninput: (e) => { s.q = e.target.value; s.cur = 0; render(); },
           onkeydown: (e) => {
-            const n = hitsOf().length;
-            if (!n || s.sel) return;
-            if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); s.cur = wrap(s.cur + (e.key === "ArrowDown" ? 3 : 1), n); sfx.move(); render(); }
-            else if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); s.cur = wrap(s.cur - (e.key === "ArrowUp" ? 3 : 1), n); sfx.move(); render(); }
-            else if (e.key === "Enter") openTerm(hitsOf()[s.cur][0]);
+            const d = { ArrowDown: 1, ArrowUp: -1, PageDown: 6, PageUp: -6 }[e.key];
+            if (d) { e.preventDefault(); select(s.cur + d); }
           },
         });
-        return h("div", { class: "screen screen-top" },
+        let last = "";
+        const rows = [];
+        hits.forEach(([k, v], i) => {
+          if (letterOf(k) !== last) { last = letterOf(k); rows.push(h("div", { class: "lx-h" }, last)); }
+          rows.push(h("div", { class: "lx-row" + (i === s.cur ? " active" : ""), onclick: () => select(i) },
+            h("b", {}, k), lexIndex[k].hits.length ? h("small", {}, lexIndex[k].hits.length + "×") : h("small", {}, ""), h("span", {}, v)));
+        });
+        return h("div", { class: "screen screen-top lexikon-screen" },
           h("h2", { class: "screen-title" }, "Lexikon"),
-          h("div", { class: "screen-sub" }, "Alle Abkürzungen und Begriffe aus dem Kurs – tippen zum Suchen, anklicken (oder Enter) für die ganze Erklärung."),
-          inp,
-          h("div", { class: "panel lex-panel" }, h("div", { class: "lex-grid" },
-            hits.length
-              ? hits.map(([k, v], i) => h("div", { class: "lex" + (i === s.cur ? " active" : ""), onclick: () => { s.cur = i; openTerm(k); } },
-                h("div", { class: "lex-top" }, h("b", {}, k), lexIndex[k].hits.length ? h("small", {}, lexIndex[k].hits.length + "× im Kurs") : null),
-                h("span", {}, v), h("i", { class: "lex-go" }, "Mehr erfahren ›")))
-              : h("div", { class: "lex empty" }, "Kein Begriff gefunden."))),
-          s.sel ? detail(s.sel) : null,
+          h("div", { class: "screen-sub" }, "Alle Abkürzungen und Begriffe aus dem Kurs – suchen oder mit ↑ ↓ blättern."),
+          h("div", { class: "lx" },
+            h("div", { class: "lx-side panel" },
+              h("div", { class: "search-wrap" }, inp,
+                h("span", { class: "search-count" }, s.q.trim() ? `${hits.length} Treffer` : `${D.lexikon.length} Begriffe`),
+                s.q ? h("button", { class: "search-x", title: "Suche leeren", "aria-label": "Suche leeren", onclick: () => { clearSearch(); s.cur = 0; render(); } }, "✕") : null),
+              h("div", { class: "lx-letters" }, LETTERS.map((L) =>
+                h("i", { class: (sel && letterOf(sel[0]) === L ? "on" : "") + (have.has(L) ? "" : " off"), onclick: () => select(hits.findIndex(([k]) => letterOf(k) === L)) }, L))),
+              h("div", { class: "lx-list" }, rows.length ? rows : h("div", { class: "lx-empty" }, "Kein Begriff gefunden."))),
+            sel ? detail(sel[0], sel[1]) : h("div", { class: "lx-detail panel lx-none" }, h("div", { class: "big" }, "🔎"), h("p", {}, "Kein Begriff gefunden – versuch es mit einem anderen Suchwort.")),
+          ),
         );
       },
       after: () => {
         const inp = document.querySelector(".search");
-        if (inp && !s.sel) inp.focus();
-        const a = document.querySelector(".lex.active");
-        if (a && !s.sel) a.scrollIntoView({ block: "nearest" });
+        if (inp && !demo.on && document.activeElement !== inp) inp.focus();
+        const a = document.querySelector(".lx-row.active");
+        a && a.scrollIntoView({ block: "nearest" });
+        if (s.shown !== s.cur + s.q) { s.shown = s.cur + s.q; const d = document.querySelector(".lx-detail"); if (d) d.scrollTop = 0; }
       },
-      esc: () => { if (s.sel) { close(); return true; } return false; },
-      key: (e) => { if (s.sel && (e.key === "Enter" || e.key === " ")) { close(); return true; } return false; },
+      key: () => false,
     };
   };
 
@@ -1068,8 +1139,138 @@
     };
   };
 
+  /* ================= DEMO-MODUS =================
+     Führt automatisch durch das Spiel – für die Präsentation des Take-aways (5–9 Minuten).
+     Ablauf, Texte und Dauer pro Station stehen in data.js unter "demo".
+     Steuerung: Leertaste = Pause · → / ← (auch Presenter-Klicker) = weiter / zurück · + / − = Tempo · Esc = beenden */
+  const demo = { on: false, i: 0, t: 0, paused: false, speed: 1, el: null, timer: null, later: [], ended: false };
+  const DEMO = D.demo || [];
+  function demoScreens(show) {
+    const [what, arg] = show.split(":");
+    const [kind, n] = what.split("-");
+    const idx = (lv) => Math.max(0, lv.missions.findIndex((m) => arg && m.title.includes(arg)));
+    if (kind === "title") return [];
+    if (kind === "menu") { menuMem.i = n === "arena" ? MENU.findIndex((m) => m.side === "arena") : 0; return [MainMenu()]; }
+    if (kind === "levels") return [MainMenu(), LevelSelect()];
+    if (kind === "level") { const lv = D.levels[(+n || 1) - 1]; return [MainMenu(), LevelSelect(), LevelDetail(lv, idx(lv))]; }
+    if (kind === "beruf") return [MainMenu(), LevelDetail(D.beruf, idx(D.beruf))];
+    if (kind === "chars") { lastChar = Math.max(0, D.characters.findIndex((c) => c.id === arg)); return [MainMenu(), CharSelect()]; }
+    if (kind === "sheet" && charById[arg]) return [MainMenu(), CharSelect(), CharSheet(arg)];
+    if (kind === "journey") return [MainMenu(), Journey(Math.max(0, Math.min(D.journey.length - 1, (+n || 1) - 1)))];
+    if (kind === "lexikon") return [MainMenu(), Lexikon(arg || null)];
+    if (kind === "boss") return [MainMenu(), Boss()];
+    return [MainMenu()];
+  }
+  const fmt = (sec) => Math.floor(sec / 60) + ":" + String(Math.floor(sec % 60)).padStart(2, "0");
+  const demoTotal = () => DEMO.reduce((a, d) => a + d.sec, 0);
+  function demoPaint() {
+    const st = DEMO[demo.i], el = demo.el;
+    if (!el) return;
+    const done = DEMO.slice(0, demo.i).reduce((a, d) => a + d.sec, 0) + Math.min(demo.t, st.sec);
+    el.querySelector(".db-kick").textContent = `Demo · ${demo.i + 1} / ${DEMO.length} · ${st.kicker}`;
+    el.querySelector(".db-title").textContent = st.title;
+    el.querySelector(".db-text").textContent = st.text;
+    el.querySelector(".db-time").textContent = `${fmt(done / demo.speed)} / ${fmt(demoTotal() / demo.speed)}` + (demo.speed !== 1 ? ` · ${demo.speed.toFixed(2).replace(/0$/, "")}×` : "");
+    el.querySelector(".db-play").textContent = demo.ended ? "↺" : demo.paused ? "▶" : "⏸";
+    el.classList.toggle("paused", demo.paused);
+    el.querySelectorAll(".db-seg").forEach((seg, i) => {
+      seg.classList.toggle("on", i === demo.i);
+      seg.firstChild.style.width = (i < demo.i ? 100 : i > demo.i ? 0 : Math.min(100, (demo.t / st.sec) * 100)) + "%";
+    });
+  }
+  function demoShow(i) {
+    demo.later.forEach(clearTimeout);
+    demo.later = [];
+    demo.i = Math.max(0, Math.min(DEMO.length - 1, i));
+    demo.t = 0;
+    demo.ended = false;
+    const st = DEMO[demo.i];
+    while (stack.length > 1) { const x = stack.pop(); x.leave && x.leave(); }
+    demoScreens(st.show).forEach((scr) => stack.push(scr));
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    sfx.ok();
+    render();
+    if (st.show.startsWith("boss")) {
+      // Bosskampf vorführen: Kampf starten und zwei Treffer landen
+      const b = current;
+      b.key({ key: "Enter" });
+      [5000, 12000].forEach((ms, k) => demo.later.push(setTimeout(() => { if (demo.on && current === b && !demo.paused) { if (k) b.key({ key: "Enter" }); b.debug("hit"); } }, ms / demo.speed)));
+    }
+    const sc = demoScroller();
+    if (sc) sc.scrollTop = 0;
+    demoPaint();
+  }
+  const demoScroller = () => app.querySelector(".mission-col .mission-body, .jr-main, .tab-body, .lx-detail, .credits");
+  function demoTick() {
+    if (!demo.on || demo.paused || demo.ended) return;
+    const st = DEMO[demo.i];
+    demo.t += 0.1 * demo.speed;
+    // langen Inhalt während der Station langsam durchscrollen (nach dem ersten Viertel, fertig bei 85 %)
+    const sc = demoScroller();
+    if (sc) {
+      const max = sc.scrollHeight - sc.clientHeight;
+      if (max > 8) sc.scrollTop = max * Math.max(0, Math.min(1, (demo.t / st.sec - 0.25) / 0.6));
+    }
+    if (demo.t >= st.sec) {
+      if (demo.i < DEMO.length - 1) return demoShow(demo.i + 1);
+      demo.ended = true;
+      sfx.win();
+    }
+    demoPaint();
+  }
+  function demoStart(from = 0) {
+    if (demo.on || !DEMO.length) return;
+    demo.on = true; demo.paused = false; demo.speed = 1;
+    const btn = (cls, txt, title, fn) => h("button", { class: "db-btn " + cls, title, "aria-label": title, onclick: (e) => { e.currentTarget.blur(); fn(); } }, txt);
+    demo.el = h("div", { id: "demo-bar" },
+      h("div", { class: "db-main" }, h("div", { class: "db-kick" }), h("div", { class: "db-title" }), h("div", { class: "db-text" })),
+      h("div", { class: "db-side" },
+        h("div", { class: "db-ctrl" },
+          btn("", "⏮", "Zurück (←)", () => demoShow(demo.i - 1)),
+          btn("db-play", "⏸", "Pause / Weiter (Leertaste)", demoToggle),
+          btn("", "⏭", "Weiter (→)", () => demoShow(demo.i + 1)),
+          btn("db-x", "✕", "Demo beenden (Esc)", demoStop)),
+        h("div", { class: "db-time" })),
+      h("div", { class: "db-segs" }, DEMO.map((d, i) => h("div", { class: "db-seg", title: d.title, style: { "--w": String(d.sec) }, onclick: () => demoShow(i) }, h("i")))));
+    document.body.append(demo.el);
+    document.body.classList.add("demo");
+    demo.timer = setInterval(demoTick, 100);
+    demoShow(from);
+  }
+  function demoToggle() {
+    if (demo.ended) return demoShow(0);
+    demo.paused = !demo.paused;
+    demoPaint();
+  }
+  function demoStop() {
+    if (!demo.on) return;
+    demo.on = false;
+    clearInterval(demo.timer);
+    demo.later.forEach(clearTimeout);
+    demo.el.remove();
+    demo.el = null;
+    document.body.classList.remove("demo");
+    while (stack.length > 1) { const x = stack.pop(); x.leave && x.leave(); }
+    menuMem.i = 0;
+    stack.push(MainMenu());
+    sfx.back();
+    render();
+  }
+  function demoKey(e) {
+    if (e.key === "Escape") demoStop();
+    else if (e.key === " " || e.key === "Enter") demoToggle();
+    else if (e.key === "ArrowRight" || e.key === "PageDown") demoShow(demo.i + 1);
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") demoShow(demo.i - 1);
+    else if (e.key === "Home") demoShow(0);
+    else if (e.key === "+" || e.key === "-") { demo.speed = Math.max(0.5, Math.min(2, demo.speed + (e.key === "+" ? 0.25 : -0.25))); demoPaint(); }
+    else if (e.key === "m" || e.key === "M") toggleMute();
+    else return;
+    e.preventDefault();
+  }
+
   /* ---------- Tastatur ---------- */
   window.addEventListener("keydown", (e) => {
+    if (demo.on) { demoKey(e); return; }
     const typing = e.target && e.target.tagName === "INPUT";
     // angeklickte Knöpfe behalten den Fokus – Enter/Leertaste sollen trotzdem nur die Bildschirm-Aktion auslösen
     if (e.target && e.target.tagName === "BUTTON" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.target.blur(); }
@@ -1103,5 +1304,6 @@
     if (what === "duell") go(Duell());
     if (what === "raetsel") go(Raetsel());
     if (what === "credits") go(Credits());
+    if (what === "demo") demoStart(Math.max(0, (+arg || 1) - 1));
   }
 })();

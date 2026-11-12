@@ -1241,6 +1241,27 @@ window.GAME_DATA = {
         ],
         source: "BiVo Informatiker/in EFZ Art. 18, 19",
       },
+      {
+        ch: "Rekrutieren & Planen (Tag 3)",
+        title: "Tag 3 angewendet auf meinen Beruf",
+        blocks: [
+          { t: "list", h: "🔎 Rekrutieren", items: [
+            "Anforderungsprofil Informatiker/in EFZ auf anforderungsprofile.ch holen und mit den Stellwerk-Resultaten der Bewerbenden abgleichen",
+            "Schnupperlehre mit dem Beurteilungsbogen des BIZ auswerten und mit der/dem Jugendlichen besprechen",
+            "Bewerbungsgespräch strukturiert führen – nicht nur auf Fachkompetenz achten, sondern auch: Passt die Person ins Team?",
+            "Beurteilungsfehler bewusst machen: Ein Gamer-Hoodie oder ein perfekter Lebenslauf darf nicht alles überstrahlen (Halo-Effekt)",
+          ] },
+          { t: "list", h: "📋 Individueller Ausbildungsplan", items: [
+            "Fachrichtung festlegen: Plattform- oder Applikationsentwicklung – davon hängen die HKB d–f bzw. g–h ab",
+            "Schultage (24 Module) und die 7 üK-Kurse à 5 Tage fix einplanen – im letzten Semester keine üK",
+            "Nach jedem üK das Gelernte gleich im Betrieb trainieren lassen (Lernortkooperation)",
+            "Infrastruktur bereitstellen: Arbeitsplatz, Notebook, Konten und Zugriffsrechte, Intranet",
+            "Lernpartnerschaft: aktuelle Informatik-Lernende als Lernpartner/in gewinnen und ihr Team informieren",
+          ] },
+          { t: "note", text: "Die Werkzeuge aus Tag 3 sind für alle Berufe gleich – Anforderungsprofil, Schnupperlehre, Bewerbungsgespräch und die 7 Planungsschritte. Konkret wird es erst über BiVo und Bildungsplan des eigenen Berufs." },
+        ],
+        source: "PP Tag 3 · Grundlagen Schnupperlehre, Bewerbungsgespräch und Beurteilungsfehler · BiVo Informatiker/in EFZ Art. 8",
+      },
     ],
   },
 
@@ -1430,6 +1451,8 @@ window.GAME_DATA = {
         "Massnahmen mit Fristen schriftlich vereinbaren und im nächsten Bericht überprüfen",
         "Arbeitssicherheit erklären: zu Beginn und während der ganzen Ausbildung, inkl. Gefahrensymbole und Piktogramme (Art. 5)",
         "Die IPA (70–90 h) im letzten Semester begleiten",
+        "Rekrutieren: Anforderungsprofil Informatiker/in EFZ mit den Stellwerk-Resultaten der Bewerbenden abgleichen",
+        "Im individuellen Ausbildungsplan die Fachrichtung, die 24 Schulmodule und die 7 üK-Kurse einplanen",
       ],
       sources: "PP Tag 1, 2 & 3 · Planung · BiVo Informatiker/in",
     },
@@ -1936,6 +1959,37 @@ window.GAME_DATA = {
     { icon: "🤝", lbl: "Weiterverweisen" },
   ],
 
+  /* =====================================================================
+     DEMO-MODUS – automatische Tour für die Präsentation (Taste D oder index.html#demo)
+     sec   = Dauer der Station in Sekunden (Summe ≈ 7 Minuten; live mit + / − schneller oder langsamer)
+     show  = was gezeigt wird: "title" · "menu" · "menu-arena" · "levels" · "level-2:Teil des Missionstitels"
+             "beruf:Teil des Titels" · "chars:rollen-id" · "sheet:rollen-id" · "journey-2" · "lexikon:Begriff" · "boss"
+     title / text = was ich dazu sage – hier die eigenen Erkenntnisse eintragen.
+     ===================================================================== */
+  demo: [
+    { sec: 14, show: "title", kicker: "Einstieg", title: "Mein Take-away als Spiel", text: "Fünf Kurstage, zusammengefasst in einem Spiel: Jeder Kurstag ist ein Level, jede beteiligte Stelle eine Rolle. In ein paar Minuten zeige ich, was ich aus dem Kurs mitnehme." },
+    { sec: 16, show: "menu", kicker: "Einstieg", title: "Zwei Welten: Wissen und Arena", text: "Links wird gelernt und nachgeschlagen, rechts gespielt und geprüft. Und ja – die Giraffe hat es auch ins Spiel geschafft." },
+    { sec: 12, show: "levels", kicker: "Kurstage", title: "Jeder Kurstag ist ein Level", text: "Drei Tage sind gespielt, zwei folgen noch. Das Spiel wächst mit jedem Kurstag weiter." },
+    { sec: 24, show: "level-1:Die Rollen des Berufsbildners", kicker: "Tag 1 · Grundlagen", title: "Meine Rolle: Coach und Fachperson", text: "Als Berufsbildner bin ich nicht nur Fachperson. Ich begleite den Lernprozess und bin Vorbild – und die erste Woche ist massgebend für alles, was folgt." },
+    { sec: 20, show: "level-1:vs. Fachperson", kicker: "Tag 1 · Grundlagen", title: "Befähigen statt machen", text: "Mein wichtigster Merksatz aus Tag 1: Die Fachperson erledigt Aufgaben – der Berufsbildner entwickelt Kompetenzen und nutzt Fehler als Lernchance." },
+    { sec: 22, show: "level-1:Die drei Lernorte", kicker: "Tag 1 · Grundlagen", title: "Drei Lernorte, ein Ziel", text: "Betrieb, Berufsfachschule und überbetriebliche Kurse bilden gemeinsam aus. Meine Aufgabe ist es, die drei Lernorte im Alltag zu verbinden." },
+    { sec: 22, show: "level-1:Generationen im Vergleich", kicker: "Tag 1 · Lebenswelt", title: "Die Jugendlichen verstehen", text: "Lernende stecken mitten in grossen Entwicklungsaufgaben. Die Generation Z will befähigt werden, nicht kontrolliert." },
+    { sec: 16, show: "chars:bb", kicker: "Rollen", title: "Wer macht was?", text: "Alle Beteiligten auf einem Mühlerad – vom Bund bis zu den Eltern. Jede Rolle hat eigene Aufgaben, Rechte und Pflichten." },
+    { sec: 24, show: "sheet:bb", kicker: "Rollen", title: "Der Charakterbogen", text: "Pro Rolle sehe ich auf einen Blick: Aufgaben, Rechte, Pflichten – und mit wem sie zusammenarbeitet." },
+    { sec: 22, show: "level-2:Der Lehrvertrag", kicker: "Tag 2 · Rechtstag", title: "Der Lehrvertrag", text: "Befristet, zwingend schriftlich und von der DBW genehmigt. Der Rechtstag hat mir gezeigt: Ich muss nicht alles auswendig wissen – aber wissen, wo es steht." },
+    { sec: 24, show: "level-2:Das Interventionsschema", kicker: "Tag 2 · Rechtstag", title: "Das Interventionsschema", text: "Leicht, mittel oder schwer: Probleme früh erkennen, richtig einordnen und verhältnismässig handeln – statt wegzuschauen." },
+    { sec: 18, show: "sheet:dbw", kicker: "Tag 2 · Rechtstag", title: "Ich stehe nicht alleine da", text: "Die DBW und die Fachstellen wollen früh einbezogen werden. Private Probleme von Lernenden muss ich nicht selbst lösen." },
+    { sec: 22, show: "level-3:Die Schnupperlehre", kicker: "Tag 3 · Rekrutieren", title: "Die Schnupperlehre", text: "Sie hilft beiden Seiten bei der Entscheidung. Meine Beobachtungen halte ich auf dem Beurteilungsbogen fest und bespreche sie mit den Jugendlichen." },
+    { sec: 24, show: "level-3:Häufige Beurteilungsfehler", kicker: "Tag 3 · Rekrutieren", title: "Beurteilungsfehler kennen", text: "Erster Eindruck, Halo-Effekt, Sympathie: Ganz vermeiden kann ich sie nicht – aber ich kann systematisch vorgehen und nicht alleine entscheiden." },
+    { sec: 22, show: "level-3:Ausbildungsplanung in 7 Schritten", kicker: "Tag 3 · Planen", title: "Die Ausbildung planen, bevor sie beginnt", text: "Das Ausbildungskonzept erstelle ich nur einmal. Für jede neue lernende Person plane ich danach die konkrete Umsetzung in sieben Schritten." },
+    { sec: 24, show: "beruf:Tag 3 angewendet", kicker: "Mein Beruf", title: "Angewendet: Informatiker/in EFZ", text: "Alles Allgemeine gilt für jeden Beruf. Konkret wird es erst mit der BiVo und dem Bildungsplan meines eigenen Berufs." },
+    { sec: 10, show: "sheet:pferd", kicker: "Running Gag", title: "Und der Pferdefachmann?", text: "Auch im Stall gelten BiVo, Bildungsplan und drei Lernorte. Das System ist für alle Berufe dasselbe." },
+    { sec: 24, show: "journey-2", kicker: "Lehrzeit-Reise", title: "Der rote Faden durch die Lehre", text: "Sieben Etappen von der Bildungsbewilligung bis zum Lehrabschluss – mit Zeitpunkt und Hilfsmittel zu jedem Schritt." },
+    { sec: 18, show: "lexikon:Halo-Effekt", kicker: "Lexikon", title: "Nachschlagen statt auswendig lernen", text: "Zu jedem Begriff sehe ich, wo er im Kurs vorkam und welche Rollen er betrifft." },
+    { sec: 22, show: "boss", kicker: "Arena", title: "Wissen prüfen im Bosskampf", text: "Gelerntes will geübt sein: Jede richtige Antwort patcht den PrintNightmare-Drucker ein Stück weiter." },
+    { sec: 30, show: "menu", kicker: "Fazit", title: "Was ich mitnehme", text: "Befähigen statt machen. Früh hinschauen und Hilfe holen. Fair und systematisch auswählen. Und die Ausbildung planen, bevor sie beginnt." },
+  ],
+
   /* Credits & Quellen – Titel, Herausgeber und Stand stammen aus den Kursunterlagen selbst
      (ausgelesen über den graphify-Wissensgraphen in graphify-out/). */
   credits: {
@@ -2000,6 +2054,7 @@ window.GAME_DATA = {
     ],
     keys: [
       [["←", "→", "↑", "↓"], "Auswahl bewegen"],
+      [["D"], "Demo-Modus: automatische Tour (Leertaste = Pause, ← → = Station, + − = Tempo)"],
       [["Enter"], "Öffnen / bestätigen"],
       [["Esc"], "Zurück"],
       [["1–8"], "Direktwahl im Menü"],
