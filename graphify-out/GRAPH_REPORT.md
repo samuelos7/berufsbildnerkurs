@@ -1,33 +1,33 @@
-# Graph Report - berufsbildnerkurs  (2026-11-12)
+# Graph Report - berufsbildnerkurs  (2026-11-13)
 
 ## Corpus Check
-- 3 files · ~90,662 words
+- 31 files · ~91,497 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 897 nodes · 1924 edges · 51 communities (49 shown, 2 thin omitted)
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 329 edges (avg confidence: 0.87)
-- Token cost: 0 input · 0 output
+- 950 nodes · 2025 edges · 50 communities (48 shown, 2 thin omitted)
+- Extraction: 82% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 352 edges (avg confidence: 0.87)
+- Token cost: 55,343 input · 0 output
 
 ## Community Hubs (Navigation)
 - Bildungsplan: ICT-Handlungskompetenzen
 - App: 3D-Welt & Bosskampf (scene3d.js)
 - Tag 4: Foliensatz Feedback & Gleichstellung
+- Tag 5: Leistungen fair beurteilen
 - App: UI & Daten (main.js)
 - Glossar Bildungssystem
 - Reflexionen & betriebliche Planung
 - Ablaufplan der Lehrzeit
 - Meine Rolle als Berufsbildner/in
-- Bildungsplan: ICT-Handlungskompetenzen (8)
 - Tag 3: Ausbildungsplanung, BiVo & BiPla
 - Tag 3: Bewerbungsgespräch
 - Tag 3: Fall Marco Gut
 - Mini-Fallbeispiele & Bildungsbericht
 - Gesetzliche Grundlagen & Lehrvertrag
+- Tag 3: Rekrutierung & Stellwerk
 - Lebenswelt der Jugendlichen
 - Drei Lernorte & Lernortkooperation
 - Unterstützungsangebote & Interventionen
-- Tag 3: Rekrutierung & Stellwerk
 - Tag 4: Schwierige Gespräche & Anleiten
 - Handlungskompetenzbereiche a–h
 - Tag 4: Arbeitsauftrag erteilen
@@ -60,10 +60,9 @@
 - Reflexion: Instruieren & Anleiten
 - Vier Kompetenzdimensionen
 - Handlungskompetenzen (BiVo)
-- Gleichstellung in der Rekrutierung
 
 ## God Nodes (most connected - your core abstractions)
-1. `Präsenztag 4 Foliensatz` - 61 edges
+1. `Präsenztag 4 Foliensatz` - 62 edges
 2. `ICT Modulbaukasten` - 58 edges
 3. `Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026)` - 53 edges
 4. `Handlungskompetenz` - 49 edges
@@ -71,8 +70,8 @@
 6. `Planung und Umsetzung der betrieblichen Bildung` - 36 edges
 7. `Überbetriebliche Kurse (üK)` - 22 edges
 8. `Bildungsplan Informatikerin / Informatiker EFZ (88611)` - 22 edges
-9. `Modul 109: Dienste in der Public Cloud betreiben und überwachen (üK, Wahlmodul)` - 21 edges
-10. `Bildungssystem Schweiz (SBFI 2026)` - 21 edges
+9. `M()` - 21 edges
+10. `Modul 109: Dienste in der Public Cloud betreiben und überwachen (üK, Wahlmodul)` - 21 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `BiPla – Bildungsplan` --semantically_similar_to--> `Bildungsplan`  [INFERRED] [semantically similar]
@@ -114,12 +113,15 @@
 - **Suchtprävention: Jugendschutz bis Suchthilfe** — material_tag_1_wbzlu_beku_präsenz_pp_tag_1_jugendschutz, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_gesundheitsfoerderung, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_frueherkennung, material_tag_1_wbzlu_beku_präsenz_pp_tag_1_suchthilfe [INFERRED 0.85]
 - **Auftragserteilung: Einbettung, Formulierung, Erwartungen, Hilfsmittel (Theorie und Anwendung)** — material_tag_4_wbzlu_beku_theorie_lernende_instruieren_und_anleiten_einbettung_des_auftrages, material_tag_4_wbzlu_beku_theorie_lernende_instruieren_und_anleiten_formulierung_des_auftrages, material_tag_4_wbzlu_beku_theorie_lernende_instruieren_und_anleiten_erwartungen_transparent_machen, material_tag_4_wbzlu_beku_theorie_lernende_instruieren_und_anleiten_informationen_zu_hilfsmitteln, graphify_out_converted_wbzlu_beku_arbeitsauftrag_ausgefuellt_ec34e429_einbettung, graphify_out_converted_wbzlu_beku_arbeitsauftrag_ausgefuellt_ec34e429_klare_formulierung_teilschritte, graphify_out_converted_wbzlu_beku_arbeitsauftrag_ausgefuellt_ec34e429_erwartungen_transparent, graphify_out_converted_wbzlu_beku_arbeitsauftrag_ausgefuellt_ec34e429_hilfsmittel_nennen [INFERRED 0.95]
 - **Fallstudie Schnupperlehrling Marco Gut (Fallbeschreibung, Zeugnis, Bewerbung, Lebenslauf, Beurteilungsbogen)** — material_tag_3_aufgabe_1_wbzlu_beku_2a_fallbeschreibung_schnupperlehrling_marco_gut_marco_gut, material_tag_3_aufgabe_1_wbzlu_beku_2a_fallbeschreibung_schnupperlehrling_marco_gut_sekundarschul_zeugnis, material_tag_3_aufgabe_1_wbzlu_beku_2b_bewerbungsunterlagen_marco_gut_bewerbung_für_eine_schnupperlehre, material_tag_3_aufgabe_1_wbzlu_beku_2b_bewerbungsunterlagen_marco_gut_lebenslauf, material_tag_3_aufgabe_1_2c_beurteilungsbogen_schnupperlehre_lehrbetrieb_beurteilung_marco_gut, material_tag_3_aufgabe_1_wbzlu_beku_1_grundlagen_zur_schnupperlehre_schnupperlehre [INFERRED 0.95]
+- **Zyklus Standortbestimmung -> Zielformulierung -> Arbeitsaufträge -> Umsetzung -> Rückmeldung** — material_tag_5_wbzlu_beku_präsenz_pp_tag_5_standortbestimmung, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_zielformulierung, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_arbeitsaufträge, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_umsetzung, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_rückmeldung [EXTRACTED 1.00]
+- **Standortgespräch: Vorbereitung, Selbsteinschätzung, SMART-Ziele, Dokumentation im Bildungsbericht** — material_tag_5_wbzlu_beku_präsenz_pp_tag_5_gesprächsvorbereitung, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_standortgespräch, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_selbsteinschätzung_lernende, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_smart_ziele, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_bildungsbericht [INFERRED 0.85]
+- **KV/Detailhandel-Instrumente pro Lehrjahr** — material_tag_5_wbzlu_beku_präsenz_pp_tag_5_kompetenzraster, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_bildungsbericht, material_tag_2_bildungsverordnung_informatiker_antworten_erfahrungsnote, material_tag_5_wbzlu_beku_präsenz_pp_tag_5_praxisaufträge_pa [EXTRACTED 1.00]
 
-## Communities (51 total, 2 thin omitted)
+## Communities (50 total, 2 thin omitted)
 
 ### Community 0 - "Bildungsplan: ICT-Handlungskompetenzen"
-Cohesion: 0.07
-Nodes (113): Berufsbild, Berufsfachschule, Fachrichtung Applikationsentwicklung, Fachrichtung Plattformentwicklung, Handlungskompetenz, Handlungskompetenzbereich, a1: Bedürfnisse von Stakeholdern im Rahmen eines ICT-Projekts abklären und dokumentieren, a2: Vorgehensmodell für ein ICT-Projekt bestimmen (+105 more)
+Cohesion: 0.05
+Nodes (136): Allgemeinbildung, Anforderungsniveau des Berufes, Anhang 1: Instrumente zur Förderung der Qualität, Ausbildungsprogramm für die überbetrieblichen Kurse, Ausführungsbestimmungen zum Qualifikationsverfahren, Berufsbildungsgesetz (BBG), Berufsbildungsverordnung (BBV), Informatikerin / Informatiker EFZ (+128 more)
 
 ### Community 1 - "App: 3D-Welt & Bosskampf (scene3d.js)"
 Cohesion: 0.08
@@ -127,35 +129,35 @@ Nodes (54): addExtras(), amt(), animateAnimal(), animateChar(), applyTheme(), br
 
 ### Community 2 - "Tag 4: Foliensatz Feedback & Gleichstellung"
 Cohesion: 0.07
-Nodes (54): Präsenztag 4 Foliensatz, 5-Finger-Feedback, Aktiv zuhören, Anleiten, Arbeitsauftrag vorbereiten und erteilen, Echt sein, Fall 1: Frauen auf der Baustelle, Fall 2: Mathe ist nichts für Mädchen (+46 more)
+Nodes (56): Präsenztag 4 Foliensatz, 5-Finger-Feedback, Aktiv zuhören, Anleiten, Arbeitsauftrag vorbereiten und erteilen, Echt sein, Fall 1: Frauen auf der Baustelle, Fall 2: Mathe ist nichts für Mädchen (+48 more)
 
-### Community 3 - "App: UI & Daten (main.js)"
+### Community 3 - "Tag 5: Leistungen fair beurteilen"
+Cohesion: 0.06
+Nodes (51): Weiterbildungszentrum Kanton Luzern (WBZ, Sursee) - Kurs für Berufsbildnerinnen und Berufsbildner, Tagesabschluss Das nehme ich mit, Präsenztag 5 Foliensatz, Arbeitsaufträge, Berufsidentität fördern, Wie gestalte ich das Beurteilungsgespräch? (Kapitel 3), Beurteilungsinstrumente, Bildungsbericht (+43 more)
+
+### Community 4 - "App: UI & Daten (main.js)"
 Cohesion: 0.08
 Nodes (22): index.html (Berufsbildner – Das Spiel), Berufsbildner – Das Spiel, DOM-Gerüst (#bg, #scene-Canvas, #vignette, #app, #flash), back(), backTo(), crumbs(), demoFit(), demoKey() (+14 more)
 
-### Community 4 - "Glossar Bildungssystem"
+### Community 5 - "Glossar Bildungssystem"
 Cohesion: 0.10
 Nodes (36): Glossar zum Bildungssystem der Schweiz, BFS – Berufsfachschule, BiPla – Bildungsplan, BiVo – Bildungsverordnung, BP – Berufsprüfung, EBA – Eidgenössisches Berufsattest, EFZ – Eidgenössisches Fähigkeitszeugnis, FH – Fachhochschule (+28 more)
 
-### Community 5 - "Reflexionen & betriebliche Planung"
+### Community 6 - "Reflexionen & betriebliche Planung"
 Cohesion: 0.13
 Nodes (31): Reflexion: Bundesverfassung, Gesetze, Verordnungen, Reflexion: Leistungsbeurteilung (Transparenz, Fairness), Reflexion: Lern- und Arbeitsleistungen beurteilen, Betriebliche und individuelle Planung erstellen, Lerndokumentation/Portfolio prüfen und Feedback geben, Rechtliche Grundlagen (BBG, BBV, ArG, OR, BiVo/BiPla, DSG, ArGV 5, BehiG, GAV), Planung und Umsetzung der betrieblichen Bildung, Ausbildungsprogramm für Lehrbetriebe (+23 more)
 
-### Community 6 - "Ablaufplan der Lehrzeit"
+### Community 7 - "Ablaufplan der Lehrzeit"
 Cohesion: 0.12
 Nodes (34): DBW – Dienststelle Berufs- und Weiterbildung, Ablaufplan der Lehrzeit für Berufsbildner/innen (Januar 2026), Antrag für Bildungsbewilligung, Arbeiten für die erste Woche definieren, Austritt oder Anstellung planen, Bedarf Nachteilsausgleich abklären, berufsbildung.ch/downloadcenter, Berufsbildungsamt des Lehrortskantons (+26 more)
 
-### Community 7 - "Meine Rolle als Berufsbildner/in"
+### Community 8 - "Meine Rolle als Berufsbildner/in"
 Cohesion: 0.10
 Nodes (31): Meine Rolle als Berufsbildner/in (Tandem-Auftrag), Beziehungsgestaltung mit Lernenden, Entwicklung und Beurteilung/Standortbestimmung als Zentrum der Arbeit, Erwartungen an sich selbst als Berufsbildner/in, Erwartungen der Firma an Berufsbildner/in, Gleichstellung/Gleichberechtigung und Haltung des Lehrbetriebs, Kommunikation mit allen Anspruchsgruppen, Konflikte zwischen Berufsbildner/innen und Vorgesetzten (+23 more)
 
-### Community 8 - "Bildungsplan: ICT-Handlungskompetenzen (8)"
-Cohesion: 0.10
-Nodes (23): Allgemeinbildung, Anforderungsniveau des Berufes, Anhang 1: Instrumente zur Förderung der Qualität, Ausbildungsprogramm für die überbetrieblichen Kurse, Ausführungsbestimmungen zum Qualifikationsverfahren, Berufsbildungsgesetz (BBG), Berufsbildungsverordnung (BBV), Informatikerin / Informatiker EFZ (+15 more)
-
 ### Community 9 - "Tag 3: Ausbildungsplanung, BiVo & BiPla"
 Cohesion: 0.12
-Nodes (19): Leistungsziele, Ausbildungsplanung umsetzen (sieben Schritte), Lernort Berufsfachschule BFS (theoretisches Fachwissen, erklärende Theorie zur Praxis), Bildungsplan (BiPla): fachliche Ziele und Anforderungen pro Lernort, Bildungsverordnung (BiVo): gesetzliche Grundstruktur der Ausbildung, einzeln für jeden Beruf, Die drei Lernorte der beruflichen Grundbildung (Zahnrad-Diagramm BFS, üK, Betrieb), 3. Eigene Betreuungstätigkeit planen (Betreuungstage, Standort-/Zwischengespräche, Vertretung), 4. Einführungsphase vorbereiten (To-Do-Liste: Material, Einweisung, Willkommen, Eintrittsgespräch-Leitfaden) (+11 more)
+Nodes (20): Leistungsziele, Ausbildungsplanung umsetzen (sieben Schritte), Lernort Berufsfachschule BFS (theoretisches Fachwissen, erklärende Theorie zur Praxis), Bildungsplan (BiPla): fachliche Ziele und Anforderungen pro Lernort, Bildungsverordnung (BiVo): gesetzliche Grundstruktur der Ausbildung, einzeln für jeden Beruf, Die drei Lernorte der beruflichen Grundbildung (Zahnrad-Diagramm BFS, üK, Betrieb), 3. Eigene Betreuungstätigkeit planen (Betreuungstage, Standort-/Zwischengespräche, Vertretung), 4. Einführungsphase vorbereiten (To-Do-Liste: Material, Einweisung, Willkommen, Eintrittsgespräch-Leitfaden) (+12 more)
 
 ### Community 10 - "Tag 3: Bewerbungsgespräch"
 Cohesion: 0.13
@@ -173,21 +175,21 @@ Nodes (16): Vorgaben Bildungsbericht, Bildungsbericht, Lehrvertrag, Beschwerden 
 Cohesion: 0.18
 Nodes (16): Arbeitsgesetz (ArG), Aufgabe Lehrvertrag (Fallbeispiele), Berufsbildungsgesetz (BBG), Bundesverfassung (BV), BV Artikel 63, Gefährliche Arbeiten – begleitende Massnahmen, Gesetzliche Grundlagen, Jugendarbeitsschutz (+8 more)
 
-### Community 14 - "Lebenswelt der Jugendlichen"
+### Community 14 - "Tag 3: Rekrutierung & Stellwerk"
+Cohesion: 0.19
+Nodes (15): Präsenztag 3 Folien: Lernende treffsicher rekrutieren, Lernumgebungen vorbereiten & Ausbildungspläne erstellen, Tagesabschluss: Ampelabfrage (Grün/Gelb/Rot Selbsteinschätzung des Wissensstands), Beispiel-Anforderungsprofil Gärtner/in EFZ Zierpflanzen (Mathematik, Schulsprache, Naturwissenschaften, Fremdsprachen, Arbeitssituation), Aufgabe Berufsvorstellung (Beruf, Dauer, Berufsschule, üK, Tätigkeiten, Rekrutierung), Block 1: Lernende treffsicher rekrutieren, Block 2: Arbeits- und Lernumgebungen vorbereiten, DBW-Kurs: Die Selektion als Schlüssel zum Erfolg, Lehrstellenausschreibungen in Bezug auf das Gleichstellungsgesetz (+7 more)
+
+### Community 15 - "Lebenswelt der Jugendlichen"
 Cohesion: 0.17
 Nodes (14): Ablösung vom Elternhaus / Peers, Generationen Z und Alpha / Digital Natives, Hurrelmann und Quenzel (2016), Die Jugend wird politischer, Merck Jugendbarometer 2025, Lebensphase «Jugend» heute, Lebenswelt der Jugendlichen, Mediennutzung (+6 more)
 
-### Community 15 - "Drei Lernorte & Lernortkooperation"
+### Community 16 - "Drei Lernorte & Lernortkooperation"
 Cohesion: 0.15
 Nodes (14): Betriebsinternes Ausbildungskonzept, 2. Lernort: Berufsfachschule, Bildungsbericht, Die drei Lernorte der Berufsbildung, Kantonale Ämter / Dienststellen für Berufsbildung, 1. Lernort: Lehrbetrieb, Lerndokumentation, Lernortkooperation (+6 more)
 
-### Community 16 - "Unterstützungsangebote & Interventionen"
+### Community 17 - "Unterstützungsangebote & Interventionen"
 Cohesion: 0.18
 Nodes (13): Berufsberatung, Berufsfachschule (BFS), Fachstelle Berufsintegration, Eidgenössisches Berufsattest (EBA), Gängigste Herausforderungen mit Lernenden, Help Point an den BFS, IB: Individuelle Begleitung, Interventionen (+5 more)
-
-### Community 17 - "Tag 3: Rekrutierung & Stellwerk"
-Cohesion: 0.22
-Nodes (13): Präsenztag 3 Folien: Lernende treffsicher rekrutieren, Lernumgebungen vorbereiten & Ausbildungspläne erstellen, Tagesabschluss: Ampelabfrage (Grün/Gelb/Rot Selbsteinschätzung des Wissensstands), Beispiel-Anforderungsprofil Gärtner/in EFZ Zierpflanzen (Mathematik, Schulsprache, Naturwissenschaften, Fremdsprachen, Arbeitssituation), Aufgabe Berufsvorstellung (Beruf, Dauer, Berufsschule, üK, Tätigkeiten, Rekrutierung), Block 1: Lernende treffsicher rekrutieren, Block 2: Arbeits- und Lernumgebungen vorbereiten, DBW-Kurs: Die Selektion als Schlüssel zum Erfolg, Persönliche Reflexion (Rekrutierungsprozess; Arbeits- und Lernumgebung) (+5 more)
 
 ### Community 18 - "Tag 4: Schwierige Gespräche & Anleiten"
 Cohesion: 0.15
@@ -309,10 +311,6 @@ Nodes (6): Bildungsplan (BiPla), Bildungsverordnung (BiVo), Grundlagendokumente 
 Cohesion: 0.40
 Nodes (4): Fachkompetenz, Methodenkompetenz, Selbstkompetenz, Sozialkompetenz
 
-### Community 50 - "Gleichstellung in der Rekrutierung"
-Cohesion: 1.00
-Nodes (3): Lehrstellenausschreibungen in Bezug auf das Gleichstellungsgesetz, Praxisbeispiel: Stereotype Darstellung von Gesundheitsberufen ((Un)sichtbare Vorbilder, nur weibliche Berufsbezeichnungen wie Arztsekretärin), Rekrutierung in Bezug auf Stereotypen und Rollenbilder (typische Männer-/Frauenberufe)
-
 ## Ambiguous Edges - Review These
 - `Ausgefüllte Beurteilung Marco Gut (überwiegend Bestnoten, Ordnung 'eher unordentlich', Betrieb 'gut geeignet', Einladung zur Lehrstellenbewerbung)` → `Schwache schulische Leistungen (Mathematik, Naturwissenschaften; mangelnde Konzentration und Eigenmotivation)`  [AMBIGUOUS]
   material/Tag 3/Aufgabe 1/2c_Beurteilungsbogen_Schnupperlehre_Lehrbetrieb.pdf · relation: conceptually_related_to
@@ -320,25 +318,27 @@ Nodes (3): Lehrstellenausschreibungen in Bezug auf das Gleichstellungsgesetz, Pr
   material/Tag 4/WBZLU BEKU_Fallbeispiele schwierige Gespräche.pdf · relation: conceptually_related_to
 - `Präsenztag 4 Foliensatz` → `Weiterbildungszentrum Kanton Luzern`  [AMBIGUOUS]
   material/Tag 4/WBZLU_BEKU_Präsenz_PP_Tag 4.pdf · relation: conceptually_related_to
+- `Bildungsverordnung (BiVo): gesetzliche Grundstruktur der Ausbildung, einzeln für jeden Beruf` → `Beurteilungsinstrumente`  [AMBIGUOUS]
+  material/Tag 5/WBZLU_BEKU_Präsenz_PP_Tag 5.pdf · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **109 isolated node(s):** `Erweiterte Grundkompetenz Englisch`, `Erweiterte Grundkompetenz Mathematik`, `Nationaler Qualifikationsrahmen Berufsbildung (NQR)`, `SBFI Staatssekretariat für Bildung, Forschung und Innovation`, `Bildungsbericht` (+104 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 153 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **116 isolated node(s):** `Gesprächsabschluss: Ergebnisse zusammenfassen und über weiteren Ablauf informieren`, `Ausbildung als Zimmermann`, `Beschwerden anderer Mitarbeiter`, `Konzentrationsschwierigkeiten und Fehler bei der Arbeit`, `Gute Beziehung zu Kund/innen` (+111 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 160 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Präsenztag 4 Foliensatz` connect `Tag 4: Foliensatz Feedback & Gleichstellung` to `Bildungsplan: ICT-Handlungskompetenzen`, `Kursrahmen & Take-away`?**
-  _High betweenness centrality (0.064) - this node is a cross-community bridge._
+- **Why does `Präsenztag 4 Foliensatz` connect `Tag 4: Foliensatz Feedback & Gleichstellung` to `Bildungsplan: ICT-Handlungskompetenzen`, `Tag 5: Leistungen fair beurteilen`, `Kursrahmen & Take-away`?**
+  _High betweenness centrality (0.198) - this node is a cross-community bridge._
 - **Are the 54 inferred relationships involving `ICT Modulbaukasten` (e.g. with `Modul 106: Datenbanken abfragen, bearbeiten und warten (üK)` and `Modul 107: ICT-Lösungen mit Blockchain Technologie umsetzen (üK, Wahlmodul)`) actually correct?**
   _`ICT Modulbaukasten` has 54 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Erweiterte Grundkompetenz Englisch`, `Erweiterte Grundkompetenz Mathematik`, `Nationaler Qualifikationsrahmen Berufsbildung (NQR)` to the rest of the system?**
-  _109 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Gesprächsabschluss: Ergebnisse zusammenfassen und über weiteren Ablauf informieren`, `Ausbildung als Zimmermann`, `Beschwerden anderer Mitarbeiter` to the rest of the system?**
+  _116 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bildungsplan: ICT-Handlungskompetenzen` be split into smaller, more focused modules?**
-  _Cohesion score 0.06590476190476191 - nodes in this community are weakly interconnected._
-- **Why does `Handlungskompetenz` connect `Bildungsplan: ICT-Handlungskompetenzen` to `Vier Kompetenzdimensionen`, `Tag 4: Foliensatz Feedback & Gleichstellung`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
+  _Cohesion score 0.05041942604856512 - nodes in this community are weakly interconnected._
+- **Why does `Präsenztag 5 Foliensatz` connect `Tag 5: Leistungen fair beurteilen` to `Tag 4: Foliensatz Feedback & Gleichstellung`?**
+  _High betweenness centrality (0.147) - this node is a cross-community bridge._
 
 ### Low-confidence Hints
 _AMBIGUOUS edges — the extractor was unsure. Verify before acting on these._
