@@ -1,5 +1,5 @@
-/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1 bis Tag 4).
-   Neue Kurstage: im Array "levels" das Level ausfüllen und "placeholder" entfernen.
+/* Spielinhalte – abgeleitet aus dem Kursmaterial (material/Tag 1 bis Tag 5).
+   Alle fünf Kurstage sind als Level umgesetzt.
 
    Block-Typen für Missionen:
    list   { t:"list",  h, items:[...] }
@@ -1525,7 +1525,198 @@ window.GAME_DATA = {
         },
       ],
     },
-    { nr: 5, title: "Kurstag 5 · Take-away", placeholder: true, c1: "#d63f5a", c2: "#3d0d18", missions: [] },
+    {
+      nr: 5,
+      title: "Fair beurteilen & Take-away",
+      subtitle: "Präsentationen Take-away · Leistungen fair beurteilen · Bildungsbericht · Standortgespräch · Kursabschluss",
+      c1: "#d63f5a", c2: "#3d0d18",
+      missions: [
+        {
+          ch: "Einstieg",
+          title: "Tagesziele: Leistungen fair beurteilen",
+          blocks: [
+            { t: "list", h: "Was wollen wir heute erreichen?", items: [
+              "Aufzeigen, welche unterschiedlichen Leistungen der Lernenden ich regelmässig beurteile",
+              "Wissen, auf welchen Grundlagen eine faire und professionelle Beurteilung basiert",
+              "Die Ausbildungsvorgaben kennen – und die Pflichten in Bezug auf die Leistungsbeurteilung",
+            ] },
+            { t: "cols", h: "Drei Blöcke", cols: [
+              { h: "🎁 Block 1", items: ["Präsentationen Take-away"] },
+              { h: "⚖️ Block 2", items: ["Leistungen fair beurteilen", "Bildungsbericht ausfüllen", "Standortgespräch vorbereiten"] },
+              { h: "🏁 Block 3", items: ["Kursabschluss", "«Das nehme ich mit»"] },
+            ] },
+          ],
+          source: "PP Tag 5, Folien 1–3",
+        },
+        {
+          ch: "Block 1 · Take-away",
+          title: "Take-away & Selbststudium",
+          blocks: [
+            { t: "cols", h: "Zwei Hälften – dann wird gewechselt", cols: [
+              { h: "🎤 Gruppen A + B", items: ["Präsentation der Take-aways", "Erkenntnisse aus dem Kurs – und was ich daraus umsetze"] },
+              { h: "📖 Gruppen C + D", items: ["Selbststudium Kapitel «Leistungsbeurteilung»", "Gruppenarbeit «Präsentation Leistungsbeurteilung»"] },
+            ] },
+            { t: "table", h: "Vier Gruppen präsentieren die Leistungsbeurteilung", head: ["Gruppe", "Kapitel", "Thema"], rows: [
+              ["A", "Kapitel 1", "Die Grundlagen einer fairen und professionellen Beurteilung"],
+              ["B", "Kapitel 2", "Fair und professionell beurteilen"],
+              ["C", "Kapitel 3", "Wie gestalte ich das Beurteilungsgespräch?"],
+              ["D", "Kapitel 4", "Achtung Stolperfallen!"],
+            ] },
+            { t: "note", text: "Dieses Spiel ist mein Take-away. Zu den Stolperfallen passen die Beurteilungsfehler aus Level 3: erster Eindruck, Halo-Effekt, Sympathie und Antipathie." },
+          ],
+          source: "PP Tag 5, Folien 4 & 7",
+        },
+        {
+          ch: "Block 2 · Fair beurteilen",
+          title: "Das Wichtigste in Kürze",
+          blocks: [
+            { t: "steps", h: "Faire Beurteilung der Leistungen von Lernenden", items: [
+              "Mindestens 1x pro Semester ein Standortgespräch mit den Lernenden führen",
+              "Die Lernenden im Rahmen des Standortgesprächs eine Selbsteinschätzung vornehmen lassen",
+              "Die berufsbezogenen Leistungen, Fähigkeiten und Verhaltensweisen ins Zentrum stellen – nicht die Person!",
+            ] },
+            { t: "cols", h: "Erfolgsfaktoren", cols: [
+              { h: "✅ Das gehört dazu", items: ["Regelmässige Beurteilungen vornehmen", "Nachvollziehbare und klare Rückmeldungen", "Stärken fördern und Talente erkennen", "Verbindliche Massnahmen vereinbaren"] },
+              { h: "⭐ Wichtig dabei", items: ["Erfolgserlebnisse ermöglichen und sichtbar machen", "Berufsidentität fördern"] },
+            ] },
+            { t: "note", text: "Leistung statt Person: dieselbe Regel wie im schwierigen Gespräch aus Level 4 – das Verhalten kritisieren, nicht die Person." },
+          ],
+          source: "PP Tag 5, Folien 6 & 10",
+        },
+        {
+          ch: "Block 2 · Fair beurteilen",
+          title: "Der Kreislauf: Beurteilung und Entwicklung",
+          blocks: [
+            { t: "steps", h: "Leistungsbeurteilung ist kein einzelner Termin, sondern ein Kreislauf", items: [
+              "Standortbestimmung – Beurteilung, Kompetenzprofil",
+              "Zielformulierung – Entwicklungsmassnahmen, Talentförderung",
+              "Arbeitsaufträge – setzen die Ziele im Alltag um",
+              "Umsetzung – die Lernenden arbeiten an den Aufträgen",
+              "Rückmeldung – führt zurück zu neuen Arbeitsaufträgen und zur nächsten Standortbestimmung",
+            ] },
+            { t: "cols", h: "Zwei Ebenen", cols: [
+              { h: "🔵 Beurteilung", items: ["Standortbestimmung", "Zielformulierung"] },
+              { h: "🟢 Entwicklung", items: ["Arbeitsaufträge", "Umsetzung", "Rückmeldung"] },
+            ] },
+            { t: "note", text: "Hier schliesst sich der Kreis zu Level 4: Auftrag → Umsetzung → Rückmeldung ist der kleine Kreislauf im Alltag. Standortbestimmung und Zielformulierung geben ihm die Richtung." },
+          ],
+          source: "PP Tag 5, Folie 9",
+        },
+        {
+          ch: "Block 2 · Bildungsbericht",
+          title: "Der Bildungsbericht",
+          blocks: [
+            { t: "cols", h: "Gemeinsamer Weg durch die Grundbildung – Berufsbildner/in und Lernende", cols: [
+              { h: "📍 Standortbestimmung", items: ["Wo steht die lernende Person?"] },
+              { h: "⚖️ Beurteilen von Leistungen", items: ["Was wurde erreicht?"] },
+              { h: "🌱 Entwicklungspotenzial", items: ["Definieren, wo es weitergehen kann"] },
+              { h: "🎯 Ziele / Massnahmen", items: ["Definieren, was als Nächstes folgt"] },
+            ] },
+            { t: "list", h: "Zur Erinnerung", items: [
+              "Berufsbildner/innen halten den Bildungsstand der Lernenden im Bildungsbericht fest",
+              "Standortgespräch und Dokumentation im Bildungsbericht: mind. 1x pro Semester",
+              "Bildungsbericht = Pflicht!",
+              "Aber: den Ausbildungsstand auch ausserhalb des Standortgesprächs mit den Lernenden besprechen",
+            ] },
+            { t: "note", text: "Die Rechtsgrundlage kennen wir aus Level 2: Die Bildungsverordnung schreibt den Bildungsbericht vor – gestützt auf die Lerndokumentation." },
+          ],
+          source: "PP Tag 5, Folien 12 & 14",
+        },
+        {
+          ch: "Block 2 · Bildungsbericht",
+          title: "Das Formular: sechs Bereiche",
+          blocks: [
+            { t: "table", h: "Bildungsbericht des SDBB – was wird beurteilt?", head: ["Bereich", "Beurteilungsmerkmale"], rows: [
+              ["1 · Fachkompetenz", "Ausbildungsstand · Arbeitsqualität · Arbeitsmenge und Arbeitstempo · Umsetzung der Berufskenntnisse"],
+              ["2 · Methodenkompetenz", "Arbeitstechnik · vernetztes Denken und Handeln · Umgang mit Mitteln und Betriebseinrichtungen · Lern- und Arbeitsstrategie"],
+              ["3 · Sozialkompetenz", "Teamfähigkeit und Konfliktfähigkeit · Zusammenarbeit · Information und Kommunikation · kundenorientiertes Handeln"],
+              ["4 · Selbstkompetenz", "Selbstständigkeit und eigenverantwortliches Handeln · Zuverlässigkeit und Belastbarkeit · Umgangsformen · Motivation"],
+              ["5 · Lerndokumentation", "Sachliche Richtigkeit und Vollständigkeit · Sauberkeit, Darstellung und Übersichtlichkeit"],
+              ["6 · Berufsfachschule und üK", "Semesterzeugnis · überbetriebliche Kurse · Freikurse und Stützkurse"],
+            ] },
+            { t: "cols", h: "Die Skala", cols: [
+              { h: "🅰️ A", items: ["Anforderungen übertroffen"] },
+              { h: "🅱️ B", items: ["Anforderungen erfüllt"] },
+              { h: "C", items: ["Anforderungen nur knapp erfüllt", "Fördermassnahmen nötig"] },
+              { h: "D", items: ["Anforderungen nicht erfüllt", "Besondere Massnahmen nötig"] },
+            ] },
+            { t: "note", text: "Die Bereiche 1 bis 4 sind die vier Kompetenzdimensionen der Handlungskompetenz. Zu jedem Merkmal gehören Begründungen und Ergänzungen. Im Kurs haben wir einen Bildungsbericht in Einzelarbeit vollständig ausgefüllt und in Vierergruppen vorgestellt." },
+          ],
+          source: "PP Tag 5, Folien 15 & 18 · Formular Bildungsbericht (SDBB, berufsbildung.ch)",
+        },
+        {
+          ch: "Block 2 · Bildungsbericht",
+          title: "Beurteilungsinstrumente & OdA",
+          blocks: [
+            { t: "cols", cols: [
+              { h: "🧰 Beurteilungsinstrument", items: ["Instrument, mit dem die Leistungen der Lernenden beurteilt werden", "Jede OdA hat ein eigenes Beurteilungsinstrument bzw. einen eigenen Bildungsbericht"] },
+              { h: "📝 Bildungsbericht", items: ["Oftmals – aber nicht immer – das Beurteilungsinstrument", "Dient immer zur Dokumentation der Beurteilung"] },
+            ] },
+            { t: "table", h: "Beispiel: die Umsetzungsinstrumente im KV und im Detailhandel", head: ["Lehrjahr", "Instrumente", "Praxisaufträge (PA)"], rows: [
+              ["1", "Kompetenzraster · Bildungsbericht · Erfahrungsnote", "3"],
+              ["2", "Kompetenzraster · Bildungsbericht · Erfahrungsnote", "5"],
+              ["3", "Kompetenzraster · Bildungsbericht · Erfahrungsnote", "7"],
+            ] },
+            { t: "note", text: "Im KV und im Detailhandel ist der Bildungsbericht «nur» Dokumentation – beurteilt wird mit Kompetenzraster und Praxisaufträgen. Wichtig: Als Berufsbildner/in muss ich mich bei der OdA über das Beurteilungsinstrument informieren und dieses verwenden." },
+          ],
+          source: "PP Tag 5, Folien 13, 16 & 17",
+        },
+        {
+          ch: "Block 2 · Standortgespräch",
+          title: "Das Standortgespräch vorbereiten",
+          blocks: [
+            { t: "steps", h: "Gesprächsvorbereitung in sechs Schritten", items: [
+              "Überblick verschaffen",
+              "Ziele festlegen",
+              "Themen und Ablauf planen",
+              "Termin und Ort festlegen",
+              "Einladung vornehmen",
+              "Hilfsmittel und Unterlagen zurechtlegen",
+            ] },
+            { t: "list", h: "Vier Fragen an mich selbst", items: [
+              "Habe ich meine Lernenden gebeten, eine Selbstbeurteilung vorzunehmen?",
+              "Haben die Lernenden die Lerndokumentation umfassend ausgefüllt und reflektiert?",
+              "Wurden die für das entsprechende Lehrjahr vorgesehenen Kompetenzen aus meiner Sicht erreicht?",
+              "Zeigen die Lernenden Motivation und Eigeninitiative beim persönlichen Kompetenzaufbau?",
+            ] },
+            { t: "note", text: "Übung im Tandem: ein Beurteilungsgespräch vorbereiten und die Ergebnisse im Plenum präsentieren." },
+          ],
+          source: "PP Tag 5, Folien 20, 21 & 23",
+        },
+        {
+          ch: "Block 2 · Standortgespräch",
+          title: "Exkurs: SMART-Ziele",
+          blocks: [
+            { t: "table", h: "Ziele so setzen, dass sie erreichbar und überprüfbar sind", head: ["", "Steht für"], rows: [
+              ["S", "Spezifisch"],
+              ["M", "Messbar"],
+              ["A", "Attraktiv"],
+              ["R", "Realistisch"],
+              ["T", "Terminiert"],
+            ] },
+            { t: "note", text: "SMART-Ziele gehören in die Zielformulierung des Kreislaufs: Nur was messbar und terminiert ist, lässt sich im nächsten Standortgespräch überprüfen." },
+          ],
+          source: "PP Tag 5, Folie 22",
+        },
+        {
+          ch: "Block 3 · Kursabschluss",
+          title: "Kursabschluss & «Das nehme ich mit»",
+          blocks: [
+            { t: "list", h: "Zum Abschluss", items: [
+              "Persönliche Reflexion zum Thema «Leistungsbeurteilung» – 10 Minuten Einzelarbeit",
+              "Kursevaluation auf Moodle ausfüllen (letzte Kachel)",
+              "Das nehme ich mit: 3 Stichworte zum Kurs auf Moderationskarten – und im Plenum kurz begründen",
+            ] },
+            { t: "cols", h: "Wie weiter? Weiterbildungs- und Impulsangebote für Berufsbildende", cols: [
+              { h: "💡 Impulsangebote", items: ["Kurze, niederschwellige Formate zur Orientierung, Reflexion und Einordnung", "Konkrete Denkanstösse für den Ausbildungsalltag", "2–3 Lektionen", "Kostenlos für Berufsbildende aus der Zentralschweiz"] },
+              { h: "🎓 Weiterbildungen", items: ["Vertiefte Formate zur Kompetenzentwicklung und Umsetzung", "Stärken die Handlungssicherheit – mit konkreten Strategien und Werkzeugen", "8 Lektionen", "CHF 290.–"] },
+            ] },
+            { t: "note", text: "Aktuelle Angebote entdecken: Newsletter des WBZ abonnieren (wbz.lu.ch). Und damit: Kurs geschafft – jetzt beginnt die Umsetzung im Betrieb." },
+          ],
+          source: "PP Tag 5, Folien 24–29",
+        },
+      ],
+    },
   ],
 
   /* =====================================================================
@@ -1682,6 +1873,32 @@ window.GAME_DATA = {
         ],
         source: "Meine ausgefüllten Vorlagen «Zielgerichtete Instruktion» und «Arbeitsauftrag vorbereiten und erteilen» (Tag 4)",
       },
+      {
+        ch: "Fair beurteilen (Tag 5)",
+        title: "Tag 5 angewendet: Standortgespräch & Bildungsbericht",
+        blocks: [
+          { t: "steps", h: "🔁 So setze ich den Kreislauf in meinem Betrieb um", items: [
+            "Laufend: Beobachtungen kurz notieren – nicht erst vor dem Bildungsbericht überlegen, was im Semester war",
+            "Vor dem Gespräch: Die lernende Person schätzt sich selbst ein; ich hole die Sicht der Teamkollegen ein, bei denen sie gearbeitet hat",
+            "Bildungsbericht vorbereiten: anhand der Kriterien und meiner Notizen – nicht nach dem letzten Eindruck",
+            "Standortgespräch (mind. 1x pro Semester): Selbst- und Fremdeinschätzung offen vergleichen, jede Einschätzung mit Beispielen begründen",
+            "Ziele SMART formulieren, Massnahmen gemeinsam festhalten – und im nächsten Gespräch überprüfen",
+          ] },
+          { t: "cols", h: "Darauf achte ich", cols: [
+            { h: "⚖️ Fair", items: ["Leistung statt Person", "Beurteilungsfehler bewusst machen (Halo-Effekt, Tendenz zur Mitte)", "Zuerst schriftlich vorbereiten, dann ins Gespräch"] },
+            { h: "🔍 Transparent", items: ["Die Lernenden kennen die Kriterien von Anfang an", "Auch Methoden-, Sozial- und Selbstkompetenz anschauen – nicht nur Fachliches und Noten", "Im Team ähnlich beurteilen: Austausch mit anderen Berufsbildner/innen"] },
+          ] },
+          { t: "table", h: "Beispiel für ein SMART-Ziel – passend zum Auftrag «Notebook bereitstellen»", head: ["", "Mein Beispiel"], rows: [
+            ["Spezifisch", "Notebooks nach unserem Standard selbstständig bereitstellen"],
+            ["Messbar", "Drei Geräte – jeweils mit vollständig erledigter Checkliste und Dokumentation im Ticket"],
+            ["Attraktiv", "Echter Nutzen: Neue Mitarbeitende erhalten ihr Gerät von der lernenden Person"],
+            ["Realistisch", "Die Handlung wurde instruiert und einmal begleitet ausgeführt"],
+            ["Terminiert", "Bis zum nächsten Standortgespräch am Ende des Semesters"],
+          ] },
+          { t: "note", text: "Bisher standen bei mir die fachlichen Leistungen und die Noten aus Schule und üK im Vordergrund. Neu gilt: Beurteilen ist ein Kreislauf – und der Bildungsbericht ist Pflicht, aber nicht das einzige Gespräch im Semester." },
+        ],
+        source: "Meine persönliche Reflexion «Lern- und Arbeitsleistungen beurteilen» und «Leistungsbeurteilung» · PP Tag 5",
+      },
     ],
   },
 
@@ -1714,7 +1931,7 @@ window.GAME_DATA = {
       ],
       pflichten: [
         "Führt die Lerndokumentation laufend (Lernberichte mind. 1x pro Monat)",
-        "Unterschreibt den Bildungsbericht mit",
+        "Schätzt sich vor dem Standortgespräch selbst ein und unterschreibt den Bildungsbericht mit",
         "Besucht Berufsfachschule und überbetriebliche Kurse",
         "Meldet sich selbst für die BM an (BM 1 mit Einverständnis des Betriebs)",
       ],
@@ -2230,8 +2447,9 @@ window.GAME_DATA = {
     ["BBV", "Berufsbildungsverordnung – konkretisiert das BBG."],
     ["BehiG", "Behindertengleichstellungsgesetz."],
     ["Beurteilungsfehler", "Wahrnehmungsfehler, die eine Beurteilung verzerren – z. B. erster Eindruck, Halo-Effekt, Sympathie."],
+    ["Beurteilungsinstrument", "Instrument, mit dem die Leistungen der Lernenden beurteilt werden – jede OdA hat ihr eigenes."],
     ["BFS", "Berufsfachschule – 2. Lernort, vermittelt die schulische Bildung."],
-    ["Bildungsbericht", "Hält den Bildungsstand fest – am Ende jedes Semesters, alle unterschreiben."],
+    ["Bildungsbericht", "Hält den Bildungsstand fest – mind. 1x pro Semester, Pflicht. Dokumentiert immer die Beurteilung."],
     ["Bildungsbewilligung", "Erlaubnis zum Ausbilden – beim Berufsbildungsamt des Lehrortskantons zu beantragen."],
     ["BiPla / Bipla", "Bildungsplan – Handlungskompetenzen und Leistungsziele pro Lernort, von der OdA erarbeitet und vom Bund genehmigt."],
     ["BiVo", "Bildungsverordnung – gesetzlicher Rahmen pro Beruf, vom Bund erlassen."],
@@ -2255,11 +2473,13 @@ window.GAME_DATA = {
     ["HF", "Höhere Fachschule – Diplom HF."],
     ["HFP", "Eidg. höhere Fachprüfung – eidg. Diplom."],
     ["IB", "Individuelle Begleitung – erweiterte Unterstützung für EBA-Lernende."],
+    ["Impulsangebot", "Kurzes Weiterbildungsformat des WBZ für Berufsbildende – 2–3 Lektionen, kostenlos für die Zentralschweiz."],
     ["Instruktion", "Geplantes Vorzeigen einer Handlung mit lautem Denken – in drei Phasen und sieben Schritten."],
     ["IPA", "Individuelle praktische Arbeit – Teil des Qualifikationsverfahrens."],
     ["Johari-Fenster", "Feedback-Modell mit vier Feldern – Rückmeldungen verkleinern den blinden Fleck."],
     ["Kognitive Meisterlehre", "Methode in vier Schritten: Modelling, Scaffolding, Fading, Coaching."],
     ["Komfortzonen-Matrix", "Komfort-, Lern-, Apathie- und Panikzone – gelernt wird in der Lernzone."],
+    ["Kompetenzraster", "Umsetzungsinstrument im KV und im Detailhandel – pro Lehrjahr neben Bildungsbericht und Erfahrungsnote."],
     ["Kontrollpunkt", "Geplanter Zwischenhalt während eines Arbeitsauftrags – je nach lernender Person sinnvoll."],
     ["Lehraufsicht", "Gesetzlicher Auftrag des Kantons – von der Lehrvertragsunterzeichnung bis zum QV."],
     ["Lerndokumentation", "Von den Lernenden geführt – Lernberichte mind. 1x pro Monat."],
@@ -2271,6 +2491,7 @@ window.GAME_DATA = {
     ["OdA", "Organisation der Arbeitswelt – Berufsverbände, verantwortlich für Inhalte und üK."],
     ["OR", "Obligationenrecht – regelt den Lehrvertrag als Einzelarbeitsvertrag."],
     ["PEX", "Prüfungsexpert/in im Qualifikationsverfahren."],
+    ["Praxisauftrag (PA)", "Umsetzungsinstrument im KV und im Detailhandel – 3, 5 und 7 Aufträge im 1., 2. und 3. Lehrjahr."],
     ["Praxisbildner/in", "Fachperson, die Lernende im Arbeitsalltag anleitet – in Absprache mit der Berufsbildnerin oder dem Berufsbildner."],
     ["QualiCarte", "Instrument zur Qualitätsprüfung im Lehrbetrieb – 1x pro Jahr."],
     ["QV", "Qualifikationsverfahren – Abschluss der beruflichen Grundbildung."],
@@ -2280,6 +2501,9 @@ window.GAME_DATA = {
     ["Schnupperlehre", "Einblick in Beruf und Betrieb vor dem Lehrvertrag – in der Theorie 3 bis 5 Tage, immer betreut."],
     ["Schwieriges Gespräch", "Spricht kritisches Verhalten über längere Zeit an – mit Vorbereitung, Gesprächsführung und Nachbereitung."],
     ["SDBB", "Schweizerisches Dienstleistungszentrum Berufsbildung – Formulare wie Bildungsbericht."],
+    ["Selbsteinschätzung", "Die Lernenden beurteilen sich vor dem Standortgespräch selbst – Grundlage für den Vergleich mit der Fremdeinschätzung."],
+    ["SMART-Ziele", "Spezifisch, messbar, attraktiv, realistisch, terminiert – so sind Ziele erreichbar und überprüfbar."],
+    ["Standortgespräch", "Gespräch zum Ausbildungsstand – mind. 1x pro Semester, mit Selbsteinschätzung; dokumentiert im Bildungsbericht."],
     ["Stellwerk", "Obligatorischer Online-Test im 8. und 9. Schuljahr – ergibt ein persönliches Leistungsprofil."],
     ["Stereotyp", "Vereinfachte, verallgemeinernde Vorstellung über Personen und Gruppen – positiv oder negativ."],
     ["üK", "Überbetriebliche Kurse – 3. Lernort, grundlegende Fertigkeiten."],
@@ -2301,7 +2525,7 @@ window.GAME_DATA = {
     "BBV": "Die Berufsbildungsverordnung führt das BBG im Detail aus und steht in der Gesetzespyramide direkt darunter – über den Bildungsverordnungen der einzelnen Berufe.",
     "BehiG": "Das Behindertengleichstellungsgesetz soll Benachteiligungen verhindern. In der Berufsbildung zeigt es sich vor allem im Nachteilsausgleich – auch im Qualifikationsverfahren.",
     "BFS": "Die Berufsfachschule ist der 2. Lernort: Berufskenntnisse, Allgemeinbildung (ABU) und Sport, meist ein Tag pro Woche. Sie bietet Stütz- und Freikurse und den Help Point. Ihr Zeugnis fliesst in den Bildungsbericht ein.",
-    "Bildungsbericht": "Am Ende jedes Semesters halten Berufsbildner/in und Lernende fest, wo die Ausbildung steht. Er stützt sich auf die Leistungen in Betrieb, Berufsfachschule und üK. Massnahmen werden mit Fristen vereinbart und im nächsten Bericht überprüft. Alle unterschreiben.",
+    "Bildungsbericht": "Mindestens einmal pro Semester halten Berufsbildner/in und Lernende fest, wo die Ausbildung steht – der Bildungsbericht ist Pflicht. Er stützt sich auf die Leistungen in Betrieb, Berufsfachschule und üK. Das Formular des SDBB beurteilt Fach-, Methoden-, Sozial- und Selbstkompetenz, die Lerndokumentation und die Leistungen in Schule und üK auf einer Skala von A bis D. Massnahmen werden mit Fristen vereinbart und im nächsten Bericht überprüft. Alle unterschreiben.",
     "Bildungsbewilligung": "Ohne Bildungsbewilligung darf ein Betrieb keine Lernenden ausbilden. Sie wird beim Berufsbildungsamt des Lehrortskantons beantragt – in Luzern bei der DBW, die sie auch wieder entziehen kann.",
     "BiPla / Bipla": "Der Bildungsplan konkretisiert die BiVo: Handlungskompetenzbereiche → Handlungskompetenzen → Leistungsziele je Lernort, mit Taxonomiestufen K1 bis K6. Die OdA erarbeitet ihn, das SBFI genehmigt ihn. Er ist die verbindliche Grundlage für die Planung im Betrieb.",
     "BiVo": "Die Bildungsverordnung ist das «Gesetz» eines einzelnen Berufs: Dauer, Lernorte, Arbeitssicherheit, Anforderungen an Berufsbildner/innen, Höchstzahl Lernende, Lerndokumentation, Bildungsbericht und QV. Das SBFI erlässt sie; alle 5 Jahre wird sie überprüft.",
@@ -2363,6 +2587,14 @@ window.GAME_DATA = {
     "Stereotyp": "Stereotype beruhen auf Gruppenzugehörigkeit statt auf individuellen Eigenschaften und können positiv oder negativ sein. Aus stereotypen Denkmustern entstehen Vorurteile – voreingenommene, negative Einstellungen. Im Kurs haben wir dazu fünf Fallbeispiele diskutiert.",
     "Vier-Ohren-Modell": "Der Sender spricht mit «vier Schnäbeln», der Empfänger hört mit «vier Ohren»: Sachinhalt, Selbstkundgabe, Beziehungshinweis und Appell. Beispiel «Die Ampel ist grün.» – gemeint ist vielleicht «Gib Gas!», gehört wird «Wer fährt eigentlich? Du oder ich?».",
     "WWW-Feedback": "Wahrnehmung: «Ich habe gesehen, dass du …» – Wirkung: «Das hat mich daran zweifeln lassen, dass du …» – Wunsch: «Ich fände es hilfreich, wenn du …».",
+    /* --- Begriffe aus Kurstag 5 --- */
+    "Beurteilungsinstrument": "Ein Beurteilungsinstrument ist das Instrument, mit dem die Leistungen der Lernenden beurteilt werden. Jede OdA hat ihr eigenes. Oft – aber nicht immer – ist das der Bildungsbericht; er dient in jedem Fall zur Dokumentation der Beurteilung. Als Berufsbildner/in muss ich mich bei der OdA informieren und das vorgesehene Instrument verwenden.",
+    "Impulsangebot": "Impulsangebote des WBZ Kanton Luzern sind kurze, niederschwellige Formate zur Orientierung, Reflexion und Einordnung: 2–3 Lektionen, kostenlos für Berufsbildende aus der Zentralschweiz. Daneben gibt es Weiterbildungen als vertiefte Formate – 8 Lektionen, CHF 290.–.",
+    "Kompetenzraster": "Im KV und im Detailhandel gehört das Kompetenzraster in jedem Lehrjahr zu den Umsetzungsinstrumenten – zusammen mit Praxisaufträgen, Erfahrungsnote und Bildungsbericht. Der Bildungsbericht ist dort «nur» die Dokumentation.",
+    "Praxisauftrag (PA)": "Praxisaufträge sind im KV und im Detailhandel Teil der Umsetzungsinstrumente. Ihre Zahl steigt mit dem Lehrjahr: drei im ersten, fünf im zweiten und sieben im dritten.",
+    "Selbsteinschätzung": "Vor dem Standortgespräch beurteilen sich die Lernenden selbst. Im Gespräch werden Selbst- und Fremdeinschätzung verglichen – das macht die Beurteilung transparent und zeigt, wo die Wahrnehmungen auseinandergehen.",
+    "SMART-Ziele": "SMART steht für spezifisch, messbar, attraktiv, realistisch und terminiert. So formulierte Ziele sind erreichbar und überprüfbar – im nächsten Standortgespräch lässt sich klar sagen, ob sie erreicht wurden.",
+    "Standortgespräch": "Im Standortgespräch besprechen Berufsbildner/in und Lernende den Ausbildungsstand – mindestens einmal pro Semester, dokumentiert im Bildungsbericht. Im Zentrum stehen die berufsbezogenen Leistungen, Fähigkeiten und Verhaltensweisen, nicht die Person. Vorbereitung in sechs Schritten: Überblick verschaffen, Ziele festlegen, Themen und Ablauf planen, Termin und Ort festlegen, einladen, Unterlagen zurechtlegen.",
     "ZEBI": "Die Zentralschweizer Bildungsmesse ist ein Treffpunkt für Jugendliche in der Berufswahl. Für Lehrbetriebe ist die Teilnahme ein Weg, aktiv auf Schülerinnen und Schüler zuzugehen – neben Schulbesuchen, Zukunftstag und Schnupperlehren.",
   },
 
@@ -2378,7 +2610,7 @@ window.GAME_DATA = {
     { q: "Welche drei Besonderheiten hat der Lehrvertrag?", a: ["Unbefristet, mündlich, genehmigungsfrei", "Befristet, schriftlich, genehmigungspflichtig", "Befristet, mündlich, nur Eltern unterschreiben", "Unbefristet, schriftlich, genehmigungsfrei"], correct: 1, why: "Befristet, zwingend schriftlich und von der DBW zu genehmigen." },
     { q: "Auf welchen Artikel der Bundesverfassung stützt sich das Berufsbildungsgesetz?", a: ["Art. 8", "Art. 63", "Art. 122", "Art. 118"], correct: 1, why: "BV Art. 63 – Befugnis, Vorschriften über die Berufsbildung zu erlassen." },
     { q: "Ab wann sind gefährliche Arbeiten grundsätzlich erlaubt?", a: ["Ab 15 ohne Bedingungen", "Ab 16", "Ab 18 – ab 15 nur mit begleitenden Massnahmen", "Nie für Lernende"], correct: 2, why: "ArGV 5 Art. 4 – Ausnahme ab 15, wenn die BiVo das vorsieht." },
-    { q: "Wie oft wird der Bildungsbericht erstellt?", a: ["Monatlich", "Am Ende jedes Semesters", "Einmal pro Lehrjahr", "Nur vor dem QV"], correct: 1, why: "Am Ende jedes Semesters – alle unterschreiben." },
+    { q: "Wie oft wird der Bildungsbericht erstellt?", a: ["Monatlich", "Mindestens einmal pro Semester", "Einmal pro Lehrjahr", "Nur vor dem QV"], correct: 1, why: "Mindestens 1x pro Semester – der Bildungsbericht ist Pflicht, und alle unterschreiben." },
     { q: "Wie oft schreiben Lernende mindestens einen Lernbericht?", a: ["Wöchentlich", "Monatlich", "Pro Semester", "Pro Lehrjahr"], correct: 1, why: "Lernberichte sind der Kern der Lerndokumentation – mind. 1x pro Monat." },
     { q: "Wann findet das Probezeitgespräch statt?", a: ["Am ersten Arbeitstag", "Ca. 2 Wochen vor Ende der Probezeit", "Nach dem ersten Lehrjahr", "Gar nicht"], correct: 1, why: "So bleibt noch Zeit zum Reagieren." },
     { q: "Warum werden Lehrstellen frühestens im August vor Lehrstart ausgeschrieben?", a: ["Wegen der Ferien", "Wegen der Chancengleichheit", "Weil die BiVo dann ändert", "Weil das Portal sonst geschlossen ist"], correct: 1, why: "Verbundpartner-Commitment: gleiche Chancen für alle." },
@@ -2442,6 +2674,18 @@ window.GAME_DATA = {
     { q: "Was ist ein Stereotyp?", a: ["Ein Vertragstyp", "Eine vereinfachte, verallgemeinernde Vorstellung über Gruppen", "Ein Feedback-Modell", "Eine Prüfungsform"], correct: 1, why: "Es beruht auf Gruppenzugehörigkeit statt auf individuellen Eigenschaften." },
     { q: "Was gehört zur Nachbereitung eines schwierigen Gesprächs?", a: ["Protokollieren und reflektieren", "Die Lernenden einladen", "Die Situation analysieren", "Nichts"], correct: 0, why: "Vereinbarungen und Pendenzen schriftlich festhalten und den Verlauf reflektieren." },
     { q: "Welche Gesprächstechnik passt zu schlechter Arbeitsleistung?", a: ["Konfliktgespräch", "Kriterienorientierte Rückmeldung", "Schwieriges Gespräch", "Kündigungsgespräch"], correct: 1, why: "Kritisches Verhalten → schwieriges Gespräch · Konflikt → Konfliktgespräch." },
+    { q: "Wie oft führst du mindestens ein Standortgespräch?", a: ["Jede Woche", "1x pro Semester", "1x pro Lehrjahr", "Nur vor dem QV"], correct: 1, why: "Mind. 1x pro Semester – den Ausbildungsstand aber auch ausserhalb des Standortgesprächs besprechen." },
+    { q: "Was steht im Standortgespräch im Zentrum?", a: ["Die Person", "Die berufsbezogenen Leistungen, Fähigkeiten und Verhaltensweisen", "Die Noten der Berufsfachschule allein", "Der Lohn"], correct: 1, why: "Leistung statt Person – das macht die Beurteilung fair und professionell." },
+    { q: "Was nehmen die Lernenden im Rahmen des Standortgesprächs vor?", a: ["Eine Selbsteinschätzung", "Eine Lohnverhandlung", "Die Beurteilung der Berufsbildnerin", "Nichts – sie hören zu"], correct: 0, why: "Selbst- und Fremdeinschätzung werden im Gespräch verglichen." },
+    { q: "Wofür steht das «M» in SMART?", a: ["Motiviert", "Messbar", "Machbar", "Mutig"], correct: 1, why: "Spezifisch, messbar, attraktiv, realistisch, terminiert – so sind Ziele erreichbar und überprüfbar." },
+    { q: "Was ist der Bildungsbericht in jedem Fall?", a: ["Das einzige Beurteilungsinstrument", "Die Dokumentation der Beurteilung", "Freiwillig", "Ein Zeugnis der Berufsfachschule"], correct: 1, why: "Oftmals ist er auch das Beurteilungsinstrument – aber nicht immer. Dokumentation ist er immer." },
+    { q: "Wo informierst du dich über das Beurteilungsinstrument deines Berufs?", a: ["Bei der OdA", "Bei den Eltern", "Bei der Berufsberatung", "Beim Help Point"], correct: 0, why: "Jede OdA hat ihr eigenes Beurteilungsinstrument bzw. ihren eigenen Bildungsbericht." },
+    { q: "Was folgt im Kreislauf der Leistungsbeurteilung auf die Standortbestimmung?", a: ["Die Rückmeldung", "Die Zielformulierung", "Die Umsetzung", "Das QV"], correct: 1, why: "Standortbestimmung → Zielformulierung → Arbeitsaufträge → Umsetzung → Rückmeldung." },
+    { q: "Womit beginnt die Vorbereitung eines Standortgesprächs?", a: ["Einladung vornehmen", "Überblick verschaffen", "Termin und Ort festlegen", "Unterlagen zurechtlegen"], correct: 1, why: "Überblick → Ziele → Themen und Ablauf → Termin und Ort → Einladung → Hilfsmittel und Unterlagen." },
+    { q: "Was gehört NICHT zu den Erfolgsfaktoren der Leistungsbeurteilung?", a: ["Regelmässige Beurteilungen", "Stärken fördern und Talente erkennen", "Verbindliche Massnahmen vereinbaren", "Nur einmal pro Lehre beurteilen"], correct: 3, why: "Regelmässig beurteilen, klar rückmelden, Stärken fördern, Massnahmen vereinbaren – und Erfolgserlebnisse sichtbar machen." },
+    { q: "Welche Beurteilungsstufe im Bildungsbericht des SDBB bedeutet «Anforderungen erfüllt»?", a: ["A", "B", "C", "D"], correct: 1, why: "A übertroffen · B erfüllt · C nur knapp erfüllt, Fördermassnahmen nötig · D nicht erfüllt, besondere Massnahmen nötig." },
+    { q: "Wie viele Praxisaufträge sieht das Beispiel KV/Detailhandel im 3. Lehrjahr vor?", a: ["Drei", "Fünf", "Sieben", "Zehn"], correct: 2, why: "3, 5 und 7 Praxisaufträge im 1., 2. und 3. Lehrjahr – dazu Kompetenzraster, Bildungsbericht und Erfahrungsnote." },
+    { q: "Was kosten die Impulsangebote des WBZ für Berufsbildende aus der Zentralschweiz?", a: ["Nichts", "CHF 60.–", "CHF 100.–", "CHF 290.–"], correct: 0, why: "Impulsangebote: 2–3 Lektionen, kostenlos. Weiterbildungen: 8 Lektionen, CHF 290.–." },
     { q: "🦒 Was frisst die Giraffe in diesem Spiel am liebsten?", a: ["Akazienblätter", "Hausaufgaben", "Bildungsverordnungen", "Drucker"], correct: 1, why: "Hausaufgaben – die Lerndokumentation führt man deshalb besser laufend und digital." },
   ],
 
@@ -2484,16 +2728,16 @@ window.GAME_DATA = {
   /* =====================================================================
      PRÄSENTATIONSMODUS – mein Take-away, Station für Station (Taste P oder index.html#demo)
      Weiter geht es nur auf Tastendruck (→ / Enter / Leertaste / Presenter-Klicker) – nichts läuft automatisch.
-     sec   = Richtzeit pro Station in Sekunden (nur Orientierung für die mitlaufende Uhr; Summe ≈ 7 Minuten)
+     sec   = Richtzeit pro Station in Sekunden (nur Orientierung für die mitlaufende Uhr; Summe ≈ 8 Minuten)
      show  = was gezeigt wird: "title" · "menu" · "levels" · "level-2:Teil des Missionstitels"
              "beruf:Teil des Titels" · "chars:rollen-id" · "sheet:rollen-id" · "journey-2" · "lexikon:Begriff" · "boss"
      title = die Erkenntnis · text = was ich daraus mitnehme und umsetze.
      points = die 3–4 Kernpunkte, die statt des ganzen Kursinhalts gross angezeigt werden (ohne points: ganzer Inhalt).
-     TODO nach Kurstag 5: Stationen zu Tag 5 ergänzen und die Texte mit der persönlichen Reflexion abgleichen.
+     Die Stationen zu Tag 5 stützen sich auf meine persönliche Reflexion (material/WBZLU BEKU_Reflexionen_ausgefuellt.docx).
      ===================================================================== */
   demo: [
     { sec: 20, show: "title", kicker: "Einstieg", title: "Mein Take-away", text: "Was nehme ich aus dem Berufsbildnerkurs mit – und was setze ich im Betrieb um? Ich gehe die Kurstage der Reihe nach durch." },
-    { sec: 15, show: "levels", kicker: "Überblick", title: "Der rote Faden", text: "Meine Rolle verstehen, den rechtlichen Rahmen kennen, passend rekrutieren und planen, zielgerichtet instruieren und Rückmeldung geben." },
+    { sec: 15, show: "levels", kicker: "Überblick", title: "Der rote Faden", text: "Meine Rolle verstehen, den rechtlichen Rahmen kennen, passend rekrutieren und planen, zielgerichtet instruieren, Rückmeldung geben – und fair beurteilen." },
     { sec: 30, show: "level-1:Die Rollen des Berufsbildners", points: ["Coach: Lernprozess und Kompetenzerwerb begleiten", "Fachperson: Expertise einbringen, Vorbild sein, Leistung beurteilen", "Dazu: Berater/in und Begleiter/in der Lernenden", "«Die erste Woche ist massgebend für die Zukunft.»"], kicker: "Tag 1 · Meine Rolle", title: "Ich bin Coach – nicht nur Fachperson", text: "Ich begleite den Lernprozess und bin fachliches wie persönliches Vorbild. Die erste Woche ist massgebend für alles, was folgt." },
     { sec: 25, show: "level-1:vs. Fachperson", points: ["Befähigen statt selbst machen", "Kompetenzen entwickeln statt nur Aufgaben erledigen", "Fokus auf den Lernprozess, nicht nur aufs Resultat", "Fehler als Lernchance nutzen"], kicker: "Tag 1 · Meine Rolle", title: "Befähigen statt machen", text: "Die Fachperson erledigt Aufgaben – als Berufsbildner entwickle ich Kompetenzen, denke aus Sicht der Lernenden und nutze Fehler als Lernchance." },
     { sec: 25, show: "level-1:Generationen im Vergleich", points: ["Generation Z: befähigen – Generation Alpha: inspirieren", "Jugendliche lösen sich ab und bauen ein eigenes Wertesystem auf", "Ich gehöre zur Erwachsenenwelt, von der sie sich abgrenzen", "Digital Natives: klare Regeln für digitale Medien vereinbaren"], kicker: "Tag 1 · Lebenswelt", title: "Die Jugendlichen verstehen", text: "Lernende stecken mitten in grossen Entwicklungsaufgaben. Die Generation Z will befähigt werden, nicht kontrolliert – darauf stelle ich meine Führung ein." },
@@ -2507,13 +2751,15 @@ window.GAME_DATA = {
     { sec: 30, show: "beruf:Tag 4 angewendet", points: ["Instruktion: Notebook-Bereitstellung in 6 Schritten vorzeigen", "Auftrag: Notebook für die Buchhaltung – 2. Lehrjahr, ca. 3 Stunden", "Drei Kontrollpunkte: nach der Planung, nach der Gruppenzuweisung, vor der Übergabe", "Zum Schluss: Rückmeldung und Reflexion"], kicker: "Tag 4 · In meinem Betrieb", title: "Mein Beispiel: Notebook bereitstellen", text: "So setze ich es um: Ich instruiere die Bereitstellung, danach erhält die lernende Person denselben Auftrag – mit drei Kontrollpunkten und einer Rückmeldung am Schluss." },
     { sec: 30, show: "level-4:Eine gute Rückmeldung", points: ["1 · Gesamteindruck vermitteln", "2 · Detailliert begründen – anhand der Kriterien", "3 · Handlungsanweisung geben", "4 · Umsetzung sicherstellen"], kicker: "Tag 4 · Rückmelden", title: "Das wichtigste Gespräch", text: "Gesamteindruck, Begründung, Handlungsanweisung, Umsetzung sicherstellen. Auf jeden Auftrag folgt eine Rückmeldung – auch wenn es gut war." },
     { sec: 30, show: "level-4:Ein schwieriges Gespräch führen", points: ["Vorbereiten: Situation analysieren, Inhalt und Rahmen planen", "Führen: Gesamteindruck → Begründung → Verbesserung → Umsetzung", "Nachbereiten: protokollieren und reflektieren", "Regel: das Verhalten kritisieren, nicht die Person"], kicker: "Tag 4 · Schwierige Gespräche", title: "Ansprechen statt aufschieben", text: "Ich bereite das Gespräch vor, kritisiere das Verhalten und nicht die Person, und halte die Vereinbarungen schriftlich fest." },
-    { sec: 40, show: "title", kicker: "Fazit", title: "Das setze ich um", text: "Befähigen statt machen. Früh hinschauen und Hilfe holen. Fair auswählen und vorausplanen. Vorzeigen, laut denken – und regelmässig Rückmeldung geben." },
+    { sec: 30, show: "level-5:Der Kreislauf", points: ["Standortbestimmung → Zielformulierung", "Arbeitsaufträge → Umsetzung → Rückmeldung", "Standortgespräch und Bildungsbericht: mind. 1x pro Semester – Pflicht", "Leistung, Fähigkeiten und Verhalten beurteilen – nicht die Person"], kicker: "Tag 5 · Fair beurteilen", title: "Beurteilen ist ein Kreislauf", text: "Die Beurteilung soll die Entwicklung unterstützen und nicht nur eine Note liefern. Aus jeder Standortbestimmung entstehen Ziele – und daraus die nächsten Aufträge." },
+    { sec: 25, show: "beruf:Tag 5 angewendet", points: ["Beobachtungen laufend notieren – nicht erst vor dem Bildungsbericht", "Die lernende Person schätzt sich zuerst selbst ein", "Jede Einschätzung mit konkreten Beispielen begründen", "Ziele SMART formulieren und im nächsten Gespräch überprüfen"], kicker: "Tag 5 · In meinem Betrieb", title: "Mein Standortgespräch", text: "So setze ich es um: laufend notieren, Selbsteinschätzung einholen, Selbst- und Fremdbild offen vergleichen – und Ziele so festhalten, dass wir sie überprüfen können." },
+    { sec: 30, show: "title", kicker: "Fazit", title: "Das setze ich um", text: "Befähigen statt machen. Früh hinschauen und Hilfe holen. Fair auswählen und vorausplanen. Vorzeigen und laut denken. Regelmässig Rückmeldung geben – und fair beurteilen: Leistung statt Person." },
   ],
 
   /* Credits & Quellen – Titel, Herausgeber und Stand stammen aus den Kursunterlagen selbst
      (ausgelesen über den graphify-Wissensgraphen in graphify-out/). */
   credits: {
-    version: "Version 1.2 · Stand November 2026 · Kurstage 1–4",
+    version: "Version 1.3 · Stand November 2026 · Kurstage 1–5",
     author: "Samuel Sergio da Costa",
     copyright: "© 2026 Samuel Sergio da Costa · mit Claude (Anthropic)",
     about: [
@@ -2561,6 +2807,14 @@ window.GAME_DATA = {
           ["Theorie «Rückmeldungen» · Beispiele für Rückmeldungen", "WBZ Kanton Luzern"],
           ["Fallbeispiele schwierige Gespräche", "WBZ Kanton Luzern"],
           ["Vorlagen «Zielgerichtete Instruktion» und «Arbeitsauftrag vorbereiten und erteilen» – eigene Bearbeitung", "WBZ Kanton Luzern"],
+        ],
+      },
+      {
+        group: "Kursunterlagen Präsenztag 5 – Fair beurteilen & Kursabschluss",
+        items: [
+          ["Präsenztag 5: Leistungen fair beurteilen (Präsentation)", "WBZ Kanton Luzern"],
+          ["Bildungsbericht – Formular für die berufliche Grundbildung", "SDBB · berufsbildung.ch"],
+          ["Vorlage Reflexionen – eigene Bearbeitung (persönliche Reflexion zu allen Kurstagen)", "WBZ Kanton Luzern"],
         ],
       },
       {
