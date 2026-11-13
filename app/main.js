@@ -1223,12 +1223,15 @@
     if (!sw.querySelector(".demo-take")) {
       goal.textContent = `${demo.i + 1} / ${DEMO.length} · ${st.kicker} · ${h3.textContent}`;
       h3.textContent = st.title;
-      const take = h("div", { class: "demo-take" }, h("b", {}, "Das nehme ich mit"), st.text);
+      const take = h("div", { class: "demo-take" }, h("b", {}, st.q ? "Das setze ich um" : "Das nehme ich mit"), st.text);
       h3.after(take);
+      // Reflexionsfrage aus dem Reflexionsbogen (data.js → demo[].q): steht direkt unter der Erkenntnis
+      if (st.q) h3.after(h("div", { class: "demo-q" }, h("b", {}, "Reflexionsfrage"), st.q));
       // Statt des ganzen Kursinhalts nur die Kernpunkte zeigen, über die ich spreche (data.js → demo[].points)
       if (st.points && st.points.length) {
         while (take.nextSibling) take.nextSibling.remove();
-        take.after(h("ul", { class: "demo-points" }, st.points.map((pt) => h("li", {}, pt))));
+        const pts = h("ul", { class: "demo-points" }, st.points.map((pt) => h("li", {}, pt)));
+        if (st.q) take.before(pts); else take.after(pts);
       }
     }
     body.scrollTop = 0;
